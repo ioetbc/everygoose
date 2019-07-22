@@ -1,0 +1,16 @@
+.shop {
+    background: green;
+    .shop-gallery {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        max-width: 980px;
+        margin: 0 auto;
+    }
+    .shop-images {
+        background: red;
+        width: 26%;
+        padding-bottom: 31%;
+        margin-bottom: 100px;
+    }
+}

@@ -1,0 +1,12 @@
+.app {
+    display: flex;
+    .navigation {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 250px;
+        color: white;
+    }
+    .main-content {
+        flex: 1;
+    }
+}

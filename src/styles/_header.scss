@@ -1,0 +1,14 @@
+.header {
+    height: 10vw;
+    display: flex;
+    justify-content: space-between;
+    background: purple;
+    margin-bottom: 40px;
+    .header-title {
+        font-size: 50px;
+        background: orange;
+    }
+    .header-basket {
+        background: lightblue;
+    }
+}

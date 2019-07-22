@@ -1,5 +1,7 @@
 import React from 'react';
 import NotFound from './NotFound';
+import Shop from './components/Shop';
+import Navigation from './components/Navigation';
 import PrismicReact from 'prismic-reactjs';
 
 export default class Page extends React.Component {
@@ -14,7 +16,7 @@ export default class Page extends React.Component {
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps) {		
 		this.props.prismicCtx.toolbar();
 		// We fetch the page only after it's ready to query the api
 		if (!prevProps.prismicCtx) {
@@ -24,7 +26,7 @@ export default class Page extends React.Component {
 
 	fetchPage(props) {
 		if (props.prismicCtx) {
-			// We are using the function to get a document by its uid
+			// We are using the function to get a document by its uid3
 			return props.prismicCtx.api.getByUID('page', props.match.params.uid, {}, (err, doc) => {
 				if (doc) {
 				// We put the retrieved content in the state as a doc variable
@@ -40,16 +42,9 @@ export default class Page extends React.Component {
 
 	render() {
 		if (this.state.doc) {
-		  return (
-			<div data-wio-id={this.state.doc.id}>
-			  {/* This is how to get an image into your template */}
-			  <img alt="cover" src={this.state.doc.data.image.url} />
-			  {/* This is how to insert a Rich Text field as plain text */}
-			  <h1>{PrismicReact.RichText.asText(this.state.doc.data.title)}</h1>
-			  {/* This is how to insert a Rich Text field into your template as html */}
-			  {PrismicReact.RichText.render(this.state.doc.data.description, this.props.prismicCtx.linkResolver)}
-			</div>
-		  );
+			return ([
+				<Shop />
+			]);
 		} else if (this.state.notFound) {
 		  return <NotFound />;
 		}

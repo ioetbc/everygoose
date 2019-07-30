@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import NotFound from '../NotFound';
-import Header from './Header';
 import PrismicReact from 'prismic-reactjs';
 
-export default class Page extends Component {
+class Page extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -13,17 +12,20 @@ export default class Page extends Component {
     }
 
 	render() {
-        let items;
-        items = this.state.produts.map((item, key) =>
-            <div key={key} className="shop-images"></div>
-        );
-        return ([
-            <Header title='shop' />,
+        return (
             <div className="shop">
                 <div className="shop-gallery">
-                    {items}                
+                {this.state.produts.map((item, key) => 
+                    <div className="shop-items">
+                        <div key={key} className="shop-images"></div>
+                        <p>Chip Thief Gull Illustrated.</p>
+                        <p>£2.50</p> 
+                    </div> 
+                )}
                 </div>
             </div>
-        ]);
+        );
 	}
 }
+
+export default Page;

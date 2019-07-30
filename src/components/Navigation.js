@@ -1,33 +1,46 @@
 import React, { Component } from 'react';
-import NotFound from '../NotFound';
-import Shop from './Shop';
-import PrismicReact from 'prismic-reactjs';
+import Logo from '../images/misc/logo.svg';
+import Hamburger from '../images/misc/hamburger.svg';
 
-export default class Page extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			produts: [1,2,3,4,5,6],
-			notFound: false,
-		}
+
+class Navigation extends Component {
+    constructor() {
+        super()
+        this.state = { show: false }
+        this.showMobileMenu = this.showMobileMenu.bind(this);
     }
 
-	render() {
+    showMobileMenu() {
+        console.log('hold')
+        this.setState({ show: !this.state.show }) 
+    }
+
+    render() {
         return (
             <div className="navigation">
-                <h4>shop</h4>
-                <ul>
-                    <li>card</li>
-                    <li>card</li>
-                    <li>card</li>
-                    <li>card</li>
-                    <li>card</li>
-                    <li>card</li>
-                </ul>
-                <h4>about</h4>
-                <h4>contact</h4>
+                <div className="sticky">
+                    <img className="navigation-logo" src={Logo} alt="EveryGoose logo" />
+                    <div className="menu" onClick={this.showMobileMenu}>
+                        <img className="hamburger-icon" src={Hamburger} alt="" />
+                    </div>
+                    <nav className={`navigation-items ${this.state.show && 'hello'}`} >
+                        <h4>shop</h4>
+                        <ul>
+                            <li>card</li>
+                            <li>card</li>
+                            <li>card</li>
+                            <li>card</li>
+                            <li>card</li>
+                            <li>card</li>
+                        </ul>
+                        <h4>about</h4>
+                        <h4>contact</h4>
+                    </nav>
+                    <div className="navigation-basket"></div>
+                </div>
             </div>
         )
-        
-	}
-}
+    }
+};
+
+export default Navigation;

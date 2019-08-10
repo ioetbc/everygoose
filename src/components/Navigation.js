@@ -11,7 +11,6 @@ class Navigation extends Component {
     }
 
     showMobileMenu() {
-        console.log('hold')
         this.setState({ show: !this.state.show }) 
     }
 
@@ -37,6 +36,11 @@ class Navigation extends Component {
                         <h4>contact</h4>
                     </nav>
                     <div className="navigation-basket"></div>
+                </div>
+                <div className="social-items">
+                    <div className="social-link"></div>
+                    <div className="social-link"></div>
+                    <div className="social-link"></div>
                 </div>
             </div>
         )

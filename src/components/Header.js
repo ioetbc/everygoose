@@ -1,12 +1,11 @@
 import React from 'react';
-import Basket from '../images/misc/basket.svg'
 
-export default function Header(props) {
+export default function Header({ title, basket, shop  }) {
     return (
-        <div className="header">
-            <h1 className="header-title">{props.title}</h1>
+        <div className={`header ${shop && 'shop'}`}>
+            <h1 className="header-title">{title}</h1>
             <p className="header-basket">
-                basket
+                basket ({basket && basket.length})
             </p>
         </div>
     )

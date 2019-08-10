@@ -1,17 +1,18 @@
 .header {
+    width: 100%;
     margin: 0 auto;
     height: 100px;
-    // margin-top: 80px;
-    padding-top: 40px;
-    width: 250px;
+    box-sizing: border-box;
+    padding-top: 70px;
 
-    @media screen and (min-width: 768px) {
-        width: auto;
+    &.shop {
+        width: 250px;
+
+        @media screen and (min-width: 600px) {
+            width: auto;
+        }
     }
 
-    @media screen and (min-width: 1000px) {
-        padding-top: 0;
-    }
     .header-basket {
         display: none;
         @media screen and (min-width: 1000px) {

@@ -1,12 +1,48 @@
 import React, { Component } from 'react';
-import NotFound from '../NotFound';
-import PrismicReact from 'prismic-reactjs';
+import { Link } from 'react-router-dom';
+import Logo from '../images/card-placeholder.jpg';
 
 class Page extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			produts: [1,2,3,4,5,6,7,8,9,10,11,12],
+			produts: [
+                {
+                    title: 'chip thief gull illustrated 1.',
+                    price: 2.50,
+                    quantity: 1,
+                },
+                {
+                    title: 'chip thief gull illustrated 2.',
+                    price: 2.50,
+                    quantity: 1,
+                },
+                {
+                    title: 'chip thief gull illustrated 3.',
+                    price: 2.50,
+                    quantity: 1,
+                },
+                {
+                    title: 'chip thief gull illustrated 4.',
+                    price: 2.50,
+                    quantity: 1,
+                },
+                {
+                    title: 'chip thief gull illustrated 5.',
+                    price: 2.50,
+                    quantity: 1,
+                },
+                {
+                    title: 'chip thief gull illustrated 6.',
+                    price: 2.50,
+                    quantity: 1,
+                },
+                {
+                    title: 'chip thief gull illustrated 7.',
+                    price: 2.50,
+                    quantity: 1,
+                },
+            ],
 			notFound: false,
 		}
     }
@@ -15,12 +51,14 @@ class Page extends Component {
         return (
             <div className="shop">
                 <div className="shop-gallery">
-                {this.state.produts.map((item, key) => 
-                    <div className="shop-items">
-                        <div key={key} className="shop-images"></div>
-                        <p>Chip Thief Gull Illustrated.</p>
-                        <p>£2.50</p> 
-                    </div> 
+                {this.state.produts.map((details, key) => 
+                    <Link to={{ pathname: "/product", state: { details } }}>
+                        <div key={key} className="shop-items">
+                            <img src={Logo} key={key} className="shop-images"></img>
+                            <p>{details.title}</p>
+                            <p>£{details.price}</p>
+                        </div> 
+                    </Link>
                 )}
                 </div>
             </div>
@@ -29,3 +67,4 @@ class Page extends Component {
 }
 
 export default Page;
+

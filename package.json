@@ -2,9 +2,7 @@
   "name": "everygoose",
   "version": "1.0.0",
   "scripts": {
-    "client": "cd client && yarn start",
-    "server": "nodemon server.js",
-    "dev": "env-cmd -f .env.development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "start": "env-cmd -f .env.development node server.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

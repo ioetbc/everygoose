@@ -4,7 +4,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 class PayForm extends Component {
     constructor(props) {
         super(props);
-        this.state = { firstName: '', lastName: '', amount: 200 }
+        this.state = { firstName: '', lastName: '', amount: 2 }
 
         this.handleFirstName = this.handleFirstName.bind(this);
         this.handleLastName = this.handleLastName.bind(this);

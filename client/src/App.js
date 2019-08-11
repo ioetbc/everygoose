@@ -20,11 +20,27 @@ import Header from './components/Header';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { basket: JSON.parse(localStorage.getItem('session')) || [] }
+		this.state = { basket: JSON.parse(localStorage.getItem('session')) || [], renderedResponse: '' }
         this.selectQuantity = this.selectQuantity.bind(this);
 		this.addToBasket = this.addToBasket.bind(this);
 		this.removeItem = this.removeItem.bind(this);
 	}
+
+	componentDidMount() {
+		// this.getResponse().then(response => {
+		// 	const someData = response;
+		// 	this.setState({ renderedResponse: someData });
+		// })
+	}
+
+	// getResponse = async () =>  {
+	// 	const response = await fetch('/api/hello');
+	// 	const body = await response.json();
+
+	// 	if (response.status !== 200) throw Error(body.message);
+
+	// 	return body;
+	// }
 
 	addToBasket(item) {
 		let itemArray = this.state.basket;
@@ -55,7 +71,7 @@ class App extends Component {
 	
 	render() {
 		const { basket } = this.state;
-
+		const { renderedResponse } = this.state;
 		return ([
 			<div className="app">
 				<Navigation />

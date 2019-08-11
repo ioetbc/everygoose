@@ -1,0 +1,49 @@
+{
+  "name": "reactjs-starter",
+  "version": "0.1.4",
+  "private": true,
+  "proxy": "http://localhost:5000/",
+  "dependencies": {
+    "@types/react-stripe-elements": "^1.3.1",
+    "@types/stripe": "^6.31.14",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-generator": "^4.16.1",
+    "highlight.js": "~9.13.1",
+    "http-proxy-middleware": "^0.19.1",
+    "jquery": "~3.3.1",
+    "node-sass": "^4.12.0",
+    "normalize.css": "^8.0.1",
+    "prismic-javascript": "^2.0.1",
+    "prismic-reactjs": "^0.3.2",
+    "qs": "^6.4.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router": "^5.0.1",
+    "react-router-dom": "~4.3.1",
+    "react-slideshow-image": "^1.2.1",
+    "react-stripe-elements": "^4.0.0",
+    "stripe": "^7.7.0",
+    "whatwg-fetch": "~3.0.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^9.0.3",
+    "react-scripts": "~2.1.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "engines": {
+    "node": ">=4.8.1",
+    "npm": ">=2.15.11"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

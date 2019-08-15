@@ -26,22 +26,6 @@ class App extends Component {
 		this.removeItem = this.removeItem.bind(this);
 	}
 
-	componentDidMount() {
-		// this.getResponse().then(response => {
-		// 	const someData = response;
-		// 	this.setState({ renderedResponse: someData });
-		// })
-	}
-
-	// getResponse = async () =>  {
-	// 	const response = await fetch('/api/hello');
-	// 	const body = await response.json();
-
-	// 	if (response.status !== 200) throw Error(body.message);
-
-	// 	return body;
-	// }
-
 	addToBasket(item) {
 		let itemArray = this.state.basket;
         
@@ -71,7 +55,6 @@ class App extends Component {
 	
 	render() {
 		const { basket } = this.state;
-		const { renderedResponse } = this.state;
 		return ([
 			<div className="app">
 				<Navigation />

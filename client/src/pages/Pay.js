@@ -10,7 +10,9 @@ const Product = ({ location }) => {
             <div className="slide-show-side-by-side">
                 <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE}>
                     <Elements>
-                        <PayForm />
+                        <PayForm
+                            basket={location.state.basket}
+                        />
                     </Elements>
                 </StripeProvider>
                 <Overview

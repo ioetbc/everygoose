@@ -33,7 +33,13 @@ class PayForm extends Component {
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify({ token, amount, currency }),
+                body: JSON.stringify({
+                    token,
+                    amount,
+                    currency,
+                    firstName: this.state.firstName,
+                    items: this.props.basket,
+                }),
             });
 
         } catch(e) {

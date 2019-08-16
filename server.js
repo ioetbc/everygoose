@@ -46,15 +46,33 @@ app.post('/api/hello', async (req, res, next) => {
           extName: '.handlebars',
     }));
 
-    const options = {
+    const everygooseEmail = {
+        from: '"everygoose" <hello@everygoose.com>',
+        to: "ioetbc@gmail.com",
+        subject: "New order",
+        template: 'main',
+    }
+
+    const customerEmail = {
         from: '"customer" <hello@everygoose.com>',
         to: "ioetbc@gmail.com",
         subject: "Order confirmation",
         template: 'main',
-    } 
+    }
 
-    try {   
-        transporter.sendMail(options, (error, data) => {
+    try {
+        transporter.sendMail(everygooseEmail, (error) => {
+            if (error) {
+                return console.log('Error occurs', error);
+            }
+            return console.log('Email sent!!!');
+        });
+    } catch (error) {
+        console.log('error', error);
+    }
+
+    try {
+        transporter.sendMail(customerEmail, (error) => {
             if (error) {
                 return console.log('Error occurs', error);
             }

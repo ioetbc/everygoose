@@ -40,34 +40,34 @@ app.post('/api/hello', async (req, res, next) => {
           user: process.env.REACT_APP_EMAIL_AUTH_USERNAME,
           pass: process.env.REACT_APP_EMAIL_AUTH_PASSWORD
         },
-        tls: { rejectUnauthorized: false } // TODO delete this when youre done testing.
+        // tls: { rejectUnauthorized: false } // TODO delete this when youre done testing.
     });
 
     transporter.use('compile', hbs({
         viewEngine: {
-            partialsDir : 'express-handlebars',
-        },
-        path: './client/src/emails/'
-
-    }))
+            extName: '.handlebars',
+            partialsDir: './client/src/emails/',
+            layoutsDir: './client/src/emails/',
+          },
+          viewPath: './client/src/emails/',
+          extName: '.handlebars',
+    }));
 
     const options = {
         from: '"customer" <hello@everygoose.com>',
         to: "ioetbc@gmail.com",
-        subject: "Hello pug✔",
-        template: 'index'
-    }
-
-    console.log('req.body', req.body.items);     
+        subject: "Order confirmation",
+        template: 'main',
+    } 
 
     try {   
-        await transporter.sendMail(options, (error, info) => {
-            if (error) {
-                console.log('error', error)
-            } else {
-                console.log('info', info)
+        transporter.sendMail(options, (err, data) => {
+            if (err) {
+                return console.log('Error occurs', err);
             }
+            return console.log('Email sent!!!');
         });
+        
     } catch (error) {
         console.log('about to send customer', error);
         res.status(500) // TODO change this to log the error

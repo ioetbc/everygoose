@@ -2,8 +2,7 @@ import React from 'react';
 import Button from './Shared/Button';
 import { Link } from 'react-router-dom';
 
-const Overview = ({ basket, payPage }) => {
-    const deliveryCost = 2;
+const Overview = ({ basket, payPage, deliveryCost }) => {
 
     return (
         <div className="checkout-overview">

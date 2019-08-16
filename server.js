@@ -53,11 +53,20 @@ app.post('/api/hello', async (req, res, next) => {
         template: 'main',
     }
 
+    const { firstName, amount, quantity, token, estimatedDelivery } = req.body;
+
     const customerEmail = {
         from: '"customer" <hello@everygoose.com>',
         to: "ioetbc@gmail.com",
         subject: "Order confirmation",
         template: 'main',
+        context: {
+            firstName: firstName,
+            amount,
+            quantity,
+            last4: token.card.last4,
+            estimatedDelivery,
+        }
     }
 
     try {

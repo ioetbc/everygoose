@@ -5,6 +5,7 @@ import Overview from '../components/Overview';
 import PayForm from '../components/PayForm'
 
 const Product = ({ location }) => {
+    const deliveryCost = 2;
     return (
         <main className="main-content">
             <div className="slide-show-side-by-side">
@@ -12,12 +13,14 @@ const Product = ({ location }) => {
                     <Elements>
                         <PayForm
                             basket={location.state.basket}
+                            deliveryCost={deliveryCost}
                         />
                     </Elements>
                 </StripeProvider>
                 <Overview
                     basket={location.state.basket}
                     payPage
+                    deliveryCost={deliveryCost}
                 />
             </div>
         </main>

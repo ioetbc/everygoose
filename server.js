@@ -14,22 +14,16 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 const stripe = new stripeLoader(process.env.REACT_APP_STRIPE_SECRET);
 
-const charge = (token, amount) => {
-    return stripe.charges.create({
-        amount: amount * 100,
-        currency: 'GBP',
-        source: token,
-        description: 'card the customer bought',
-    })
-}
-
 app.post('/api/hello', async (req, res, next) => {
     try {
-        console.log('wt')
-        await charge(req.body.token.id, req.body.amount);
-        res.send('charged!')
+        await stripe.charges.create({
+            amount: req.body.amount * 100,
+            currency: 'GBP',
+            source: req.body.token.id,
+            description: 'card the customer bought',
+        })
     } catch (error) {
-        res.status(500) // TODO change this to log the error
+        console.log('charge error', error);
     }
 
     const transporter = nodemailer.createTransport({
@@ -40,7 +34,6 @@ app.post('/api/hello', async (req, res, next) => {
           user: process.env.REACT_APP_EMAIL_AUTH_USERNAME,
           pass: process.env.REACT_APP_EMAIL_AUTH_PASSWORD
         },
-        // tls: { rejectUnauthorized: false } // TODO delete this when youre done testing.
     });
 
     transporter.use('compile', hbs({
@@ -61,16 +54,14 @@ app.post('/api/hello', async (req, res, next) => {
     } 
 
     try {   
-        transporter.sendMail(options, (err, data) => {
-            if (err) {
-                return console.log('Error occurs', err);
+        transporter.sendMail(options, (error, data) => {
+            if (error) {
+                return console.log('Error occurs', error);
             }
             return console.log('Email sent!!!');
         });
-        
     } catch (error) {
-        console.log('about to send customer', error);
-        res.status(500) // TODO change this to log the error
+        console.log('error', error);
     }
 
     next();

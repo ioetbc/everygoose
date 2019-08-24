@@ -11,6 +11,7 @@ import Page from './pages/Page';
 import Product from './pages/Product';
 import Checkout from './pages/Checkout'
 import Pay from './pages/Pay';
+import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer'
@@ -163,6 +164,10 @@ class App extends Component {
 									selectQuantity={this.selectQuantity}
 									removeItem={this.removeItem}
 								/>
+							} />
+
+							<Route exact path="/contact" render={routeProps =>
+								<Contact />
 							} />
 
 							<Route component={NotFound} />

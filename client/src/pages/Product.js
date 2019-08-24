@@ -6,7 +6,6 @@ import ProductDetails from '../components/ProductDetails';
 const Product = ({ location, addToBasket, basket }) => {
     const { item } = location.state;
 
-    console.log('item', item)
     const slideshowImages = [item.image_1_url, item.image_2_url, item.image_3_url];
 
     return (

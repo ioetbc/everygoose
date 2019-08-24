@@ -14,6 +14,16 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 const stripe = new stripeLoader(process.env.REACT_APP_STRIPE_SECRET);
 
+const transporter = nodemailer.createTransport({
+    host: "smtp.sendgrid.net",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.REACT_APP_EMAIL_AUTH_USERNAME,
+      pass: process.env.REACT_APP_EMAIL_AUTH_PASSWORD
+    },
+});
+
 app.post('/api/hello', async (req, res, next) => {
     try {
         await stripe.charges.create({
@@ -25,16 +35,6 @@ app.post('/api/hello', async (req, res, next) => {
     } catch (error) {
         console.log('charge error', error);
     }
-
-    const transporter = nodemailer.createTransport({
-        host: "smtp.sendgrid.net",
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.REACT_APP_EMAIL_AUTH_USERNAME,
-          pass: process.env.REACT_APP_EMAIL_AUTH_PASSWORD
-        },
-    });
 
     transporter.use('compile', hbs({
         viewEngine: {
@@ -92,5 +92,37 @@ app.post('/api/hello', async (req, res, next) => {
     }
 
     next();
+});
+
+app.post('/api/contact', async (req, res, next) => {
+    try {
+        transporter.use('compile', hbs({
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: './client/src/emails/',
+                layoutsDir: './client/src/emails/',
+              },
+              viewPath: './client/src/emails/',
+              extName: '.handlebars',
+        }));
+
+        const everygooseEmail = {
+            from: '"everygoose" <hello@everygoose.com>',
+            to: "ioetbc@gmail.com",
+            subject: "New order",
+            template: 'main',
+        }
+
+        transporter.sendMail(everygooseEmail, (error) => {
+            if (error) {
+                return console.log('Error occurs', error);
+            }
+            return console.log('Email sent!!!');
+        });
+
+
+    } catch (error) {
+       console.log('error', error)
+    }
 });
 

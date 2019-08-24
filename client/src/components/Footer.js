@@ -6,11 +6,11 @@ const Footer = ({ isDesktop }) => {
         <footer className="footer">
             <img className="footer-logo" src={Logo} alt="EveryGoose logo" />
             <div className="footer-items">
-                <uL>
+                <ul>
                     <li>Contact</li>
                     <li>Delivery & returns</li>
                     <li>Terms and conditions</li>
-                </uL>
+                </ul>
             </div>
         </footer>
     )

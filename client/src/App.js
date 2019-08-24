@@ -17,14 +17,33 @@ import Footer from './components/Footer'
 import './App.scss';
 import Header from './components/Header';
 import Shit from './components/Shit'
+import Prismic from 'prismic-javascript';
 
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { basket: JSON.parse(localStorage.getItem('session')) || [], renderedResponse: '' }
+		this.state = {
+			basket: JSON.parse(localStorage.getItem('session')) || [],
+			cardTypes: [],
+			products: [],
+			doc: null,
+			filtered: false,
+		}
         this.selectQuantity = this.selectQuantity.bind(this);
 		this.addToBasket = this.addToBasket.bind(this);
 		this.removeItem = this.removeItem.bind(this);
+		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
+
+		if (this.props.prismicCtx) {
+			this.fetchPage(props);
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		this.props.prismicCtx.toolbar();
+		if (!prevProps.prismicCtx) {
+			this.fetchPage(this.props);
+		}
 	}
 
 	addToBasket(item) {
@@ -53,12 +72,49 @@ class App extends Component {
 				return element.title !== item.title
         })}), () => localStorage.setItem('session', JSON.stringify(this.state.basket)));
 	}
+
+	handleNavigationFilter(item) {
+		this.setState({
+			filteredProducts: this.state.products.filter(product => product.type === item),
+		});
+
+		if (item === 'reset') {
+			this.setState({ filteredProducts: false });
+		}
+	}
+
+	async fetchPage() {
+		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
+			.getByID('XVxFfREAACEAlCKe');
+
+		const cardTypes = [];
+
+		doc.data.products.forEach(item => {
+			this.state.products.push({
+				title: item.product_title[0].text,
+				price: item.product_price.toFixed(2),
+				image_1_url: item.image_1.url,
+				image_2_url: item.image_2.url,
+				image_3_url: item.image_3.url,
+				quantity: 1,
+				description: item.product_description[0].text,
+				type: item.type_of_card,
+			});
+			
+			cardTypes.push(item.type_of_card);
+		});
+
+		this.setState({ cardTypes, doc });
+	}
 	
 	render() {
-		const { basket } = this.state;
+		const { basket, cardTypes, doc, products, filteredProducts } = this.state;
 		return ([
 			<div className="app">
-				<Navigation />
+				<Navigation
+					navigationItems={cardTypes}
+					handleNavigationFilter={this.handleNavigationFilter}
+				/>
 				<div style={{ flex: 1, background: '#fff7f5' }}>
 					<Header
 						title='header'
@@ -72,6 +128,9 @@ class App extends Component {
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
 									basket={basket}
+									getCardType={this.getCardType}
+									doc={doc}
+									products={filteredProducts || products}
 								/>
 							} />
 

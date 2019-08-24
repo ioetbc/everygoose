@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { uniq } from 'lodash';
+
 import Logo from '../images/misc/logo.svg';
 import Hamburger from '../images/misc/hamburger.svg';
 
@@ -15,6 +17,8 @@ class Navigation extends Component {
     }
 
     render() {
+        const { navigationItems, handleNavigationFilter } = this.props;
+
         return (
             <div className="navigation">
                 <div className="sticky">
@@ -25,12 +29,10 @@ class Navigation extends Component {
                     <nav className={`navigation-items ${this.state.show && 'hello'}`} >
                         <h4>shop</h4>
                         <ul>
-                            <li>card</li>
-                            <li>card</li>
-                            <li>card</li>
-                            <li>card</li>
-                            <li>card</li>
-                            <li>card</li>
+                            {uniq(navigationItems).map(navItem =>
+                                <li onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
+                            )}
+                            <li onClick={() => handleNavigationFilter('reset')}>reset</li>
                         </ul>
                         <h4>about</h4>
                         <h4>contact</h4>

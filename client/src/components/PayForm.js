@@ -28,7 +28,7 @@ class PayForm extends Component {
         if (weekday < 6 || time < 14) {
             return moment().add(2, 'day').format('Do MMMM');
         } else {
-            return moment().add(3, 'day').format('Do MMMM');
+            return moment().add(4, 'day').format('Do MMMM');
         }
     }
     
@@ -68,6 +68,7 @@ class PayForm extends Component {
     }
 
     render() {
+        console.log(this.props.deliveryCost)
         return (
             <form onSubmit={(e) => this.handleSubmit(e)}>
                 <label>first name</label>

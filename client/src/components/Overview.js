@@ -27,7 +27,7 @@ const Overview = ({ basket, payPage, deliveryCost }) => {
                     <ul className="list-flex sub-total">
                         <li>
                             <p>total</p>
-                            <p>{basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost}</p>
+                            <p>{basket.reduce((a, item) =>  item.price * item.quantity + a, 0)}</p>
                         </li>
                     </ul>
                 </div>,

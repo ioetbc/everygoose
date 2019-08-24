@@ -16,6 +16,7 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer'
 import './App.scss';
 import Header from './components/Header';
+import Shit from './components/Shit'
 
 class App extends Component {
 	constructor(props) {
@@ -73,6 +74,8 @@ class App extends Component {
 									basket={basket}
 								/>
 							} />
+
+							<Route exact path="/page/:uid" render={routeProps => <Shit {...routeProps} prismicCtx={this.props.prismicCtx} />} />
 
 							<Route exact path="/product" render={routeProps =>
 								<Product

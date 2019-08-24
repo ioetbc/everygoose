@@ -9,15 +9,13 @@ const properties = {
     arrows: false,
 }
 
-const slideShowImages = [1,2,3,4,5,6];
-
-const SlideShow = () => {
+const SlideShow = ({ slideshowImages }) => {
     return (
         <div className="slide-container">
             <Slide {...properties}>
-                {slideShowImages.map((item, key) => 
+                {slideshowImages.map((item, key) => 
                     <div className="each-slide">
-                        <div className="placeholder-slideshow-item"></div>
+                        <img className="placeholder-slideshow-item" src={item} />
                     </div>
                 )}
             </Slide>

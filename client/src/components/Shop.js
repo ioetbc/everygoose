@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import React from 'react';
+import Prismic from 'prismic-javascript';
+
 import { Link } from 'react-router-dom';
 import Logo from '../images/card-placeholder.jpg';
 
@@ -43,25 +46,16 @@ class Page extends Component {
                     quantity: 1,
                 },
             ],
-			notFound: false,
+			doc: null,   
+        }
+		if (this.props.prismicCtx) {
+			this.fetchPage(props);
 		}
     }
 
 	render() {
         return (
-            <div className="shop">
-                <div className="shop-gallery">
-                {this.state.produts.map((details, key) => 
-                    <Link to={{ pathname: "/product", state: { details } }}>
-                        <div key={key} className="shop-items">
-                            <img src={Logo} key={key} className="shop-images"></img>
-                            <p>{details.title}</p>
-                            <p>£{details.price}</p>
-                        </div> 
-                    </Link>
-                )}
-                </div>
-            </div>
+           
         );
 	}
 }

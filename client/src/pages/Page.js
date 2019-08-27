@@ -11,14 +11,13 @@ export default class Page extends Component {
 						<div className="shop-gallery">
 							{products.map((item, key) => {
 								return (		
-										<div key={key} className="shop-items">
+									<div key={key} className="shop-items">
 										<Link to={{ pathname: "/product", state: { item } }}>
-											<img src={item.image_1_url} key={key} className="shop-images"></img>
-											<p>{item.title}</p>
-											<p>£{item.price}</p>
-									</Link>
-
-										</div>
+												<img src={item.image_1_url} key={key} className="shop-images"></img>
+												<p>{item.title}</p>
+												<p>£{item.price}</p>
+										</Link>
+									</div>
 								);
 							})}
 						</div>

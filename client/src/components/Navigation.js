@@ -27,13 +27,15 @@ class Navigation extends Component {
                         <img className="hamburger-icon" src={Hamburger} alt="" />
                     </div>
                     <nav className={`navigation-items ${this.state.show && 'hello'}`} >
-                        <h4>shop</h4>
-                        <ul>
-                            {uniq(navigationItems).map(navItem =>
-                                <li onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
-                            )}
-                            <li onClick={() => handleNavigationFilter('reset')}>reset</li>
-                        </ul>
+                        <div className="hide-shop-mobile">
+                            <h4>shop</h4>
+                            <ul>
+                                {uniq(navigationItems).map(navItem =>
+                                    <li onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
+                                )}
+                                <li onClick={() => handleNavigationFilter('reset')}>reset</li>
+                            </ul>
+                        </div>
                         <h4>about</h4>
                         <h4>contact</h4>
                     </nav>

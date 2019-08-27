@@ -121,6 +121,8 @@ class App extends Component {
 						title='header'
 						shop
 						basket={basket}
+						navigationItems={cardTypes}
+						handleNavigationFilter={this.handleNavigationFilter}
 					/>
 					<Router history={history} >
 						<Switch>

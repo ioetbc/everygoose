@@ -3,13 +3,25 @@
     margin: 0 auto;
     height: 100px;
     box-sizing: border-box;
-    padding-top: 70px;
+    padding: 70px 0;
 
     &.shop {
-        width: 250px;
+        width: 210px;
+        height: 200px;
+
+        @media screen and (min-width: 1000px) {
+            height: 100px;
+        }
 
         @media screen and (min-width: 600px) {
             width: auto;
+        }
+
+        .mobile-filter {
+            margin-top: 60px;
+            @media screen and (min-width: 1000px) {
+                display: none;
+            }
         }
     }
 

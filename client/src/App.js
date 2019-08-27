@@ -17,8 +17,8 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer'
 import './App.scss';
 import Header from './components/Header';
-import Shit from './components/Shit'
 import Prismic from 'prismic-javascript';
+import BackIcon from './images/misc/back-button.svg';
 
 class App extends Component {
 	constructor(props) {
@@ -110,72 +110,101 @@ class App extends Component {
 	
 	render() {
 		const { basket, cardTypes, doc, products, filteredProducts } = this.state;
+
 		return ([
-			<div className="app">
-				<Navigation
-					navigationItems={cardTypes}
-					handleNavigationFilter={this.handleNavigationFilter}
-				/>
-				<div style={{ flex: 1, background: '#fff7f5' }}>
-					<Header
-						title='header'
-						shop
-						basket={basket}
-						navigationItems={cardTypes}
-						handleNavigationFilter={this.handleNavigationFilter}
-					/>
-					<Router history={history} >
-						<Switch>
-							<Route exact path="/" render={routeProps =>
-								<Page
-									{...routeProps}
-									prismicCtx={this.props.prismicCtx}
-									basket={basket}
-									getCardType={this.getCardType}
-									doc={doc}
-									products={filteredProducts || products}
-								/>
-							} />
+			<div className="app">	
+				<Router history={history}>
+				<Switch>
+					<Route exact path="/" render={routeProps => [
+						<Navigation
+							navigationItems={cardTypes}
+							handleNavigationFilter={this.handleNavigationFilter}
+						/>,
+						<div style={{ width: '100%' }}>
+							<Header
+								title='shop'
+								shop
+								basket={basket}
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>
+							<Page
+								{...routeProps}
+								prismicCtx={this.props.prismicCtx}
+								basket={basket}
+								getCardType={this.getCardType}
+								doc={doc}
+								products={filteredProducts || products}
+							/>
+						</div>
+					]} />
 
-							<Route exact path="/page/:uid" render={routeProps => <Shit {...routeProps} prismicCtx={this.props.prismicCtx} />} />
+					<Route exact path="/product" render={routeProps =>
+						<div className="page-container">
+							<Header
+								title='product'
+								basket={basket}
+							/>
+							<div className="back-button">
+								<img src={BackIcon} alt="back chevron" />
+								<p onClick={history.goBack} className="back-button-text">back to homepage</p>
+							</div>
+							<Product
+								{...routeProps}
+								prismicCtx={this.props.prismicCtx}
+								addToBasket={this.addToBasket}
+								basket={basket}
+							/>
+						</div>
+					} />
 
-							<Route exact path="/product" render={routeProps =>
-								<Product
-									{...routeProps}
-									prismicCtx={this.props.prismicCtx}
-									addToBasket={this.addToBasket}
-									basket={basket}
-								/>
-							} />
+					<Route exact path="/checkout" render={routeProps =>
+						<div className="page-container">
+							<Header
+								title='checkout'
+								basket={basket}
+							/>
+							<div className="back-button">
+								<img src={BackIcon} alt="back chevron" />
+								<p onClick={history.goBack} className="back-button-text">back to product details</p>
+							</div>
+							<Checkout
+								{...routeProps}
+								basket={basket}
+								prismicCtx={this.props.prismicCtx}
+								selectQuantity={this.selectQuantity}
+								removeItem={this.removeItem}
+							/>
+						</div>
+					} />
 
-							<Route exact path="/checkout" render={routeProps =>
-								<Checkout
-									{...routeProps}
-									basket={basket}
-									prismicCtx={this.props.prismicCtx}
-									selectQuantity={this.selectQuantity}
-									removeItem={this.removeItem}
-								/>
-							} />
+					<Route exact path="/pay" render={routeProps =>
+						<div className="page-container">
+							<Header
+								title='pay'
+								basket={basket}
+							/>
+							<div className="back-button">
+								<img src={BackIcon} alt="back chevron" />
+								<p onClick={history.goBack} className="back-button-text">back to checkout</p>
+							</div>
+							<Pay
+								{...routeProps}
+								basket={basket}
+								prismicCtx={this.props.prismicCtx}
+								selectQuantity={this.selectQuantity}
+								removeItem={this.removeItem}
+							/>
+						</div>
+					} />
 
-							<Route exact path="/pay" render={routeProps =>
-								<Pay
-									{...routeProps}
-									basket={basket}
-									prismicCtx={this.props.prismicCtx}
-									selectQuantity={this.selectQuantity}
-									removeItem={this.removeItem}
-								/>
-							} />
+					<Route exact path="/contact" render={routeProps =>
+						<Contact />
+					} />
 
-							<Route exact path="/contact" render={routeProps =>
-								<Contact />
-							} />
-
-							<Route component={NotFound} />
-						</Switch>
-					</Router>
-				</div>
+					<Route component={NotFound} />
+				</Switch>
+			</Router>
 			</div>,
 			<Footer />,
 		])

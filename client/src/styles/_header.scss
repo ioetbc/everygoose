@@ -3,11 +3,23 @@
     margin: 0 auto;
     height: 100px;
     box-sizing: border-box;
-    padding: 70px 0;
+    padding: 70px 30px;
+
+    @media screen and (min-width: 1000px) {
+        padding: 70px 0;
+    }
+
+    .mobile-filter {
+        margin-top: 60px;
+        @media screen and (min-width: 1000px) {
+            display: none;
+        }
+    }
 
     &.shop {
         width: 210px;
         height: 200px;
+        padding: 70px 0;
 
         @media screen and (min-width: 1000px) {
             height: 100px;
@@ -15,13 +27,6 @@
 
         @media screen and (min-width: 600px) {
             width: auto;
-        }
-
-        .mobile-filter {
-            margin-top: 60px;
-            @media screen and (min-width: 1000px) {
-                display: none;
-            }
         }
     }
 

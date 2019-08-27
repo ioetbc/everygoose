@@ -1,8 +1,8 @@
 .navigation {
-    margin: 25px 0;
-
+    padding: 25px 0;
     @media screen and (min-width: 1000px) {
         margin: 0;
+        background: white;
     }
 
     .sticky {

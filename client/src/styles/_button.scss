@@ -7,3 +7,27 @@
 //     color: white;
 //     font-size: .8rem;
 // }
+
+.back-button {
+    display: inline-flex;
+    cursor: pointer;
+    padding: 0 30px;
+
+    @media screen and (min-width: 1000px) {
+        padding: 0;
+    }
+
+    img {
+        width: 32px;
+    }
+    .back-button-text {
+        margin-top: 20px;
+        margin-bottom: -10px;
+        text-transform: uppercase;
+        font-size: .7rem;
+        letter-spacing: 1.4px;
+        margin-top: 5px;
+        margin-left: 10px;
+    
+    }
+}

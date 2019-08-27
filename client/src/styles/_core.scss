@@ -1,8 +1,11 @@
 .app {
     max-width: 1600px;
     margin: 0 auto;
+    background: $color-bg;
+    // padding: 0 30px;
     @media screen and (min-width: 1000px) {
         display: flex;
+        padding: 0;
     }
 
     .main-content {
@@ -13,7 +16,18 @@
         min-height: 100vh;
 
         @media screen and (min-width: 1000px) {
-            padding: 70px;
+            padding: 70px 0;
+        }
+    }
+
+    .page-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+
+        @media screen and (min-width: 1000px) {
+            padding: 0 30px;
+
         }
     }
 }
@@ -33,22 +47,17 @@
         grid-gap: 3em;
     }
 
-    @media screen and (min-width: 1000px) {
-        grid-template-columns: 1fr; 
-    }
-
     @media screen and (min-width: 1150px) {
         grid-template-columns: 3fr 2fr;        
     }
 }
 
 .slide-show-side-by-side {
-    max-width: 400px;    
-
-    @media screen and (min-width: 768px) {
+    // max-width: 400px;    
+    @media screen and (min-width: 1000px) {
         display: grid;
         grid-gap: 3em;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 2fr));
+        grid-template-columns: 1fr 1fr;
     }
 
     @media screen and (min-width: 1270px) {

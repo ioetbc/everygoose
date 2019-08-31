@@ -1,26 +1,26 @@
-import React from 'react';
-import { Slide } from 'react-slideshow-image';
-   
-const properties = {
-    duration: 5000,
-    transitionDuration: 500,
-    infinite: true,
-    indicators: true,
-    arrows: false,
-}
+import React, { Component } from 'react';
+import { Carousel } from 'react-responsive-carousel';
 
-const SlideShow = ({ slideshowImages }) => {
-    return (
-        <div className="slide-container">
-            <Slide {...properties}>
-                {slideshowImages.map((item, key) => 
-                    <div className="each-slide">
-                        <img className="placeholder-slideshow-item" src={item} />
-                    </div>
-                )}
-            </Slide>
-        </div>
-    );
+class SlideShow extends Component {
+    render() {
+        return (
+            <div className="slide-container">
+                <Carousel
+                    showIndicators={false}
+                    showStatus={false}
+                    showArrows={false}
+                    autoPlay={true}
+                >
+                    {this.props.slideshowImages.map((item, key) => 
+                        <img
+                            className="placeholder-slideshow-item"
+                            src={item}
+                        />
+                    )}
+                </Carousel>
+            </div>
+        );
+    }
 }
 
 export default SlideShow;

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import ScrollToTop from '../components/utils/ScrollTop';
 import SlideShow from '../components/SlideShow';
 import ProductDetails from '../components/ProductDetails';
 
@@ -8,7 +9,8 @@ const Product = ({ location, addToBasket, basket }) => {
 
     const slideshowImages = [item.image_1_url, item.image_2_url, item.image_3_url];
 
-    return (
+    return [
+        <ScrollToTop />,
         <main className="main-content">
             <div className="slide-show-side-by-side">
                 <SlideShow
@@ -19,8 +21,8 @@ const Product = ({ location, addToBasket, basket }) => {
                     addToBasket={addToBasket}
                 />
             </div>
-        </main>
-    );
+        </main>,
+    ];
 }
 
 export default Product;

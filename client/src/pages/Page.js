@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import ScrollToTop from '../components/utils/ScrollTop';
+
 export default class Page extends Component {
 	render() {
 		const { doc, products } = this.props;
 		if (doc) {
-			return (
+			return [
+				<ScrollToTop />,
 				<main className="main-content">
 					<div className="shop">
 						<div className="shop-gallery">
@@ -22,8 +25,8 @@ export default class Page extends Component {
 							})}
 						</div>
 					</div>
-				</main>
-			)
+				</main>,
+			]
 		} else {
 			return (
 				<p>loading</p>

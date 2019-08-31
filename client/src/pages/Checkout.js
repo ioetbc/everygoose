@@ -1,10 +1,12 @@
 import React from 'react';
 
+import ScrollToTop from '../components/utils/ScrollTop';
 import SelectedItem from '../components/SelectedItem'; 
 import Overview from '../components/Overview';
 
 const Checkout = ({ selectQuantity, basket, removeItem }) => {
-    return (
+    return [
+        <ScrollToTop />,
         <main className="main-content">
             <div className="checkout-not-equal">
                 <SelectedItem
@@ -16,8 +18,8 @@ const Checkout = ({ selectQuantity, basket, removeItem }) => {
                     basket={basket}
                 />
             </div>
-        </main>
-    );
+        </main>,
+    ];
 }
 
 export default Checkout;

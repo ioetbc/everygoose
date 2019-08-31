@@ -37,6 +37,8 @@ class Navigation extends Component {
                             </ul>
                         </div>
                         <h4>about</h4>
+                        <h4>trade</h4>
+                        <h4>work</h4>
                         <h4>contact</h4>
                     </nav>
                     <div className="navigation-basket"></div>

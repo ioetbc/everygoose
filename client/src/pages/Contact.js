@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import ScrollToTop from '../components/utils/ScrollTop';
+
 class Contact extends Component {
     constructor(props) {
         super(props); 
@@ -30,7 +32,8 @@ class Contact extends Component {
     }
 
     render() {
-        return (
+        return [
+            <ScrollToTop />,
             <main className="main-content" style={{ display: 'flex', justifyContent: 'center' }}>
                 <form onSubmit={(e) => this.handleSubmit(e)}>
                     <div className='text-field--container'>
@@ -59,8 +62,8 @@ class Contact extends Component {
                     </div>
                     <button class="pure-material-button-contained">submit</button>
                 </form>
-            </main>
-        )
+            </main>,
+        ]
     }
 }
 

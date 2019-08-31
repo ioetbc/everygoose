@@ -1,12 +1,14 @@
 import React from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 
+import ScrollToTop from '../components/utils/ScrollTop';
 import Overview from '../components/Overview';
 import PayForm from '../components/PayForm'
 
 const Product = ({ location }) => {
     const deliveryCost = 2;
-    return (
+    return [
+        <ScrollToTop />,
         <main className="main-content">
             <div className="slide-show-side-by-side">
                 <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE}>
@@ -23,8 +25,8 @@ const Product = ({ location }) => {
                     deliveryCost={deliveryCost}
                 />
             </div>
-        </main>
-    );
+        </main>,
+    ];
 }
 
 export default Product;

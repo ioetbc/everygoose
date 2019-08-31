@@ -14,11 +14,11 @@ export default class Page extends Component {
 						<div className="shop-gallery">
 							{products.map((item, key) => {
 								return (		
-									<div key={key} className="shop-items">
+									<div key={key} className="shop-items" >
 										<Link to={{ pathname: "/product", state: { item } }}>
-												<img src={item.image_1_url} key={key} className="shop-images"></img>
-												<p>{item.title}</p>
-												<p>£{item.price}</p>
+											<img src={item.image_1_url} key={key} className="shop-images"></img>
+											<p>{item.title}</p>
+											<p>£{item.price}</p>
 										</Link>
 									</div>
 								);
@@ -29,7 +29,19 @@ export default class Page extends Component {
 			]
 		} else {
 			return (
-				<p>loading</p>
+				<main className="main-content">
+					<div className="shop">
+						<div className="shop-gallery">
+							{[1,2,3,4,5,6].map((item, key) => {
+								return (		
+									<div key={key} className="shop-items" >
+										<div key={key} className="palceholder-shop-image"></div>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				</main>
 			)
 		}
 	}

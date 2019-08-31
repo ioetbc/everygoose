@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-
-
+import React from 'react';
 
 const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
+    console.log('basket', basket)
     return (
         <div>
             {basket.map((item, key) =>
                 <div className="selected-item">
-                    <div className="selected-item-placeholder-image"></div>
+                    <div className="item-image-wrapper">
+                        <img src={item.image_1_url} className="item-image" />
+                    </div>
                     <div className="item-content">
                         <div className="item-title">
                             <p>{item.title}</p>
@@ -26,7 +27,7 @@ const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
                     </div>
                     <div className="item-remove">
                         <div className="item-price">
-                            <p className="price">£{item.price * item.quantity}</p>
+                            <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
                             <p className="remove text-small" onClick={() => removeItem(item)}>remove</p>
                         </div>
                     </div>

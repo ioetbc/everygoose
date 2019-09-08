@@ -43,7 +43,7 @@
                 position: relative;
                 width: 220px;
                 padding: 0 30px;
-                margin: 80px 0 50px 0;
+                margin: 60px 0 50px 0;
             }
         }
         .navigation-items {
@@ -82,7 +82,9 @@
                 margin: 0 0 8px 20px;
     
                 li {
-                    line-height: 1.9rem;
+                    font-size: 1rem;
+                    line-height: 1.8rem;
+                    color: $color-charcoal;
                 }
             }
         }
@@ -107,8 +109,9 @@
     @media screen and (min-width: 1000px) {
         .social-items {
             display: flex;
-            position: fixed;
-            bottom: 20px;
+            position: sticky;
+            top: 670px;
+            height: 30px;
             width: 120px;
             margin-left: 30px;
             justify-content: space-between;

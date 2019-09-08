@@ -10,14 +10,14 @@ const Product = ({ location }) => {
     return [
         <ScrollToTop />,
         <main className="main-content">
-            <div className="slide-show-side-by-side">
+            <div className="checkout-not-equal">
                 <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE}>
                     <Elements>
                         <PayForm
                             basket={location.state.basket}
                             deliveryCost={deliveryCost}
                         />
-                    </Elements>
+                        </Elements>
                 </StripeProvider>
                 <Overview
                     basket={location.state.basket}

@@ -8,7 +8,7 @@ import Hamburger from '../images/misc/hamburger.svg';
 class Navigation extends Component {
     constructor() {
         super()
-        this.state = { show: false }
+        this.state = { show: false, bottom: false }
         this.showMobileMenu = this.showMobileMenu.bind(this);
     }
 
@@ -18,7 +18,6 @@ class Navigation extends Component {
 
     render() {
         const { navigationItems, handleNavigationFilter } = this.props;
-
         return (
             <div className="navigation">
                 <div className="sticky">
@@ -31,7 +30,7 @@ class Navigation extends Component {
                             <h4>shop</h4>
                             <ul>
                                 {uniq(navigationItems).map(navItem =>
-                                    <li onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
+                                    <li onClick={() => handleNavigationFilter(navItem)}>- {navItem}</li>
                                 )}
                                 <li onClick={() => handleNavigationFilter('reset')}>reset</li>
                             </ul>
@@ -43,7 +42,11 @@ class Navigation extends Component {
                     </nav>
                     <div className="navigation-basket"></div>
                 </div>
-                <div className="social-items">
+                <div
+                    id="shit"
+                    className="social-items"
+                    // style={{ position: 'fixed', bottom: `${!!this.state.bottom ? '120px' : '0px'}` }}
+                >
                     <div className="social-link"></div>
                     <div className="social-link"></div>
                     <div className="social-link"></div>

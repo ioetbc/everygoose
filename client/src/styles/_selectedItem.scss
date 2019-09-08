@@ -3,12 +3,13 @@
     background: white;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border: blue solid 1px;
+    border: $color-red solid 1px;
     border-radius: 8px;
     margin-bottom: 24px;
     height: 130px;
     padding: 0 10px;
     box-sizing: border-box;
+    color: $color-red;
 
     @media screen and (min-width: 600px) {
         grid-template-columns: 1.2fr 3fr 2fr;
@@ -42,19 +43,9 @@
         justify-content: center;
         height: 100%;
 
-        .item-title {
-
-            .item-quantity {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-
-                .quantity-select {
-                    min-width: 65px;
-                    border: 1px solid red;
-                    outline: none;
-                    margin-left: 16px;
-                }
+        .item {
+            .item-title {
+                margin-bottom: 8px;
             }
         }
     }
@@ -82,12 +73,13 @@
 .checkout-overview {
     width: 100%;
     background: white;
-    border: red 1px solid;
+    border: $color-red 1px solid;
     border-radius: 8px;
     padding: 24px;
     display: inline-table;
     box-sizing: border-box;
     margin-top: 24px;
+    color: $color-charcoal;
 
     @media screen and (min-width: 768px) {
         max-width: 380px;  
@@ -96,13 +88,13 @@
         top: 80px;
     }
 
-    .total {
+    .total { 
         margin: 24px 0;
 
         .sub-total {
             margin-top: 20px;
-            border-top: 1px solid red;
-            border-bottom: 1px solid red;
+            border-top: 1px solid $color-charcoal;
+            border-bottom: 1px solid $color-charcoal;
 
             li {
             

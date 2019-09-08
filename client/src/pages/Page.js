@@ -15,10 +15,10 @@ export default class Page extends Component {
 							{products.map((item, key) => {
 								return (		
 									<div key={key} className="shop-items" >
-										<Link to={{ pathname: "/product", state: { item } }}>
+										<Link className="link" to={{ pathname: "/product", state: { item } }}>
 											<img src={item.image_1_url} key={key} className="shop-images"></img>
-											<p>{item.title}</p>
-											<p>£{item.price}</p>
+											<p className="product-title">{item.title}</p>
+											<p className="product-price">£{item.price}</p>
 										</Link>
 									</div>
 								);

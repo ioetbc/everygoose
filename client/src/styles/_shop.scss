@@ -43,6 +43,7 @@
             max-width: 210px;
             overflow: hidden;
             margin: 0 auto;
+            transition: all 1s;
             @media screen and (min-width: 768px) {
                 margin: 0;
             }
@@ -61,26 +62,22 @@
             }
 
             .palceholder-shop-image {
-                    width: 210px;
-                    height: 260px;
-                    border-radius: 8px;
-                    background-color: #d8d8d8;
-                    background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
-                    animation: shine-avatar 2s infinite linear;
+                width: 210px;
+                height: 260px;
+                border-radius: 8px;
+                background-color: #d8d8d8;
+                background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
+                animation: shine-avatar 2s infinite ease;
 
-                    @keyframes shine-avatar {
-                        0% {
-                          background-position: -32px;
-                        }
-                        40%, 100% {
-                          background-position: 208px;
-                        }
-                      }
+                @keyframes shine-avatar {
+                    0% {
+                        background-position: -32px;
+                    }
+                    40%, 100% {
+                        background-position: 208px;
+                    }
+                }
             }
-        }
-
-        p {
-            margin-bottom: 8px;
         }
     }
 }

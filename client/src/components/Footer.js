@@ -3,7 +3,7 @@ import Logo from '../images/misc/logo.svg';
 
 const Footer = ({ isDesktop }) => {
     return (
-        <footer className="footer">
+        <footer className="footer" id="footer">
             <img className="footer-logo" src={Logo} alt="EveryGoose logo" />
             <div className="footer-items">
                 <ul>

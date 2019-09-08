@@ -11,12 +11,13 @@ h1, h2, h3, h4, h5 {
     color: $color-red;
 }
 
-h4 {
-	font-size: 1.3rem;
+h3 {
+	margin-bottom: 20px;
+	text-transform: uppercase;
 }
 
-li {
-    font-size: 1.1rem;
+h4 {
+	font-size: 1.3rem;
 }
 
 .header-title {
@@ -24,23 +25,47 @@ li {
     font-size: 3rem;
 }
 
-.list {
-	margin: 30px 0;
-
-	li {
-		margin-bottom: 12px;
-	}
-
-}
-
 .list-flex {
-		
+	font-size: 0.9rem;
 	li {
 		display: flex;
 		justify-content: space-between;
+		margin-bottom: 6px;
+	}
+	.overview-delivery-cost {
+		font-size: .9rem;
+	}
+	.overview-total-text {
+		text-transform: uppercase;
+		font-weight: bold;
+		letter-spacing: 0.1rem;	
+	}
+	.overview-total-price {
+		font-weight: bold;
+		font-size: 1rem;
+	}
+
+	&.sub-total {
+		li {
+			margin-bottom: 5px;
+			margin-top: 3px;
+		}
 	}
 }
 
 .text-small {
 	font-size: .8rem;
+}
+
+.product-title, .product-price {
+	color: $color-red;
+}
+
+.product-price {
+	font-style: italic;
+	font-size: 0.9rem;
+}
+
+.link {
+	text-decoration: none;
 }

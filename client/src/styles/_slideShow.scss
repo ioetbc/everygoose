@@ -102,15 +102,15 @@
       margin-right: 6px;
       white-space: nowrap;
       overflow: hidden;
-      border: 1px solid red;
+      border: 1px solid $color-charcoal;
       border-radius: 5px;
       cursor: pointer;
       padding: 2px; }
       .carousel .thumb:focus {
-        border: 1px solid blue;
+        border: 1px solid $color-red;
         outline: none; }
       .carousel .thumb.selected, .carousel .thumb:hover {
-        border: 1px solid blue; }
+        border: 1px solid $color-red; }
       .carousel .thumb img {
         vertical-align: top; }
     .carousel.carousel-slider {

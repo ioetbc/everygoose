@@ -12,7 +12,7 @@ const Overview = ({ basket, payPage, deliveryCost }) => {
                 <ul className="list-flex">
                     {basket.map((item, key) =>
                         <li>
-                            <p>{item.title}</p>
+                            <p>{item.title}. ({item.quantity})</p>
                             <p>£{(item.price * item.quantity).toFixed(2)}</p>
                         </li>
                     )}
@@ -20,14 +20,14 @@ const Overview = ({ basket, payPage, deliveryCost }) => {
                 <div className="total">
                     <ul className="list-flex">
                         <li>
-                            <p>delivery cost</p>
+                            <p className="overview-delivery-cost">Delivery Cost</p>
                             <p>£2.00</p>
                         </li>
                     </ul>
                     <ul className="list-flex sub-total">
                         <li>
-                            <p>total</p>
-                            <p>£{(basket.reduce((a, item) =>  item.price * item.quantity + a, 0)).toFixed(2)}</p>
+                            <p className="overview-total-text">total</p>
+                            <p className="overview-total-price">£{(basket.reduce((a, item) =>  item.price * item.quantity + a, 0)).toFixed(2)}</p>
                         </li>
                     </ul>
                 </div>,

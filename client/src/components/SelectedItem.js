@@ -10,8 +10,8 @@ const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
                         <img src={item.image_1_url} className="item-image" />
                     </div>
                     <div className="item-content">
-                        <div className="item-title">
-                            <p>{item.title}</p>
+                        <div className="item">
+                            <p className="item-title">{item.title}.</p>
                             <div className="item-quantity">
                                 <p className="text-small">quantity</p>
                                 <select className="quantity-select" onChange={(e) => selectQuantity(e, item)}>

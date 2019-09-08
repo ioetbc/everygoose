@@ -6,8 +6,8 @@ export default function Header({ title, basket, shop, navigationItems, handleNav
         <div className={`header ${shop && 'shop'}`}>
             <h1 className="header-title">{title}</h1>
             {shop &&
-                <div className="mobile-filter">
-                    <select onChange={(e) => handleNavigationFilter(e.target.value)}>
+                <div className="mobile-filter item-quantity">
+                    <select className="quantity-select" onChange={(e) => handleNavigationFilter(e.target.value)}>
                         {uniq(navigationItems).map(navItem =>
                             <option value={navItem}>{navItem}</option>
                         )}

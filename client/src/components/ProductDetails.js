@@ -5,13 +5,13 @@ import Button from './Shared/Button';
 
 const ProductDetails = ({ details, addToBasket }) => {
     return (
-        <div className='product-container'>
+        <div className="product-details-container">
             <h3>{details.title}</h3>
             <p>{details.description}</p>
-            <ul className="list">
-                <li>key featuer</li>
-                <li>key featuer</li>
-                <li>key featuer</li>
+            <ul className="key-features">
+                <li>10.5cm x 14.8cm</li>
+                <li>hand made</li>
+                <li>delivered by 6th June</li>
             </ul>
             <Link to={{ pathname: "/checkout", state: { details } }}>
                 <Button

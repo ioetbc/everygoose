@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '../images/misc/logo.svg';
+import Logo from '../images/icons/logo-white.svg';
 
 const Footer = ({ isDesktop }) => {
     return (

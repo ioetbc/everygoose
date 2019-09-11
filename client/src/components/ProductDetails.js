@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import getEstimatedDelivery from './utils/estimateDelivery';
 import Button from './Shared/Button';
 
 const ProductDetails = ({ details, addToBasket }) => {
@@ -11,7 +12,7 @@ const ProductDetails = ({ details, addToBasket }) => {
             <ul className="key-features">
                 <li>10.5cm x 14.8cm</li>
                 <li>hand made</li>
-                <li>delivered by 6th June</li>
+                <li>delivered by {getEstimatedDelivery()}</li>
             </ul>
             <Link to={{ pathname: "/checkout", state: { details } }}>
                 <Button

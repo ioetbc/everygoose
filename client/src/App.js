@@ -12,6 +12,8 @@ import Product from './pages/Product';
 import Checkout from './pages/Checkout'
 import Pay from './pages/Pay';
 import Contact from './pages/Contact';
+import Trade from './pages/Trade';
+import About from './pages/About';
 import NotFound from './pages/NotFound';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer'
@@ -119,6 +121,7 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								shop
 							/>,
 							<div style={{ width: '100%' }}>
 								<Header
@@ -139,16 +142,16 @@ class App extends Component {
 							</div>
 						]} />
 
-						<Route exact path="/product" render={routeProps =>
-							<div className="page-container">
+						<Route exact path="/product" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>,
+							<div style={{ width: '100%' }}>
 								<Header
 									title='product'
 									basket={basket}
 								/>
-								<div className="back-button">
-									<img src={BackIcon} alt="back chevron" />
-									<p onClick={history.goBack} className="back-button-text">back to homepage</p>
-								</div>
 								<Product
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
@@ -156,18 +159,18 @@ class App extends Component {
 									basket={basket}
 								/>
 							</div>
-						} />
+						]} />
 
-						<Route exact path="/checkout" render={routeProps =>
-							<div className="page-container">
+						<Route exact path="/checkout" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>,
+							<div style={{ width: '100%' }}>
 								<Header
 									title='checkout'
 									basket={basket}
 								/>
-								<div className="back-button">
-									<img src={BackIcon} alt="back chevron" />
-									<p onClick={history.goBack} className="back-button-text">back to product details</p>
-								</div>
 								<Checkout
 									{...routeProps}
 									basket={basket}
@@ -176,18 +179,18 @@ class App extends Component {
 									removeItem={this.removeItem}
 								/>
 							</div>
-						} />
+						]} />
 
-						<Route exact path="/pay" render={routeProps =>
-							<div className="page-container">
+						<Route exact path="/pay" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>,
+							<div style={{ width: '100%' }}>
 								<Header
 									title='pay'
 									basket={basket}
 								/>
-								<div className="back-button">
-									<img src={BackIcon} alt="back chevron" />
-									<p onClick={history.goBack} className="back-button-text">back to checkout</p>
-								</div>
 								<Pay
 									{...routeProps}
 									basket={basket}
@@ -195,12 +198,66 @@ class App extends Component {
 									selectQuantity={this.selectQuantity}
 									removeItem={this.removeItem}
 								/>
-							</div>
-						} />
+							</div>,
+						]} />
 
-						<Route exact path="/contact" render={routeProps =>
-							<Contact />
-						} />
+						<Route exact path="/contact" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>,
+							<div style={{ width: '100%' }}>
+								<Header
+									title='contact'
+									basket={basket}
+								/>
+								<Contact
+									{...routeProps}
+								/>
+							</div>,
+						]} />
+
+						<Route exact path="/trade" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>,
+							<div style={{ width: '100%' }}>
+							<Header
+								title='trade'
+								basket={basket}
+							/>
+								<Trade />
+							</div>,
+						]} />
+
+						<Route exact path="/about" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>,
+							<div style={{ width: '100%' }}>
+							<Header
+								title='about'
+								basket={basket}
+							/>
+								<About />
+							</div>,
+						]} />
+
+						<Route exact path="/done" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+							/>,
+							<div style={{ width: '100%' }}>
+							<Header
+								title='about'
+								basket={basket}
+							/>
+								<About />
+							</div>,
+						]} />
 
 						<Route component={NotFound} />
 					</Switch>

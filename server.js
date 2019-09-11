@@ -7,6 +7,8 @@ const cors = require("cors");
 const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
 
+// joi backend validation
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
@@ -23,7 +25,8 @@ const transporter = nodemailer.createTransport({
       pass: process.env.REACT_APP_EMAIL_AUTH_PASSWORD
     },
 });
-
+// math on backend
+// get the products and do math
 app.post('/api/hello', async (req, res, next) => {
     try {
         await stripe.charges.create({
@@ -31,7 +34,7 @@ app.post('/api/hello', async (req, res, next) => {
             currency: 'GBP',
             source: req.body.token.id,
             description: 'card the customer bought',
-        })
+        });
     } catch (error) {
         console.log('charge error', error);
     }

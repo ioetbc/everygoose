@@ -36,6 +36,8 @@ export default class Page extends Component {
 								return (		
 									<div key={key} className="shop-items" >
 										<div key={key} className="palceholder-shop-image"></div>
+										<div className="placeholder-shop-title"></div>
+										<div className="placeholder-shop-price"></div>
 									</div>
 								);
 							})}

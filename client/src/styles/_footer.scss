@@ -11,8 +11,9 @@
     .footer-logo {
         width: 100%;
         max-width: 260px;
+        margin-top: 6px;
         @media screen and (min-width: 768px) {
-            width: 220px;
+            margin-left: -10px;
         }
     }
 

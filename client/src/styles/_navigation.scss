@@ -65,7 +65,7 @@
             }
 
             @media screen and (min-width: 1000px) {
-                padding-left: 70px;
+                padding-left: 30px;
                 width: auto;
                 height: auto;
 
@@ -111,16 +111,22 @@
             display: flex;
             position: sticky;
             top: 670px;
-            height: 30px;
+            height: 35px;
             width: 120px;
-            margin-left: 30px;
-            justify-content: space-between;
+            justify-content: end;
+            padding-left: 30px;
     
             .social-link {
-                width: 30px;
-                height: 30px;
+                width: 35px;
                 border-radius: 50%;
-                border: blue 1px solid;
+                margin-right: 8px;
+                background-repeat: no-repeat;
+                background: url('./images/icons/icon-insta.svg');
+
+                &:nth-child(2) {
+                    background-repeat: no-repeat;
+                    background: url('./images/icons/icon-facebook.svg');
+                }
             }
         }
     }

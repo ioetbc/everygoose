@@ -65,16 +65,55 @@
                 width: 210px;
                 height: 260px;
                 border-radius: 8px;
-                background-color: #d8d8d8;
+                background-color: $color-dull-as-fuck;
                 background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
-                animation: shine-avatar 2s infinite ease;
+                animation: shine-avatar 1s infinite ease;
 
                 @keyframes shine-avatar {
                     0% {
-                        background-position: -32px;
+                        background-position: -10px;
                     }
-                    40%, 100% {
-                        background-position: 208px;
+                    100% {
+                        background-position: 400px;
+                    }
+                }
+            }
+
+            .placeholder-shop-title {
+                width: 160px;
+                height: 20px;
+                background-color: $color-dull-as-fuck;;
+                margin-top: 24px;
+                border-radius: 4px;
+                background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
+                animation: shine-avatar 1s infinite ease;
+
+                @keyframes shine-avatar {
+                    0% {
+                        background-position: -10px;
+                    }
+                    100% {
+                        background-position: 400px;
+                    }
+                }
+            }
+
+            .placeholder-shop-price {
+                width: 90px;
+                height: 20px;
+                background-color: $color-dull-as-fuck;;
+                margin-top: 12px;
+                border-radius: 4px;
+
+                background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
+                animation: shine-avatar 1s infinite ease;
+
+                @keyframes shine-avatar {
+                    0% {
+                        background-position: -10px;
+                    }
+                    100% {
+                        background-position: 200px;
                     }
                 }
             }

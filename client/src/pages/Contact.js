@@ -34,8 +34,8 @@ class Contact extends Component {
     render() {
         return [
             <ScrollToTop />,
-            <main className="main-content" style={{ display: 'flex', justifyContent: 'center' }}>
-                <form onSubmit={(e) => this.handleSubmit(e)}>
+            <main className="main-content">
+                <form className="content-center" onSubmit={(e) => this.handleSubmit(e)}>
                     <div className='text-field--container'>
                         <div className='text-field'>
                             <input className='text-field--input' name="Name" id="name" placeholder=' ' type='text' />

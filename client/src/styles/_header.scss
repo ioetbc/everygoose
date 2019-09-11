@@ -4,6 +4,7 @@
     height: 100px;
     box-sizing: border-box;
     padding: 70px 30px;
+    max-width: 980px;
 
     @media screen and (min-width: 1000px) {
         padding: 70px 0;
@@ -19,24 +20,59 @@
     &.shop {
         width: 210px;
         height: 200px;
-        padding: 70px 0;
+        padding: 70px 0px;
+        max-width: 480px;
+
+        @media screen and (min-width: 600px) {
+            width: auto;
+        }
+
+        @media screen and (min-width: 768px) {
+            max-width: 780px;
+            padding: 70px 30px;
+        }
+
+        @media screen and (min-width: 780px) {
+            // padding: 70px 30px;
+        }
 
         @media screen and (min-width: 1000px) {
             height: 100px;
         }
 
-        @media screen and (min-width: 600px) {
-            width: auto;
+        @media screen and (min-width: 1200px) {
+            height: 100px;
+            padding: 70px 0px;
         }
     }
 
-    .header-basket {
+    .basket-wrapper {
         display: none;
         color: $color-charcoal;
+        width: 44px;
+        margin-top: 12px;
+        position: relative;
         @media screen and (min-width: 1000px) {
             display: block;
             float: right;
             position: relative;
+        }
+
+        .basket-amount {
+            background: #E26567;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            top: -2px;
+            right: 2px;
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            color: white;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
         }
     }
 }

@@ -17,7 +17,7 @@ const Overview = ({ basket, payPage, deliveryCost }) => {
                         </li>
                     )}
                 </ul>,
-                <div className="total">
+                <div className="total" style={{ marginBottom: payPage && 0 }}>
                     <ul className="list-flex">
                         <li>
                             <p className="overview-delivery-cost">Delivery Cost</p>
@@ -31,11 +31,12 @@ const Overview = ({ basket, payPage, deliveryCost }) => {
                         </li>
                     </ul>
                 </div>,
-                <Link to={{ pathname: "/pay", state: { basket } }}>
-                    <Button
-                        text={payPage ? 'pay now' : 'proceed to payment'}
-                    />
-                </Link>
+                !payPage &&
+                    <Link to={{ pathname: "/pay", state: { basket } }}>
+                        <Button
+                            text="proceed to payment"
+                        />
+                    </Link> 
             ]   
             :
             <p>nothing in your basket</p>

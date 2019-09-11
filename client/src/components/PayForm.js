@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import moment from 'moment';
 import { isEmpty, } from 'lodash';
-import { regExpLiteral } from 'babel-types';
+
+import getEstimatedDelivery from './utils/estimateDelivery';
 
 class PayForm extends Component {
     constructor(props) {
@@ -34,6 +34,7 @@ class PayForm extends Component {
         }
 
         if (e.target.name === 'postcode') {
+            // regex store in environment variable
             const postcodeRegex = RegExp('([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})');
             postcodeMatch = postcodeRegex.test(strippedValue)
         }
@@ -92,17 +93,6 @@ class PayForm extends Component {
             this.setState({ card: true })
         }
     }
-
-    getEstimatedDelivery() {
-        const weekday = moment().weekday();
-        const time = moment().format('H')
-
-        if (weekday < 6 || time < 14) {
-            return moment().add(2, 'day').format('Do MMMM');
-        } else {
-            return moment().add(4, 'day').format('Do MMMM');
-        }
-    }
     
     handleSubmit = async (e, allFieldsValidated) => {
         e.preventDefault();
@@ -126,8 +116,8 @@ class PayForm extends Component {
     
                 const quantity = this.props.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
     
-                const estimatedDelivery = this.getEstimatedDelivery();
-    
+                const estimatedDelivery = getEstimatedDelivery();
+                // post array of products to backend
                 await fetch('/api/hello', {
                     method: 'POST',
                     headers: {
@@ -148,6 +138,8 @@ class PayForm extends Component {
                         phone,
                     }),
                 });
+
+                window.location('/done');
     
             } catch(e) {
                 console.log('whats error', e)

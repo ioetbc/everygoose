@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import Logo from '../images/icons/logo-white.svg';
 
 const Footer = ({ isDesktop }) => {
@@ -7,7 +9,7 @@ const Footer = ({ isDesktop }) => {
             <img className="footer-logo" src={Logo} alt="EveryGoose logo" />
             <div className="footer-items">
                 <ul>
-                    <li>Contact</li>
+                <Link to={{ pathname: "/pay" }}><li>Contact</li></Link>
                     <li>Delivery & returns</li>
                     <li>Terms and conditions</li>
                 </ul>

@@ -8,13 +8,13 @@ export default function Header({ title, basket, shop, navigationItems, handleNav
         <div className={`header ${shop && 'shop'}`}>
             <h1 className="header-title">{title}</h1>
             {shop &&
-                <div className="mobile-filter item-quantity" style={{ display: 'block' }}>
+                <div className="mobile-filter item-quantity">
                     <select className="quantity-select" style={{ marginLeft: 0 }} onChange={(e) => handleNavigationFilter(e.target.value)}>
                         {uniq(navigationItems).map(navItem =>
                             <option value={navItem}>{navItem}</option>
                         )}
                     </select>
-                    <p style={{ marginTop: '8px' }} onClick={() => handleNavigationFilter('reset')}>reset</p>
+                    <p style={{ marginTop: '8px', cursor: 'pointer' }} onClick={() => handleNavigationFilter('reset')}>reset</p>
                 </div>
             }
             <Link to={{ pathname: "/checkout" }}>

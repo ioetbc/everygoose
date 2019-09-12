@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Prismic from 'prismic-javascript';
 import { find, get } from 'lodash';
 import {
   BrowserRouter as Router,
@@ -12,6 +13,7 @@ import Product from './pages/Product';
 import Checkout from './pages/Checkout'
 import Pay from './pages/Pay';
 import Contact from './pages/Contact';
+import TermsConditions from './pages/TermsAndConditions';
 import Trade from './pages/Trade';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
@@ -19,7 +21,7 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer'
 import './App.scss';
 import Header from './components/Header';
-import Prismic from 'prismic-javascript';
+
 import BackIcon from './images/misc/back-button.svg';
 
 class App extends Component {
@@ -91,7 +93,7 @@ class App extends Component {
 			.getByID('XVxFfREAACEAlCKe');
 
 		const cardTypes = [];
-
+		console.log('doc.data.', doc.data)
 		doc.data.products.forEach(item => {
 			this.state.products.push({
 				title: item.product_title[0].text,
@@ -102,6 +104,7 @@ class App extends Component {
 				quantity: 1,
 				description: item.product_description[0].text,
 				type: item.type_of_card,
+
 			});
 			
 			cardTypes.push(item.type_of_card);
@@ -122,6 +125,7 @@ class App extends Component {
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
 								shop
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 								<Header
@@ -146,6 +150,7 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 								<Header
@@ -165,6 +170,8 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								basket
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 								<Header
@@ -185,6 +192,7 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 								<Header
@@ -205,6 +213,7 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 								<Header
@@ -217,10 +226,28 @@ class App extends Component {
 							</div>,
 						]} />
 
+						<Route exact path="/terms-conditions" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
+							/>,
+							<div style={{ width: '100%' }}>
+								<Header
+									title='contact'
+									basket={basket}
+								/>
+								<TermsConditions
+									{...routeProps}
+								/>
+							</div>,
+						]} />
+
 						<Route exact path="/trade" render={routeProps => [
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 							<Header
@@ -235,6 +262,7 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 							<Header
@@ -249,6 +277,7 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
 							/>,
 							<div style={{ width: '100%' }}>
 							<Header
@@ -263,7 +292,11 @@ class App extends Component {
 					</Switch>
 				</Router>
 			</div>,
-			<Footer />,
+			<Router history={history}>
+				<Route>
+					<Footer />			
+				</Route>
+			</Router>,
 		])
 	}
 };

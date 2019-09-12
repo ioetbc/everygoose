@@ -112,7 +112,7 @@ class PayForm extends Component {
                 const { token } =  await this.props.stripe.createToken({ name: this.state.FirstName })
     
                 // pass this value down from the checkout page
-                const amount = this.props.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + this.props.deliveryCost;
+                const amount = this.props.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + 2;
     
                 const quantity = this.props.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
     
@@ -174,10 +174,12 @@ class PayForm extends Component {
 
         let buttonStyles;
 
+        console.log('allFieldsValidated', allFieldsValidated)
+
         if (allFieldsValidated) {
-            buttonStyles = { backgroundColor: '#ff6a6a' }
+            buttonStyles = { background: '#ff6a6a' }
         } else {
-            buttonStyles = { pointerEvents: 'none', boxShadow: 'none' }
+            buttonStyles = { pointerEvents: 'none', boxShadow: 'none', background: '#FCE4D4' }
         }
 
         return (
@@ -287,7 +289,7 @@ class PayForm extends Component {
                 </div>
 
                 <h3 style={{ marginTop: '12px' }}>payment method</h3>
-                <div className="payment-method-container">
+                {/*<div className="payment-method-container">
                     <div
                         className={`payment-method ${this.state.paymentMethod === 'visa' && 'selected'}`}
                         onClick={() => this.setState({ paymentMethod: 'visa' })}
@@ -300,7 +302,7 @@ class PayForm extends Component {
                     >
                         Paypal
                     </div>
-                </div>
+                </div>*/}
 
                 {this.state.paymentMethod === 'visa' && [
                     <CardElement
@@ -308,8 +310,8 @@ class PayForm extends Component {
                         onChange={(e) => this.handleCardValidation(e)}
                     />,
                     <button
-                        class="pure-material-button-contained"
-                        style={buttonStyles}
+                        className={`button pay-form ${allFieldsValidated && 'validated'} `}
+                        // style={buttonStyles}
                     >
                         pay now
                     </button>,

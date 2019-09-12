@@ -2,11 +2,13 @@ import React from 'react';
 import Button from './Shared/Button';
 import { Link } from 'react-router-dom';
 
-const Overview = ({ basket, payPage, deliveryCost }) => {
+const Overview = ({ basket, payPage, }) => {
+    const total = (basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + 2).toFixed(2);
 
     return (
         <div className="checkout-overview">
             <h3>Overview</h3>
+
 
             {basket.length > 0 ? [
                 <ul className="list-flex">
@@ -27,7 +29,7 @@ const Overview = ({ basket, payPage, deliveryCost }) => {
                     <ul className="list-flex sub-total">
                         <li>
                             <p className="overview-total-text">total</p>
-                            <p className="overview-total-price">£{(basket.reduce((a, item) =>  item.price * item.quantity + a, 0)).toFixed(2)}</p>
+                            <p className="overview-total-price">£{total}</p>
                         </li>
                     </ul>
                 </div>,

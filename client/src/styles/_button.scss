@@ -14,6 +14,20 @@ button {
     text-transform: uppercase;
     letter-spacing: 0.1rem;
     font-weight: bold;
+    transition: all .1s ease-in-out;
+    line-height: 24px;
+
+    &.pay-form {
+      background: green;
+      &.validated {
+        background: #ff6a6a;
+      }
+    }
+
+
+    &:hover {
+      background: darken($color-red, 5);
+    }
 }
 
 .back-button {
@@ -41,10 +55,22 @@ button {
 }
 
 .item-quantity {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
+	position: relative;
+  display: inline-block;
+  
+  .text-small {
+    display: none;
+  }
+
+    @media screen and (min-width: 1000px) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .text-small {
+        display: block;
+      }
+    }
 
     &:after {
         content:"\A";
@@ -57,7 +83,7 @@ button {
     }
 
     .quantity-select {
-        min-width: 65px;
+        min-width: 100px;
         border: 1px solid $color-red;
         outline: none;
         margin-left: 16px;
@@ -66,7 +92,6 @@ button {
         color: $color-red;
         border-radius: 3px;
         background: white; 
-         
     }
 }
 

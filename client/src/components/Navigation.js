@@ -61,17 +61,24 @@ class Navigation extends Component {
                     id="shit"
                     className="social-items"
                 >
+                    <div
+                        onClick={() => window.open('http://www.instagram.com/everygoose/', '_blank')}
+                        className="social-link"
+                    >
+                    </div>
 
-                    <a target="_blank" href="/http://www.instagram.com/everygoose/">
-                        <div className="social-link"></div>
-                    </a>
+                    <div
+                        onClick={() => window.open('http://www.facebook.com/Every-Goose-368589263977587/', '_blank')}
+                        className="social-link"
+                    >
+                    </div>
 
-                    <a target="_blank" href="/http://www.facebook.com/Every-Goose-368589263977587/">
-                        <div className="social-link"></div>
-                    </a>
-                    <a target="_blank" href="/http://www.etsy.com/uk/shop/EveryGoose">
-                        <div className="social-link"></div>
-                    </a>
+                    <div
+                        onClick={() => window.open('http://www.etsy.com/everygoose/', '_blank')}
+                        className="social-link"
+                    >
+                    </div>
+
                 </div>
             </div>
         )

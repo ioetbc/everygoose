@@ -34,11 +34,11 @@ const transporter = nodemailer.createTransport({
       pass: process.env.REACT_APP_EMAIL_AUTH_PASSWORD
     },
 });
-// math on backend
-// get the products and do math
-app.post('/api/hello', async (req, res, next) => {
 
+app.post('/api/hello', async (req, res, next) => {
+    const total = (req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + 2).toFixed(2);
     const { error } = PaySchema.validate(req.body.paymentValues);
+
     if (!!error) {
         console.log('validation error', error);
         return error;
@@ -47,7 +47,7 @@ app.post('/api/hello', async (req, res, next) => {
     try {
         console.log('validation successful');
         await stripe.charges.create({
-            amount: req.body.amount * 100,
+            amount: total * 100,
             currency: 'GBP',
             source: req.body.token.id,
             description: 'card the customer bought',
@@ -58,6 +58,7 @@ app.post('/api/hello', async (req, res, next) => {
     }
 
     try {
+        console.log('payent successful');
         transporter.use('compile', hbs({
             viewEngine: {
                 extName: '.handlebars',

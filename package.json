@@ -5,6 +5,7 @@
     "start": "env-cmd -f .env.development node server.js"
   },
   "dependencies": {
+    "@hapi/joi": "^16.0.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "email-templates": "^6.0.0",

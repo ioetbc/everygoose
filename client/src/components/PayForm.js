@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import { isEmpty, } from 'lodash';
 
-import getEstimatedDelivery from './utils/estimateDelivery';
+import getEstimatedDelivery from './utils/EstimateDelivery';
+import { PaySchema } from '../schema/PaySchema';
 
 class PayForm extends Component {
     constructor(props) {
@@ -15,89 +15,24 @@ class PayForm extends Component {
             postcode: false,
             email: false,
             phone: false,
-            card: false,
             paymentMethod: 'visa',
+            paymentValues: {},
+            validationError: ''
         }
 
-        this.handleInputValidation = this.handleInputValidation.bind(this);
-        this.handleCardValidation = this.handleCardValidation.bind(this);
-    }
-
-    handleInputValidation(e) {
-        let strippedValue = e.target.value.toLowerCase();
-        let postcodeMatch = false;
-        let emailMatch = false;
-        let phoneMatch = false;
-
-        if (e.target.name !== 'addressFirstLine') {
-            strippedValue = strippedValue.replace(/ /g, "");
-        }
-
-        if (e.target.name === 'postcode') {
-            // regex store in environment variable
-            const postcodeRegex = RegExp('([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})');
-            postcodeMatch = postcodeRegex.test(strippedValue)
-        }
-
-        if (e.target.name === 'email') {
-            const emailRegex = RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
-            emailMatch = emailRegex.test(strippedValue);
-        }
-
-        if (e.target.name === 'phone') {
-            const phoneRegex = RegExp(/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/);
-            phoneMatch = phoneRegex.test(strippedValue);
-        }
-
-        switch(e.target.name) {
-            case 'firstName':
-                if (!isEmpty(strippedValue)) {
-                    this.setState({ firstName: strippedValue });
-                }
-                break;
-            case 'lastName':
-                if (!isEmpty(strippedValue)) {
-                    this.setState({ lastName: strippedValue });
-                }
-                break;
-            case 'addressFirstLine':
-                if (!isEmpty(strippedValue)) {
-                    this.setState({ addressFirstLine: strippedValue }); 
-                }
-                break;
-            case 'county':
-                if (!isEmpty(strippedValue)) {
-                    this.setState({ county: strippedValue });
-                }
-                break;
-            case 'postcode':
-                if (!isEmpty(strippedValue) && postcodeMatch) {
-                    this.setState({ postcode: strippedValue });
-                }
-                break;
-            case 'email': 
-                if (!isEmpty(strippedValue) && emailMatch) {
-                    this.setState({ email: strippedValue });
-                }
-            case 'phone': 
-                if (!isEmpty(strippedValue) && phoneMatch) {
-                    this.setState({ phone: strippedValue });
-                }
-            default:
-                return false;
-          }
-    }
-
-    handleCardValidation(e) {
-        if (e.error === undefined && e.complete === true) {
-            this.setState({ card: true })
-        }
+        this.handleInput = this.handleInput.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     
-    handleSubmit = async (e, allFieldsValidated) => {
+    async handleSubmit(e) {
         e.preventDefault();
 
-        if (allFieldsValidated) {
+        const { error } = PaySchema.validate(this.state.paymentValues);
+            if (error) {
+                console.log('pay validation error', error)
+                this.setState({ validationError: error.message });
+                return error;
+            }
             try {
                 const {
                     firstName,
@@ -106,18 +41,17 @@ class PayForm extends Component {
                     county,
                     postcode,
                     email,
-                    phone
+                    phone,
+                    paymentValues,
                 } = this.state;
+
+                const { basket } = this.props;
     
-                const { token } =  await this.props.stripe.createToken({ name: this.state.FirstName })
-    
-                // pass this value down from the checkout page
-                const amount = this.props.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + 2;
-    
-                const quantity = this.props.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
-    
+                const { token } = await this.props.stripe.createToken({ name: this.state.FirstName })
+                const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
                 const estimatedDelivery = getEstimatedDelivery();
-                // post array of products to backend
+
+
                 await fetch('/api/hello', {
                     method: 'POST',
                     headers: {
@@ -131,59 +65,31 @@ class PayForm extends Component {
                         lastName,
                         postcode,
                         quantity,
-                        amount,
                         county,
                         token,
                         email,
                         phone,
+                        paymentValues,
+                        basket,
                     }),
                 });
 
-                window.location('/done');
-    
-            } catch(e) {
-                console.log('whats error', e)
-                throw e;
+            } catch(error) {
+                console.log('payment error', error)
+                return error;
             }
-        }
-        return false;
     }
 
+    handleInput = (e) => {
+        e.preventDefault();
+        this.setState({
+            paymentValues: {...this.state.paymentValues, [e.target.name]: e.target.value },
+        })
+    };
+
     render() {
-        const {
-            firstName,
-            lastName,
-            addressFirstLine,
-            county,
-            postcode,
-            email,
-            phone,
-            card,
-        } = this.state;
-
-        const allFieldsValidated = [
-            !!firstName,
-            !!lastName,
-            !!addressFirstLine,
-            !!county,
-            !!postcode,
-            !!email,
-            !!phone,
-            !!card,
-        ].filter(Boolean).length === 8;
-
-        let buttonStyles;
-
-        console.log('allFieldsValidated', allFieldsValidated)
-
-        if (allFieldsValidated) {
-            buttonStyles = { background: '#ff6a6a' }
-        } else {
-            buttonStyles = { pointerEvents: 'none', boxShadow: 'none', background: '#FCE4D4' }
-        }
-
         return (
-            <form onSubmit={(e) => this.handleSubmit(e, allFieldsValidated)}>
+            <form onSubmit={this.handleSubmit}>
 
                 <div class="input-side-by-side">
                     <div className='text-field--container'>
@@ -194,7 +100,7 @@ class PayForm extends Component {
                                 id="firstName"
                                 placeholder=' '
                                 type='text'
-                                onBlur={(e) => this.handleInputValidation(e)}
+                                onBlur={(e) => this.handleInput(e)}
                             />
                             <label className='text-field--label' for='firstName'>first name</label>
                         </div>
@@ -207,7 +113,7 @@ class PayForm extends Component {
                                 id="lastName"
                                 placeholder=' '
                                 type='text'
-                                onBlur={(e) => this.handleInputValidation(e)}
+                                onBlur={(e) => this.handleInput(e)}
                             />
                             <label className='text-field--label' for='lastName'>last name</label>
                         </div>
@@ -222,7 +128,7 @@ class PayForm extends Component {
                             id="addressFirstLine"
                             placeholder=' '
                             type='text'
-                            onBlur={(e) => this.handleInputValidation(e)}    
+                            onBlur={(e) => this.handleInput(e)}   
                         />
                         <label className='text-field--label' for='address'>address line 1</label>
                     </div>
@@ -237,7 +143,7 @@ class PayForm extends Component {
                                 id="county"
                                 placeholder=' '
                                 type='text'
-                                onBlur={(e) => this.handleInputValidation(e)}
+                                onBlur={(e) => this.handleInput(e)}
                             />
                             <label className='text-field--label' for='county'>county</label>
                         </div>
@@ -250,7 +156,7 @@ class PayForm extends Component {
                                 id="postcode"
                                 placeholder=' '
                                 type='text'
-                                onBlur={(e) => this.handleInputValidation(e)}
+                                onBlur={(e) => this.handleInput(e)}
                                 style={{ textTransform: 'uppercase' }}
                             />
                             <label className='text-field--label' for='postcode'>postcode</label>
@@ -267,7 +173,7 @@ class PayForm extends Component {
                                 id="email"
                                 placeholder=' '
                                 type='email'
-                                onBlur={(e) => this.handleInputValidation(e)}
+                                onBlur={(e) => this.handleInput(e)}
                                 style={{ textTransform: 'none' }}
                             />
                             <label className='text-field--label' for='email'>email</label>
@@ -281,41 +187,27 @@ class PayForm extends Component {
                                 id="phone"
                                 placeholder=' '
                                 type='number'
-                                onBlur={(e) => this.handleInputValidation(e)}
+                                onBlur={(e) => this.handleInput(e)}
                             />
                             <label className='text-field--label' for='phone'>phone number</label>
                         </div>
                     </div>
                 </div>
 
-                <h3 style={{ marginTop: '12px' }}>payment method</h3>
-                {/*<div className="payment-method-container">
-                    <div
-                        className={`payment-method ${this.state.paymentMethod === 'visa' && 'selected'}`}
-                        onClick={() => this.setState({ paymentMethod: 'visa' })}
-                    >
-                        Visa
-                    </div>
-                    <div
-                        className={`payment-method ${this.state.paymentMethod === 'paypal' && 'selected'}`}
-                        onClick={() => this.setState({ paymentMethod: 'paypal' })}
-                    >
-                        Paypal
-                    </div>
-                </div>*/}
+                {!!this.state.validationError &&
+                    <p className='error-message'>{(this.state.validationError).toString()}</p>
+                }
 
-                {this.state.paymentMethod === 'visa' && [
-                    <CardElement
-                        hidePostalCode
-                        onChange={(e) => this.handleCardValidation(e)}
-                    />,
-                    <button
-                        className={`button pay-form ${allFieldsValidated && 'validated'} `}
-                        // style={buttonStyles}
-                    >
-                        pay now
-                    </button>,
-                ]}
+                <h3 style={{ marginTop: '12px' }}>payment method</h3>
+
+                <CardElement
+                    hidePostalCode
+                />
+                <button
+                    className='button pay-form'
+                >
+                    pay now
+                </button>
             </form>
         );
     }

@@ -93,7 +93,6 @@ class App extends Component {
 			.getByID('XVxFfREAACEAlCKe');
 
 		const cardTypes = [];
-		console.log('doc.data.', doc.data)
 		doc.data.products.forEach(item => {
 			this.state.products.push({
 				title: item.product_title[0].text,

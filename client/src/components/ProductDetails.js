@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import EstimatedDelivery from './utils/Estimated';
+import EstimatedDelivery from './utils/EstimatedDelivery';
 import Button from './Shared/Button';
 
 const ProductDetails = ({ details, addToBasket }) => {

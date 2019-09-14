@@ -17,14 +17,6 @@ button {
     transition: all .1s ease-in-out;
     line-height: 24px;
 
-    &.pay-form {
-      background: green;
-      &.validated {
-        background: #ff6a6a;
-      }
-    }
-
-
     &:hover {
       background: darken($color-red, 5);
     }

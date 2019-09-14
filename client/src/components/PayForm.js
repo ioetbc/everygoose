@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
-import EstimatedDelivery from './utils/Estimated';
+import EstimatedDelivery from './utils/EstimatedDelivery';
 import { PaySchema } from '../schema/PaySchema';
 
 class PayForm extends Component {
@@ -203,9 +203,7 @@ class PayForm extends Component {
                 <CardElement
                     hidePostalCode
                 />
-                <button
-                    className='button pay-form'
-                >
+                <button className='button'>
                     pay now
                 </button>
             </form>

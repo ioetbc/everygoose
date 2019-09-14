@@ -74,7 +74,7 @@ class Navigation extends Component {
                     </div>
 
                     <div
-                        onClick={() => window.open('http://www.etsy.com/everygoose/', '_blank')}
+                        onClick={() => window.open('https://www.etsy.com/uk/shop/EveryGoose', '_blank')}
                         className="social-link"
                     >
                     </div>

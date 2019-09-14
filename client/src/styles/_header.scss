@@ -32,19 +32,15 @@
             padding: 70px 30px;
         }
 
-        @media screen and (min-width: 780px) {
-            // padding: 70px 30px;
-        }
-
         @media screen and (min-width: 1000px) {
             height: 100px;
             display: flex;
-        justify-content: space-between;
+            justify-content: space-between;
         }
 
         @media screen and (min-width: 1200px) {
             height: 100px;
-            padding: 70px 0px;
+            padding: 70px 0 0 0;
         }
     }
 }

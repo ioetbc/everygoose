@@ -13,9 +13,10 @@ import Product from './pages/Product';
 import Checkout from './pages/Checkout'
 import Pay from './pages/Pay';
 import Contact from './pages/Contact';
-import TermsConditions from './pages/TermsAndConditions';
+import TermsConditions from './pages/Terms';
 import Trade from './pages/Trade';
 import About from './pages/About';
+import Delivery from './pages/Delivery';
 import NotFound from './pages/NotFound';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer'
@@ -225,7 +226,7 @@ class App extends Component {
 							</div>,
 						]} />
 
-						<Route exact path="/terms-conditions" render={routeProps => [
+						<Route exact path="/terms" render={routeProps => [
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
@@ -236,9 +237,7 @@ class App extends Component {
 									title='contact'
 									basket={basket}
 								/>
-								<TermsConditions
-									{...routeProps}
-								/>
+								<TermsConditions prismicCtx={this.props.prismicCtx} />
 							</div>,
 						]} />
 
@@ -253,7 +252,22 @@ class App extends Component {
 								title='trade'
 								basket={basket}
 							/>
-								<Trade />
+								<Trade prismicCtx={this.props.prismicCtx} />
+							</div>,
+						]} />
+
+						<Route exact path="/delivery" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
+							/>,
+							<div style={{ width: '100%' }}>
+							<Header
+								title='trade'
+								basket={basket}
+							/>
+								<Delivery prismicCtx={this.props.prismicCtx} />
 							</div>,
 						]} />
 
@@ -268,7 +282,7 @@ class App extends Component {
 								title='about'
 								basket={basket}
 							/>
-								<About />
+								<About prismicCtx={this.props.prismicCtx}/>
 							</div>,
 						]} />
 

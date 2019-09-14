@@ -3,12 +3,10 @@ import Prismic from 'prismic-javascript';
 
 import ScrollToTop from '../components/utils/ScrollTop';
 
-class Trade extends Component {
+class Delivery extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-			tradeContent: '',
-		}
+        this.state = { deliveryContent: '' }
 
 		if (this.props.prismicCtx) {
 			this.fetchPage(props);
@@ -28,9 +26,9 @@ class Trade extends Component {
         })
 
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
-			.getByID('XXxIZxAAACUAJDr8');
+			.getByID('XXxJixAAACMAJEAT');
         if (doc) {
-            this.setState({ tradeContent: doc.data.trade[0].text })
+            this.setState({ deliveryContent: doc.data.delivery_and_returns[0].text });
         }
 	}
     
@@ -39,11 +37,11 @@ class Trade extends Component {
             <ScrollToTop />,
             <main className="main-content">
                 <div className="content-more-right-less-left">
-                    <p>{this.state.tradeContent}</p>
+                    <p>{this.state.deliveryContent}</p>
                 </div>
             </main>,
         ];
     }
 }
 
-export default Trade;
+export default Delivery;

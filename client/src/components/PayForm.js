@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
-import getEstimatedDelivery from './utils/EstimateDelivery';
+import EstimatedDelivery from './utils/Estimated';
 import { PaySchema } from '../schema/PaySchema';
 
 class PayForm extends Component {
@@ -49,7 +49,7 @@ class PayForm extends Component {
     
                 const { token } = await this.props.stripe.createToken({ name: this.state.FirstName })
                 const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
-                const estimatedDelivery = getEstimatedDelivery();
+                const estimatedDelivery = EstimatedDelivery();
 
 
                 await fetch('/api/hello', {

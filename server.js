@@ -35,11 +35,11 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-app.post('/api/hello', async (req, res, next) => {
+app.post('/api/hello', async (req, res) => {
     const total = (req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + 2).toFixed(2);
     const { error } = PaySchema.validate(req.body.paymentValues);
 
-    if (!!error) {
+    if (error) {
         console.log('validation error', error);
         return error;
     }
@@ -69,27 +69,30 @@ app.post('/api/hello', async (req, res, next) => {
               extName: '.handlebars',
         }));
 
-        const { firstName, amount, quantity, token, estimatedDelivery } = req.body;
+        const { firstName, quantity, token, estimatedDelivery, cardOrCards, theyOrIt } = req.body;
 
-        const customerEmail = {
-            from: '"customer" <hello@everygoose.com>',
+        const customerConfirmation = {
+            from: '"Every Goose" <hello@everygoose.com>',
             to: "ioetbc@gmail.com",
             subject: "Order confirmation",
             template: 'main',
             context: {
                 firstName,
-                amount,
+                amount: total,
                 quantity,
                 last4: token.card.last4,
                 estimatedDelivery,
+                cardOrCards,
+                theyOrIt
             }
         }
 
-        transporter.sendMail(customerEmail, (error) => {
+        transporter.sendMail(customerConfirmation, (error) => {
             if (error) {
+                console.log('error', error)
                 return error;
             }
-            return console.log('cusomer confirmation email sent');
+            return console.log('customer confirmation email sent');
         });
 
     } catch (error) {
@@ -98,35 +101,35 @@ app.post('/api/hello', async (req, res, next) => {
     }
 });
 
-app.post('/api/contact', async (req, res, next) => {
-    try {
-        transporter.use('compile', hbs({
-            viewEngine: {
-                extName: '.handlebars',
-                partialsDir: './client/src/emails/',
-                layoutsDir: './client/src/emails/',
-              },
-              viewPath: './client/src/emails/',
-              extName: '.handlebars',
-        }));
+// app.post('/api/contact', async (req, res, next) => {
+//     try {
+//         transporter.use('compile', hbs({
+//             viewEngine: {
+//                 extName: '.handlebars',
+//                 partialsDir: './client/src/emails/',
+//                 layoutsDir: './client/src/emails/',
+//               },
+//               viewPath: './client/src/emails/',
+//               extName: '.handlebars',
+//         }));
 
-        const everygooseEmail = {
-            from: '"everygoose" <hello@everygoose.com>',
-            to: "ioetbc@gmail.com",
-            subject: "New order",
-            template: 'main',
-        }
+//         const everygooseEmail = {
+//             from: '"everygoose" <hello@everygoose.com>',
+//             to: "ioetbc@gmail.com",
+//             subject: "New order",
+//             template: 'main',
+//         }
 
-        transporter.sendMail(everygooseEmail, (error) => {
-            if (error) {
-                return console.log('Error occurs', error);
-            }
-            return console.log('Email sent!!!');
-        });
+//         transporter.sendMail(everygooseEmail, (error) => {
+//             if (error) {
+//                 return console.log('Error occurs', error);
+//             }
+//             return console.log('Email sent!!!');
+//         });
 
 
-    } catch (error) {
-       console.log('error', error)
-    }
-});
+//     } catch (error) {
+//        console.log('error', error)
+//     }
+// });
 

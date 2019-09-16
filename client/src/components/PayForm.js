@@ -34,43 +34,29 @@ class PayForm extends Component {
                 return error;
             }
             try {
-                const {
-                    firstName,
-                    lastName,
-                    addressFirstLine,
-                    county,
-                    postcode,
-                    email,
-                    phone,
-                    paymentValues,
-                } = this.state;
-
+                const { paymentValues } = this.state;
                 const { basket } = this.props;
-    
-                const { token } = await this.props.stripe.createToken({ name: this.state.FirstName })
+                const { firstName, email } = paymentValues;
+                const { token } = await this.props.stripe.createToken({ name: firstName })
                 const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
                 const estimatedDelivery = EstimatedDelivery();
-
+                const theyOrIt = basket.length > 1 ? 'They' : 'It';
+                const cardOrCards = basket.length > 1 ? 'cards' : 'card';
 
                 await fetch('/api/hello', {
                     method: 'POST',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
+                    headers: {'content-type': 'application/json'},
                     body: JSON.stringify({
                         estimatedDelivery,
-                        addressFirstLine,
                         currency: 'GBP',
                         firstName,
-                        lastName,
-                        postcode,
                         quantity,
-                        county,
                         token,
                         email,
-                        phone,
                         paymentValues,
                         basket,
+                        theyOrIt,
+                        cardOrCards,
                     }),
                 });
 

@@ -28,7 +28,6 @@ class PayForm extends Component {
     async handleSubmit(e) {
         e.preventDefault();
         const { token } = await this.props.stripe.createToken({ name: 'william' })
-        console.log('token', token)
         axios({
             method: 'post',
             url: process.env.REACT_APP_PAY_ENDPOINT,

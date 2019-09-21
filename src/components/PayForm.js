@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
+import axios from 'axios';
 
 import EstimatedDelivery from './utils/EstimatedDelivery';
 import { PaySchema } from '../schema/PaySchema';
@@ -26,39 +27,29 @@ class PayForm extends Component {
     
     async handleSubmit(e) {
         e.preventDefault();
-
-        const { error } = PaySchema.validate(this.state.paymentValues);
-            if (error) {
-                console.log('pay validation error', error)
-                this.setState({ validationError: error.message });
-                return error;
-            }
-            try {
-                const { paymentValues } = this.state;
-                const { basket } = this.props;
-                const { firstName, email } = paymentValues;
-                const { token } = await this.props.stripe.createToken({ name: firstName })
-                const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
-                const estimatedDelivery = EstimatedDelivery();
-                const theyOrIt = basket.length > 1 ? 'They' : 'It';
-                const cardOrCards = basket.length > 1 ? 'cards' : 'card';
-
-                await fetch(process.env.REACT_APP_PAY_ENDPOINT, {
-                    method: 'POST',
-                    headers: {'content-type': 'application/json'},
-                    body: JSON.stringify({
-                        firstName: 'firstName',
-                        lastName: 'lastName',
-                        email: 'emai', 
-                        items: 'items',
-                        address: 'address',
-                        phoneNumber: 'phoneNumber'
-                    })
-                })
-            } catch(error) {
-                console.log('payment error', error)
-                return error;
-            }
+        axios({
+            method: 'post',
+            url: process.env.REACT_APP_PAY_ENDPOINT,
+            config: {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            },
+            data: {
+                firstName: 'firstName',
+                lastName: 'lastName',
+                email: 'emai', 
+                items: 'items',
+                address: 'address',
+                phoneNumber: 'phoneNumber'
+            },
+        })
+        .then(function (response) {
+            console.log('the respoonse', response);
+        })
+        .catch(function (error) {
+            console.log('the error', error);
+        });
     }
 
     handleInput = (e) => {
@@ -181,9 +172,7 @@ class PayForm extends Component {
 
                 <h3 style={{ marginTop: '12px' }}>payment method</h3>
 
-                <CardElement
-                    hidePostalCode
-                />
+
                 <button className='button'>
                     pay now
                 </button>

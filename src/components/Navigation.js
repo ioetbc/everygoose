@@ -3,7 +3,7 @@ import { uniq } from 'lodash';
 import { Link } from 'react-router-dom';
 
 // import Logo from '../images/misc/logo.svg'
-import Logo from '../images/misc/logo-animated.gif';
+// import Logo from '../images/misc/logo-animated.gif';
 import Hamburger from '../images/misc/hamburger.svg';
 import Basket from '../images/icons/icon-basket.svg';
 
@@ -24,9 +24,9 @@ class Navigation extends Component {
         return (
             <div className="navigation">
                 <div className="sticky">
-                    <Link to={{ pathname: "/" }}>
+                    {/*<Link to={{ pathname: "/" }}>
                         <img className="navigation-logo" src={Logo} alt="EveryGoose logo" />                
-                    </Link>
+                    </Link>*/}
                     <div className="menu" onClick={this.showMobileMenu}>
                         <img className="hamburger-icon" src={Hamburger} alt="" />
                         <Link to={{ pathname: "/checkout" }}>

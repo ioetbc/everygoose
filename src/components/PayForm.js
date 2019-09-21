@@ -27,6 +27,8 @@ class PayForm extends Component {
     
     async handleSubmit(e) {
         e.preventDefault();
+        const { token } = await this.props.stripe.createToken({ name: 'william' })
+        console.log('token', token)
         axios({
             method: 'post',
             url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -41,7 +43,8 @@ class PayForm extends Component {
                 email: 'emai', 
                 items: 'items',
                 address: 'address',
-                phoneNumber: 'phoneNumber'
+                phoneNumber: 'phoneNumber',
+                stripeToken: token.id,
             },
         })
         .then(function (response) {
@@ -172,6 +175,9 @@ class PayForm extends Component {
 
                 <h3 style={{ marginTop: '12px' }}>payment method</h3>
 
+                <CardElement	
+                    hidePostalCode	
+                />
 
                 <button className='button'>
                     pay now

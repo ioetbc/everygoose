@@ -1,0 +1,84 @@
+.app {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: $color-bg;
+    @media screen and (min-width: 1000px) {
+        display: flex;
+        padding: 0;
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 30px;
+        box-sizing: border-box; 
+        background: $color-bg;
+        min-height: 100vh;
+        max-width: 980px;
+        margin: 0 auto;
+
+        @media screen and (min-width: 1200px) {
+            padding: 70px 0;
+        }
+    }
+
+    .page-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+
+        @media screen and (min-width: 1000px) {
+            padding: 0 30px;
+
+        }
+    }
+}
+
+.content-side-by-side {
+    @media screen and (min-width: 768px) {
+        display: grid;
+        grid-gap: 3em;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 2fr));
+    }
+}
+
+.checkout-not-equal {
+    @media screen and (min-width: 768px) {
+        display: grid;
+        grid-template-columns: 3fr 2fr;        
+        grid-gap: 3em;
+    }
+
+    @media screen and (min-width: 1150px) {
+        grid-template-columns: 3fr 2fr;        
+    }
+}
+
+.content-more-right-less-left {
+    @media screen and (min-width: 768px) {
+        display: grid;
+        grid-template-columns: 2fr 3fr;        
+        grid-gap: 3em;
+    }
+
+    @media screen and (min-width: 1150px) {
+        grid-template-columns: 2fr 3fr;        
+    }
+}
+
+.slide-show-side-by-side {
+    // max-width: 400px;    
+    @media screen and (min-width: 1000px) {
+        display: grid;
+        grid-gap: 3em;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 1270px) {
+        max-width: none;         
+    }
+}
+
+.content-center {
+    max-width: 450px;
+    width: 100%;
+}

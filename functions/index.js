@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const stripeLoader = require('stripe');
 const cors = require('cors')({ origin: true });
 const uuid = require('uuidv4').default;
-const stripe = new stripeLoader(functions.config().stripe.secret_key);
+const sendgrid = require('@sendgrid/mail');
 
 admin.initializeApp({
     apiKey: functions.config().db.api_key,
@@ -16,6 +16,9 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+const stripe = new stripeLoader(functions.config().stripe.secret_key);
+const sendgridSecret = functions.config().sendgrid.secret_key;
+sendgrid.setApiKey(sendgridSecret);
 
 exports.payment = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
@@ -44,10 +47,26 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 return console.log('going to send email to imogen');
             })
             .then(() => {
-                return console.log('going to send email to the customer');
+                const email = {
+                    to: 'ioetbc@gmail.com',
+                    from: {
+                        email: 'ioetbc@gmail.com',
+                        name: 'william cole',
+                    },
+                    templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
+                    substitutionWrappers: ['{{', '}}'],
+                    substitutions: {
+                        firstName: 'william',
+                        amount: '20.00',
+                        last4: '1234',
+                        estimatedDelivery: '12th june',
+                    }
+                }
+                return sendgrid.send(email);
             })
             .catch((error) => {
                 console.log('error taking payment', error)
+                console.log('email error :(', JSON.stringify(error.response.body, null, 4));
             });
         }
         catch (error) {

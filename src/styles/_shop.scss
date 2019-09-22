@@ -35,10 +35,6 @@
             grid-template-columns: 1fr 1fr 1fr;
         }
 
-        // @media screen and (min-width: 1320px) {
-        //     grid-template-columns: 1fr 1fr 1fr 1fr;
-        // }
-
         .shop-items {
             overflow: hidden;
             margin: 0 auto;
@@ -52,8 +48,7 @@
             }
 
             &:hover {
-                transform: scale(1.01);
-                box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.10);
+                background: #FCE4D4;
             }
 
             .shop-images {

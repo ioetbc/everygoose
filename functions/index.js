@@ -21,57 +21,75 @@ const sendgridSecret = functions.config().sendgrid.secret_key;
 sendgrid.setApiKey(sendgridSecret);
 
 exports.payment = functions.https.onRequest(async (req, res) => {
+    const customer_id = uuid();
+    
     cors(req, res, async () => {
         try {
+            const payload = {
+                customer: {
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    items: req.body.items,
+                    address: req.body.address,
+                    phoneNumber: req.body.phoneNumber,
+                    isPaid: false,
+                }
+            }
+
+            const customerRef = db.collection('customers').doc(customer_id);
+
+            console.log('creating customer')
+            await customerRef.set(payload)
+            .catch((error) => {
+                throw new Error('database error', error)
+            })
+
+            console.log('attempting to take payment');
             await stripe.charges.create({
                 amount: 200,
                 currency: 'GBP',
                 source: req.body.stripeToken,
                 description: 'card the customer bought',
-            }).then(() => {
-                const customer_id = uuid();
-                const payload = {
-                    customer: {
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName,
-                        email: req.body.email,
-                        items: req.body.items,
-                        address: req.body.address,
-                        phoneNumber: req.body.phoneNumber
-                    }
-                }
-                console.log('customer creation');
-                return db.collection("customers").doc(customer_id).set(payload)
+            }, { idempotency_key: req.body.idempotencyKey })
+            .catch((error) => {
+                throw new Error('payment error', error)
             })
-            .then(() => {
-                return console.log('going to send email to imogen');
-            })
-            .then(() => {
-                const email = {
-                    to: 'ioetbc@gmail.com',
-                    from: {
-                        email: 'ioetbc@gmail.com',
-                        name: 'william cole',
-                    },
-                    templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
-                    substitutionWrappers: ['{{', '}}'],
-                    substitutions: {
-                        firstName: 'william',
-                        amount: '20.00',
-                        last4: '1234',
-                        estimatedDelivery: '12th june',
-                    }
-                }
-                return sendgrid.send(email);
+
+            console.log('updating customer isPaid to true')
+            await customerRef.update({
+                'customer.isPaid': true,
             })
             .catch((error) => {
-                console.log('error taking payment', error)
-                console.log('email error :(', JSON.stringify(error.response.body, null, 4));
-            });
+                return Error('customer has paid but there was an error updating isPaid to true', error);
+            })
+
+            const email = {
+                to: 'ioetbc@gmail.com',
+                from: {
+                    email: 'ioetbc@gmail.com',
+                    name: 'william cole',
+                },
+                templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
+                substitutionWrappers: ['{{', '}}'],      
+                substitutions: {
+                    firstName: 'william',
+                    amount: '20.00',
+                    last4: '1234',
+                    estimatedDelivery: '12th june',
+                }
+            }
+            console.log('sending email')
+            await sendgrid.send(email)
+            .catch((error) => {
+                throw new Error('error sending emails', error)
+            })
+
+            res.redirect('/done');  
+
+        } catch (error) {
+            console.log('an error occured', 'customer id: ', customer_id , 'actual error: ', error)
+            res.redirect('/sorry');  
         }
-        catch (error) {
-            console.log('mega error', error);
-        }
-        res.send('all successfull');
     });
 });

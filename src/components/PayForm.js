@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import axios from 'axios';
-import { find } from 'lodash';
+import uuid from 'uuid/v4';
 
 import EstimatedDelivery from './utils/EstimatedDelivery';
 import { generic, postcode, email, phone } from '../schema/PaySchema';
@@ -11,6 +11,7 @@ class PayForm extends Component {
         super(props);
         this.state = {
             stripeComplete: false,
+            isLoading: false,
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -21,7 +22,11 @@ class PayForm extends Component {
         e.preventDefault();
 
         if (allValid && this.state.stripeComplete) {
+            const inputs = [...document.getElementsByTagName('input')]
+            inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: 'william' })
+            this.setState({ isLoading: true });
+
             axios({
                 method: 'post',
                 url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -38,6 +43,7 @@ class PayForm extends Component {
                     address: 'address',
                     phoneNumber: 'phoneNumber',
                     stripeToken: token.id,
+                    idempotencyKey: uuid(),
                 },
             })
             .then(function (response) {
@@ -116,7 +122,8 @@ class PayForm extends Component {
             postcodeError,
             emailError,
             phoneError,
-            stripeComplete
+            stripeComplete,
+            isLoading
         } = this.state;
 
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
@@ -256,7 +263,10 @@ class PayForm extends Component {
                     onChange={(e) => this.setState({ stripeComplete: e.complete })}
                 />
 
-                <button type="submit" className={`button ${!disableButton && 'disabled'}`}>
+                <button 
+                    type="submit"
+                    className={`button ${!disableButton && 'disabled'}`}
+                >
                     pay now
                 </button>
             </form>

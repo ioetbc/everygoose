@@ -1,7 +1,7 @@
 import Joi from '@hapi/joi';
 
 export const generic = Joi.object({
-    generic: Joi.string().required().min(2).max(25)
+    generic: Joi.string().required().min(2).max(50)
 });
 
 export const postcode = Joi.object({
@@ -15,3 +15,7 @@ export const email = Joi.object({
 export const phone = Joi.object({
     phone: Joi.string().required().pattern(/^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/i)
 });
+
+export const genericNotRequired = Joi.object({
+    genericNotRequired: Joi.string().max(50).allow('').optional()
+})

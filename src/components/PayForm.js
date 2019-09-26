@@ -4,7 +4,7 @@ import axios from 'axios';
 import uuid from 'uuid/v4';
 
 import estimatedDelivery from './utils/EstimatedDelivery';
-import { generic, postcode, email, phone } from '../schema/PaySchema';
+import { generic, postcode, email, phone, genericNotRequired } from '../schema/PaySchema';
 
 class PayForm extends Component {
     constructor(props) {
@@ -16,7 +16,10 @@ class PayForm extends Component {
             lastName: '',
             email: '',
             basket: [],
-            address: '',
+            addressFirst: '',
+            addressSecond: '',
+            addressThird : '',
+            city: '',
             county: '',
             postcode: '',
             phoneNumber: '',
@@ -34,7 +37,6 @@ class PayForm extends Component {
             // inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: 'william' })
             this.setState({ isLoading: true });
-
             axios({
                 method: 'post',
                 url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -48,7 +50,10 @@ class PayForm extends Component {
                     lastName: this.state.lastName,
                     email: this.state.email,
                     basket: this.props.basket,
-                    address: this.state.address,
+                    addressFirst: this.state.addressFirst,
+                    addressSecond: this.state.addressSecond,
+                    addressThird: this.state.addressThird,
+                    city: this.state.city,
                     county: this.state.county,
                     postcode: this.state.postcode,
                     phoneNumber: this.state.phone,
@@ -88,9 +93,30 @@ class PayForm extends Component {
             break;
             case 'addressFirstLine':
                 if (generic.validate({ generic: e.target.value }).error) {
-                    this.setState({ addressError: 'Whoops, please check your answer to continue.' })
+                    this.setState({ addressFirstError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ address: e.target.value, addressError: false });
+                    this.setState({ addressFirst: e.target.value, addressFirstError: false });
+                }
+            break
+            case 'addressSecondLine':
+                if (genericNotRequired.validate({ genericNotRequired: e.target.value }).error) {
+                    this.setState({ addressSecondError: 'Whoops, please check your answer.' })
+                } else {
+                    this.setState({ addressSecond: e.target.value, addressSecondError: false });
+                }
+            break
+            case 'addressThirdLine':
+                if (genericNotRequired.validate({ genericNotRequired: e.target.value }).error) {
+                    this.setState({ addressThirdError: 'Whoops, please check your answer.' })
+                } else {
+                    this.setState({ addressThird: e.target.value, addressThirdError: false });
+                }
+            break;
+            case 'city':
+                if (generic.validate({ generic: e.target.value }).error) {
+                    this.setState({ cityError: 'Whoops, please check your answer to continue.' })
+                } else {
+                    this.setState({ city: e.target.value, cityError: false });
                 }
             break;
             case 'county':
@@ -128,13 +154,15 @@ class PayForm extends Component {
         const {
             firstNameError,
             lastNameError,
-            addressError,
+            addressFirstError,
+            addressSecondError,
+            addressThirdError,
+            cityError,
             countyError,
             postcodeError,
             emailError,
             phoneError,
             stripeComplete,
-            isLoading
         } = this.state;
 
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
@@ -142,7 +170,10 @@ class PayForm extends Component {
         if (
             firstNameError === false &&
             lastNameError === false &&
-            addressError === false &&
+            addressFirstError === false &&
+            addressSecondError === false &&
+            addressThirdError === false &&
+            cityError === false &&
             countyError === false &&
             postcodeError === false &&
             emailError === false &&
@@ -152,11 +183,14 @@ class PayForm extends Component {
             allValid = true;
         }
 
+        console.log('addressFirstError', addressFirstError)
+        console.log('addressSecondError', addressSecondError)
+
         const disableButton = (allValid && stripeComplete);
 
         return (
             <form onSubmit={(e) => this.handleSubmit(e, allValid)}>
-            <h3 style={{ marginTop: '12px' }}>Personal details</h3>
+                <h3>Personal details</h3>
                 <div class="input-side-by-side">
                     <div className='text-field--container'>
                         <div className='text-field'>
@@ -187,7 +221,39 @@ class PayForm extends Component {
                         {lastNameError && <p className="error-message">{lastNameError}</p>}
                     </div>
                 </div>
-
+                <div class="input-side-by-side">
+                <div className='text-field--container'>
+                    <div className='text-field'>
+                        <input
+                            className='text-field--input'
+                            name="email"
+                            id="email"
+                            placeholder=' '
+                            type='email'
+                            onBlur={(e) => this.handleInput(e)}
+                            style={{ textTransform: 'none' }}
+                        />
+                        <label className='text-field--label' for='email'>email</label>
+                    </div>
+                    {emailError && <p className="error-message">{emailError}</p>}
+                </div>
+                <div className='text-field--container'>
+                    <div className='text-field'>
+                        <input
+                            className='text-field--input'
+                            name="phone"
+                            id="phone"
+                            placeholder=' '
+                            type='number'
+                            onBlur={(e) => this.handleInput(e)}
+                        />
+                        <label className='text-field--label' for='phone'>phone number</label>
+                    </div>
+                    {phoneError && <p className="error-message">{phoneError}</p>}
+                </div>
+            </div>
+            
+                <h3>Shipping address</h3>
                 <div className='text-field--container'>
                     <div className='text-field'>
                         <input
@@ -198,11 +264,52 @@ class PayForm extends Component {
                             type='text'
                             onBlur={(e) => this.handleInput(e)}   
                         />
-                        <label className='text-field--label' for='address'>address line 1</label>
+                        <label className='text-field--label' for='address'>address first line</label>
                     </div>
-                    {addressError && <p className="error-message">{addressError}</p>}
+                    {addressFirstError && <p className="error-message">{addressFirstError}</p>}
                 </div>
-
+                <div className='text-field--container'>
+                    <div className='text-field'>
+                        <input
+                            className='text-field--input'
+                            name="addressSecondLine"
+                            id="addressSecondLine"
+                            placeholder=' '
+                            type='text'
+                            onBlur={(e) => this.handleInput(e)}   
+                        />
+                        <label className='text-field--label' for='address'>address second line</label>
+                    </div>
+                    {addressSecondError && <p className="error-message">{addressSecondError}</p>}
+                </div>
+                <div className='text-field--container'>
+                    <div className='text-field'>
+                        <input
+                            className='text-field--input'
+                            name="addressThirdLine"
+                            id="addressThirdLine"
+                            placeholder=' '
+                            type='text'
+                            onBlur={(e) => this.handleInput(e)}   
+                        />
+                        <label className='text-field--label' for='address'>address third line</label>
+                    </div>
+                    {addressThirdError && <p className="error-message">{addressThirdError}</p>}
+                </div>
+                <div className='text-field--container'>
+                    <div className='text-field'>
+                        <input
+                            className='text-field--input'
+                            name="city"
+                            id="city"
+                            placeholder=' '
+                            type='text'
+                            onBlur={(e) => this.handleInput(e)}   
+                        />
+                        <label className='text-field--label' for='city'>city</label>
+                    </div>
+                    {cityError && <p className="error-message">{cityError}</p>}
+                </div>
                 <div class="input-side-by-side">
                     <div className='text-field--container'>
                         <div className='text-field'>
@@ -235,40 +342,7 @@ class PayForm extends Component {
                     </div>
                 </div>
 
-                <div class="input-side-by-side">
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="email"
-                                id="email"
-                                placeholder=' '
-                                type='email'
-                                onBlur={(e) => this.handleInput(e)}
-                                style={{ textTransform: 'none' }}
-                            />
-                            <label className='text-field--label' for='email'>email</label>
-                        </div>
-                        {emailError && <p className="error-message">{emailError}</p>}
-                    </div>
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="phone"
-                                id="phone"
-                                placeholder=' '
-                                type='number'
-                                onBlur={(e) => this.handleInput(e)}
-                            />
-                            <label className='text-field--label' for='phone'>phone number</label>
-                        </div>
-                        {phoneError && <p className="error-message">{phoneError}</p>}
-                    </div>
-                </div>
-
-                <h3 style={{ marginTop: '12px' }}>Payment</h3>
-
+                <h3 style={{ marginTop: '12px' }}>Payment details</h3>
                 <CardElement	
                     hidePostalCode
                     onChange={(e) => this.setState({ stripeComplete: e.complete })}

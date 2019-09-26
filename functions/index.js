@@ -36,12 +36,18 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: req.body.email,
-                    items: req.body.basket,
-                    address: req.body.address,
                     phoneNumber: req.body.phoneNumber,
+                    customerId: customer_id,
+                    timeStamp: Date.now(),
+                    items: req.body.basket,
+                    addressFirstLine: req.body.addressFirst,
+                    addressSecondLine: req.body.addressSecond,
+                    addressThirdLine: req.body.addressThird,
+                    city: req.body.city,
+                    county: req.body.county,
+                    postcode: req.body.postcode,
                     isPaid: false,
                     amount: totalCost,
-                    customerId: customer_id,
                 }
             }
 
@@ -73,14 +79,13 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 throw new Error(`is paid to true error. customer_id: ${customer_id} `, error);
             })
 
-            const email = {
+            const customerEmail = {
                 to: 'ioetbc@gmail.com',
                 from: {
                     email: 'ioetbc@gmail.com',
-                    name: 'william cole',
+                    name: 'customer email',
                 },
                 templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
-                substitutionWrappers: ['{{', '}}'],
                 substitutions: {
                     firstName: req.body.firstName,
                     amount: totalCost,
@@ -89,14 +94,33 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     quantity: quantity,
                 }
             }
-            console.log('sending email')
-            await sendgrid.send(email)
+
+            const imogenEmail = {
+                to: 'ioetbc@gmail.com',
+                from: {
+                    email: 'ioetbc@gmail.com',
+                    name: 'imogen email',
+                },
+                templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
+                substitutions: {
+                    firstName: req.body.firstName,
+                    amount: totalCost,
+                    last4: '1234',
+                    estimatedDelivery: req.body.estimatedDelivery,
+                    quantity: quantity,
+                }
+            }
+
+            console.log('sending customer email');
+            await sendgrid.send(customerEmail)
+
+            console.log('sending imogen email');
+            await sendgrid.send(imogenEmail)
+
             .catch((error) => {
                 throw new Error(`email error. customer_id: ${customer_id} `, error);
             })
-
             res.send('SUCCESS');
-
         } catch (error) {
             console.log('an error occured', error)
             res.send('ERROR');

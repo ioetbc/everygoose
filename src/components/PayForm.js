@@ -28,7 +28,7 @@ class PayForm extends Component {
         this.handleInput = this.handleInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
     async handleSubmit(e, allValid) {
         e.preventDefault();
 
@@ -36,7 +36,10 @@ class PayForm extends Component {
             // const inputs = [...document.getElementsByTagName('input')]
             // inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: 'william' })
+            const theyOrIt = this.props.length > 1 ? 'They' : 'It';
+            const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
             this.setState({ isLoading: true });
+
             axios({
                 method: 'post',
                 url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -60,6 +63,8 @@ class PayForm extends Component {
                     stripeToken: token.id,
                     idempotencyKey: uuid(),
                     estimatedDelivery: estimatedDelivery(),
+                    cardOrCards,
+                    theyOrIt,
                 },
             })
             .then(function (response) {
@@ -183,8 +188,8 @@ class PayForm extends Component {
             allValid = true;
         }
 
-        console.log('addressFirstError', addressFirstError)
-        console.log('addressSecondError', addressSecondError)
+
+        console.log('ummmmmm', this.props.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0))
 
         const disableButton = (allValid && stripeComplete);
 
@@ -252,7 +257,7 @@ class PayForm extends Component {
                     {phoneError && <p className="error-message">{phoneError}</p>}
                 </div>
             </div>
-            
+
                 <h3>Shipping address</h3>
                 <div className='text-field--container'>
                     <div className='text-field'>
@@ -262,7 +267,7 @@ class PayForm extends Component {
                             id="addressFirstLine"
                             placeholder=' '
                             type='text'
-                            onBlur={(e) => this.handleInput(e)}   
+                            onBlur={(e) => this.handleInput(e)}
                         />
                         <label className='text-field--label' for='address'>address first line</label>
                     </div>
@@ -276,7 +281,7 @@ class PayForm extends Component {
                             id="addressSecondLine"
                             placeholder=' '
                             type='text'
-                            onBlur={(e) => this.handleInput(e)}   
+                            onBlur={(e) => this.handleInput(e)}
                         />
                         <label className='text-field--label' for='address'>address second line</label>
                     </div>
@@ -290,7 +295,7 @@ class PayForm extends Component {
                             id="addressThirdLine"
                             placeholder=' '
                             type='text'
-                            onBlur={(e) => this.handleInput(e)}   
+                            onBlur={(e) => this.handleInput(e)}
                         />
                         <label className='text-field--label' for='address'>address third line</label>
                     </div>
@@ -304,7 +309,7 @@ class PayForm extends Component {
                             id="city"
                             placeholder=' '
                             type='text'
-                            onBlur={(e) => this.handleInput(e)}   
+                            onBlur={(e) => this.handleInput(e)}
                         />
                         <label className='text-field--label' for='city'>city</label>
                     </div>
@@ -343,12 +348,12 @@ class PayForm extends Component {
                 </div>
 
                 <h3 style={{ marginTop: '12px' }}>Payment details</h3>
-                <CardElement	
+                <CardElement
                     hidePostalCode
                     onChange={(e) => this.setState({ stripeComplete: e.complete })}
                 />
 
-                <button 
+                <button
                     type="submit"
                     className={`button ${!disableButton && 'disabled'}`}
                 >

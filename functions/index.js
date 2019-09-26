@@ -27,9 +27,12 @@ exports.payment = functions.https.onRequest(async (req, res) => {
         console.log('req.body', req.body)
         try {
             const deliveryCost = 2;
-            const totalCost = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost;
+            const total = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
+            const subtotal = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost;
             const quantity = req.body.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
             const customer_id = uuid();
+            const timeStamp = Date(Date.now()); 
+            const formatTimeStamp = timeStamp.toString();
 
             const payload = {
                 customer: {
@@ -38,7 +41,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     email: req.body.email,
                     phoneNumber: req.body.phoneNumber,
                     customerId: customer_id,
-                    timeStamp: Date.now(),
+                    timeStamp: formatTimeStamp,
                     items: req.body.basket,
                     addressFirstLine: req.body.addressFirst,
                     addressSecondLine: req.body.addressSecond,
@@ -47,7 +50,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     county: req.body.county,
                     postcode: req.body.postcode,
                     isPaid: false,
-                    amount: totalCost,
+                    total_cost: subtotal,
                 }
             }
 
@@ -82,32 +85,44 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             const customerEmail = {
                 to: 'ioetbc@gmail.com',
                 from: {
-                    email: 'ioetbc@gmail.com',
+                    email: 'cole-09@hotmail.co.uk',
                     name: 'customer email',
                 },
                 templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
-                substitutions: {
+                dynamic_template_data: {
                     firstName: req.body.firstName,
-                    amount: totalCost,
+                    amount: subtotal,
                     last4: '1234',
                     estimatedDelivery: req.body.estimatedDelivery,
                     quantity: quantity,
+                    cardOrCards: req.body.cardOrCards,
+                    theyOrIt: req.body.theyOrIt,
                 }
             }
 
             const imogenEmail = {
                 to: 'ioetbc@gmail.com',
                 from: {
-                    email: 'ioetbc@gmail.com',
+                    email: 'cole-09@hotmail.co.uk',
                     name: 'imogen email',
                 },
                 templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
-                substitutions: {
-                    firstName: req.body.firstName,
-                    amount: totalCost,
+                dynamic_template_data: {
+                    total: total,
+                    subtotal: subtotal,
                     last4: '1234',
                     estimatedDelivery: req.body.estimatedDelivery,
                     quantity: quantity,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    phoneNumber: req.body.phoneNumber,
+                    addressFirst: req.body.addressFirst,
+                    addressSecond: req.body.addressSecond,
+                    addressThird: req.body.addressThird,
+                    city: req.body.city,
+                    county: req.body.county,
+                    postcode: req.body.postcode,
                 }
             }
 

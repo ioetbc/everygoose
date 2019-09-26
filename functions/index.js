@@ -5,6 +5,8 @@ const cors = require('cors')({ origin: true });
 const uuid = require('uuidv4').default;
 const sendgrid = require('@sendgrid/mail');
 
+// TODO validate on the back end too using JOI
+
 admin.initializeApp({
     apiKey: functions.config().db.api_key,
     authDomain: functions.config().db.auth_domain,
@@ -21,19 +23,25 @@ const sendgridSecret = functions.config().sendgrid.secret_key;
 sendgrid.setApiKey(sendgridSecret);
 
 exports.payment = functions.https.onRequest(async (req, res) => {
-    const customer_id = uuid();
-    
     cors(req, res, async () => {
+        console.log('req.body', req.body)
         try {
+            const deliveryCost = 2;
+            const totalCost = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost;
+            const quantity = req.body.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
+            const customer_id = uuid();
+
             const payload = {
                 customer: {
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: req.body.email,
-                    items: req.body.items,
+                    items: req.body.basket,
                     address: req.body.address,
                     phoneNumber: req.body.phoneNumber,
                     isPaid: false,
+                    amount: totalCost,
+                    customerId: customer_id,
                 }
             }
 
@@ -42,7 +50,8 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             console.log('creating customer')
             await customerRef.set(payload)
             .catch((error) => {
-                throw new Error('database error', error)
+                throw new Error(`database error. customer_id: ${customer_id} `, error)
+
             })
 
             console.log('attempting to take payment');
@@ -53,7 +62,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 description: 'card the customer bought',
             }, { idempotency_key: req.body.idempotencyKey })
             .catch((error) => {
-                throw new Error('payment error', error)
+                throw new Error('payment error. customer id: ', customer_id, error);
             })
 
             console.log('updating customer isPaid to true')
@@ -61,7 +70,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 'customer.isPaid': true,
             })
             .catch((error) => {
-                return Error('customer has paid but there was an error updating isPaid to true', error);
+                throw new Error(`is paid to true error. customer_id: ${customer_id} `, error);
             })
 
             const email = {
@@ -71,25 +80,26 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     name: 'william cole',
                 },
                 templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
-                substitutionWrappers: ['{{', '}}'],      
+                substitutionWrappers: ['{{', '}}'],
                 substitutions: {
-                    firstName: 'william',
-                    amount: '20.00',
+                    firstName: req.body.firstName,
+                    amount: totalCost,
                     last4: '1234',
-                    estimatedDelivery: '12th june',
+                    estimatedDelivery: req.body.estimatedDelivery,
+                    quantity: quantity,
                 }
             }
             console.log('sending email')
             await sendgrid.send(email)
             .catch((error) => {
-                throw new Error('error sending emails', error)
+                throw new Error(`email error. customer_id: ${customer_id} `, error);
             })
 
-            res.redirect('/done');  
+            res.send('SUCCESS');
 
         } catch (error) {
-            console.log('an error occured', 'customer id: ', customer_id , 'actual error: ', error)
-            res.redirect('/sorry');  
+            console.log('an error occured', error)
+            res.send('ERROR');
         }
     });
 });

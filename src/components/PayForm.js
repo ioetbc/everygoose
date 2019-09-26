@@ -3,7 +3,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import axios from 'axios';
 import uuid from 'uuid/v4';
 
-import EstimatedDelivery from './utils/EstimatedDelivery';
+import estimatedDelivery from './utils/EstimatedDelivery';
 import { generic, postcode, email, phone } from '../schema/PaySchema';
 
 class PayForm extends Component {
@@ -12,6 +12,14 @@ class PayForm extends Component {
         this.state = {
             stripeComplete: false,
             isLoading: false,
+            firstName: '',
+            lastName: '',
+            email: '',
+            basket: [],
+            address: '',
+            county: '',
+            postcode: '',
+            phoneNumber: '',
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -22,8 +30,8 @@ class PayForm extends Component {
         e.preventDefault();
 
         if (allValid && this.state.stripeComplete) {
-            const inputs = [...document.getElementsByTagName('input')]
-            inputs.map(i => i.value = '');
+            // const inputs = [...document.getElementsByTagName('input')]
+            // inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: 'william' })
             this.setState({ isLoading: true });
 
@@ -36,14 +44,17 @@ class PayForm extends Component {
                     }
                 },
                 data: {
-                    firstName: 'firstName',
-                    lastName: 'lastName',
-                    email: 'emai', 
-                    items: 'items',
-                    address: 'address',
-                    phoneNumber: 'phoneNumber',
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    email: this.state.email,
+                    basket: this.props.basket,
+                    address: this.state.address,
+                    county: this.state.county,
+                    postcode: this.state.postcode,
+                    phoneNumber: this.state.phone,
                     stripeToken: token.id,
                     idempotencyKey: uuid(),
+                    estimatedDelivery: estimatedDelivery(),
                 },
             })
             .then(function (response) {
@@ -65,49 +76,49 @@ class PayForm extends Component {
                 if (generic.validate({ generic: e.target.value }).error) {
                     this.setState({ firstNameError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ firstNameError: false });
+                    this.setState({ firstName: e.target.value, firstNameError: false });
                 }
             break;
             case 'lastName':
                 if (generic.validate({ generic: e.target.value }).error) {
                     this.setState({ lastNameError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ lastNameError: false });
+                    this.setState({ lastName: e.target.value, lastNameError: false });
                 }
             break;
             case 'addressFirstLine':
                 if (generic.validate({ generic: e.target.value }).error) {
                     this.setState({ addressError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ addressError: false });
+                    this.setState({ address: e.target.value, addressError: false });
                 }
             break;
             case 'county':
                 if (generic.validate({ generic: e.target.value }).error) {
                     this.setState({ countyError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ countyError: false });
+                    this.setState({ county: e.target.value, countyError: false });
                 }
             break;
             case 'postcode':
                 if (postcode.validate({ postcode: e.target.value }).error) {
                     this.setState({ postcodeError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ postcodeError: false });
+                    this.setState({ postcode: e.target.value, postcodeError: false });
                 }
             break;
             case 'email':
                 if (email.validate({ email: e.target.value }).error) {
                     this.setState({ emailError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ emailError: false });
+                    this.setState({ email: e.target.value, emailError: false });
                 }
             break;
             case 'phone':
                 if (phone.validate({ phone: e.target.value }).error) {
                     this.setState({ phoneError: 'Whoops, please check your answer to continue.' })
                 } else {
-                    this.setState({ phoneError: false });
+                    this.setState({ phone: e.target.value, phoneError: false });
                 }
             break;
         }

@@ -57,7 +57,12 @@
                 width: 440px;
                 position: relative;
                 left: -90px;
-    
+
+                @media screen and (min-width: 600px) {
+                    width: 380px;
+                    left: -83px;
+                }
+
                 @media screen and (min-width: 768px) {
                     height: 260px;
                     left: -78px;

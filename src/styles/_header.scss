@@ -1,12 +1,18 @@
 .header {
     margin: 0 auto;
     height: 100px;
-    padding: 70px 30px 0 30px;
-    max-width: 980px;
+    max-width: 260px;
+
+    &.shop {
+        margin-bottom: 80px;
+    }
 
     @media screen and (min-width: 1000px) {
         display: flex;
         justify-content: space-between;
+        max-width: 980px;
+        margin-bottom: 0;
+        padding: 70px 30px 0 30px;
     }
     @media screen and (min-width: 1200px) {
         padding: 70px 0 0 0;

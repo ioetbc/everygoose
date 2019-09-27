@@ -9,15 +9,16 @@
 
     .main-content {
         width: 100%;
-        padding: 30px;
         box-sizing: border-box; 
         background: $color-bg;
         min-height: 100vh;
-        max-width: 980px;
+        max-width: 260px;
         margin: 0 auto;
+        padding-bottom: 60px;
 
         @media screen and (min-width: 1200px) {
             padding: 70px 0;
+            max-width: 980px;
         }
     }
 

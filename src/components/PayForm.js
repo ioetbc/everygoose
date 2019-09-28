@@ -191,7 +191,7 @@ class PayForm extends Component {
             <form onSubmit={(e) => {
                 e.preventDefault()
                 this.handleSubmit(e, allValid)
-                document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+                // document.getElementById('submitButton').setAttribute('disabled', 'disabled');
             }}>
                 <div class="input-side-by-side">
                     <div className='text-field--container'>

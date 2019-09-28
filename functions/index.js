@@ -53,129 +53,131 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             postcode: req.body.postcode,
             phoneNumber: req.body.phoneNumber,
         }).error
-        // TODO remove the else just throw if error
+
         try {
-            if (validationError) {
-                throw new Error(`form validation error: ${validationError}`);
-            } else {
-                const customer_id = uuid();
-                const deliveryCost = 2;
-                const total = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
-                const subtotal = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost;
-                const quantity = req.body.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
-                const timeStamp = Date(Date.now()); 
-                const formatTimeStamp = timeStamp.toString();
-                const items = req.body.basket.map(a => a.title);
-    
-                const payload = {
-                    customer: {
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName,
-                        email: req.body.email,
-                        phoneNumber: req.body.phoneNumber,
-                        customerId: customer_id,
-                        timeStamp: formatTimeStamp,    
-                        items: items,
-                        addressFirstLine: req.body.addressFirst,
-                        addressSecondLine: req.body.addressSecond || false,
-                        addressThirdLine: req.body.addressThird || false,
-                        city: req.body.city,
-                        county: req.body.county,
-                        postcode: req.body.postcode,
-                        isPaid: false,
-                        total_cost: subtotal,
-                    }
+            if (validationError) throw new Error(`form validation error: ${validationError}`);
+
+            const customer_id = uuid();
+            const deliveryCost = 2;
+            const total = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
+            const subtotal = (req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost).toFixed(2);
+            const quantity = req.body.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
+            const timeStamp = Date(Date.now()); 
+            const formatTimeStamp = timeStamp.toString();
+            const items = req.body.basket.map(a => a.title);
+            let last4 = 'XXXX';
+
+            const payload = {
+                customer: {
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    phoneNumber: req.body.phoneNumber,
+                    customerId: customer_id,
+                    timeStamp: formatTimeStamp,    
+                    items: items,
+                    addressFirstLine: req.body.addressFirst,
+                    addressSecondLine: req.body.addressSecond || false,
+                    addressThirdLine: req.body.addressThird || false,
+                    city: req.body.city,
+                    county: req.body.county,
+                    postcode: req.body.postcode,
+                    isPaid: false,
+                    total_cost: subtotal,
                 }
-    
-                const customerRef = db.collection('customers').doc(customer_id);
-    
-                console.log('creating customer')
-                await customerRef.set(payload)
-                .catch((error) => {
-                    throw new Error(`database error. customer_id: ${customer_id} `, error)
-    
-                })
-    
-                console.log('attempting to take payment');
-                await stripe.charges.create({
-                    amount: 200,
-                    currency: 'GBP',
-                    source: req.body.stripeToken,
-                    description: 'card the customer bought',
-                }, { idempotency_key: req.body.idempotencyKey })
-                .catch((error) => {
-                    throw new Error('payment error. customer id: ', customer_id, error);
-                })
-    
-                console.log('updating customer isPaid to true')
-                await customerRef.update({
-                    'customer.isPaid': true,
-                })
-                .catch((error) => {
-                    throw new Error(`is paid to true error. customer_id: ${customer_id} `, error);
-                })
-    
-                const customerEmail = {
-                    to: 'ioetbc@gmail.com',
-                    from: {
-                        email: 'cole-09@hotmail.co.uk',
-                        name: 'customer email',
-                    },
-                    templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
-                    dynamic_template_data: {
-                        firstName: req.body.firstName,
-                        amount: subtotal,
-                        last4: '1234',
-                        estimatedDelivery: req.body.estimatedDelivery,
-                        quantity: quantity,
-                        cardOrCards: req.body.cardOrCards,
-                        theyOrIt: req.body.theyOrIt,
-                    }
-                }
-    
-                const imogenEmail = {
-                    to: 'ioetbc@gmail.com',
-                    from: {
-                        email: 'cole-09@hotmail.co.uk',
-                        name: 'imogen email',
-                    },
-                    templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
-                    dynamic_template_data: {
-                        total: total,
-                        subtotal: subtotal,
-                        last4: '1234',
-                        estimatedDelivery: req.body.estimatedDelivery,
-                        quantity: quantity,
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName,
-                        email: req.body.email,
-                        phoneNumber: req.body.phoneNumber,
-                        addressFirstLine: req.body.addressFirst,
-                        addressSecondLine: req.body.addressSecond,
-                        addressThirdLine: req.body.addressThird,
-                        city: req.body.city,
-                        county: req.body.county,
-                        postcode: req.body.postcode,
-                        deliveryCost: deliveryCost,
-                        phone: req.body.phoneNumber,
-                        cardTitle: items,
-                    }
-                }
-    
-                console.log('sending customer email');
-                await sendgrid.send(customerEmail)
-    
-                console.log('sending imogen email');
-                await sendgrid.send(imogenEmail)
-    
-                .catch((error) => {
-                    throw new Error(`email error. customer_id: ${customer_id} `, error);
-                })
-                res.send('SUCCESS');
             }
+
+            const customerRef = db.collection('customers').doc(customer_id);
+
+            console.log('creating customer')
+            await customerRef.set(payload)
+            .catch((error) => {
+                throw new Error(`database error. customer_id: ${customer_id} `, error)
+
+            })
+
+            console.log('attempting to take payment');
+            await stripe.charges.create({
+                amount: 200,
+                currency: 'GBP',
+                source: req.body.stripeToken,
+                description: 'card the customer bought',
+            }, { idempotency_key: req.body.idempotencyKey })
+            .then((data) => {
+                return last4 = data.payment_method_details.card.last4;
+            })
+            .catch((error) => {
+                throw new Error('payment error. customer id: ', customer_id, error);
+            })
+
+            console.log('updating customer isPaid to true')
+            await customerRef.update({
+                'customer.isPaid': true,
+            })
+            .catch((error) => {
+                throw new Error(`is paid to true error. customer_id: ${customer_id} `, error);
+            })
+
+            const customerEmail = {
+                to: 'ioetbc@gmail.com',
+                from: {
+                    email: 'cole-09@hotmail.co.uk',
+                    name: 'customer email',
+                },
+                templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
+                dynamic_template_data: {
+                    firstName: req.body.firstName,
+                    amount: subtotal,
+                    last4: last4,
+                    estimatedDelivery: req.body.estimatedDelivery,
+                    quantity: quantity,
+                    cardOrCards: req.body.cardOrCards,
+                    theyOrIt: req.body.theyOrIt,
+                }
+            }
+
+            const imogenEmail = {
+                to: 'ioetbc@gmail.com',
+                from: {
+                    email: 'cole-09@hotmail.co.uk',
+                    name: 'imogen email',
+                },
+                templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
+                dynamic_template_data: {
+                    total: total,
+                    subtotal: subtotal,
+                    estimatedDelivery: req.body.estimatedDelivery,
+                    quantity: quantity,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    phoneNumber: req.body.phoneNumber,
+                    addressFirstLine: req.body.addressFirst,
+                    addressSecondLine: req.body.addressSecond,
+                    addressThirdLine: req.body.addressThird,
+                    city: req.body.city,
+                    county: req.body.county,
+                    postcode: req.body.postcode,
+                    deliveryCost: deliveryCost,
+                    phone: req.body.phoneNumber,
+                    cardTitle: items,
+                }
+            }
+
+            console.log('sending customer email');
+            await sendgrid.send(customerEmail)
+
+            console.log('sending imogen email');
+            await sendgrid.send(imogenEmail)
+
+            .catch((error) => {
+                throw new Error(`email error. customer_id: ${customer_id} `, error);
+            })
+            res.send('/done');
+            
         } catch (error) {
             console.log('an error occured', error)
-            res.send('ERROR');
+            res.send('/sorry');
         }
     });
 });

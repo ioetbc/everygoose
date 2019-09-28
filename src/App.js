@@ -16,6 +16,8 @@ import Contact from './pages/Contact';
 import TermsConditions from './pages/Terms';
 import Trade from './pages/Trade';
 import About from './pages/About';
+import Done from './pages/Done';
+import Sorry from './pages/Sorry';
 import Delivery from './pages/Delivery';
 import NotFound from './pages/NotFound';
 import Navigation from './components/Navigation';
@@ -294,10 +296,25 @@ class App extends Component {
 							/>,
 							<div style={{ width: '100%' }}>
 							<Header
-								title='about'
+								title='Thank you!'
 								basket={basket}
 							/>
-								<About />
+								<Done />
+							</div>,
+						]} />
+
+						<Route exact path="/sorry" render={routeProps => [
+							<Navigation
+								navigationItems={cardTypes}
+								handleNavigationFilter={this.handleNavigationFilter}
+								basket={basket}
+							/>,
+							<div style={{ width: '100%' }}>
+							<Header
+								title='Sorry'
+								basket={basket}
+							/>
+								<Sorry />
 							</div>,
 						]} />
 

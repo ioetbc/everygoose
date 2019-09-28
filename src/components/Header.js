@@ -14,7 +14,18 @@ export default function Header({ title, basket, shop, navigationItems, handleNav
                             <option value={navItem}>{navItem}</option>
                         )}
                     </select>
-                    <p style={{ marginTop: '8px', cursor: 'pointer', fontWeight: 'bolder' }} onClick={() => handleNavigationFilter('reset')}>reset</p>
+                    <p
+                        style={{
+                            marginTop: '8px',
+                            cursor: 'pointer',
+                            fontWeight: 'bolder',
+                            fontSize: '0.8rem',
+                            textTransform: 'uppercase'
+                        }}
+                        onClick={() => handleNavigationFilter('reset')}
+                    >
+                        reset
+                    </p>
                 </div>
             }
             <Link to={{ pathname: "/checkout" }}>

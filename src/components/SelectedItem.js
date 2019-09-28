@@ -13,7 +13,7 @@ const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
                         <div className="item">
                             <p className="item-title">{item.title}.</p>
                             <div className="item-quantity">
-                                <p className="text-small">quantity</p>
+                                <p className="text-small">Quantity</p>
                                 <select className="quantity-select" onChange={(e) => selectQuantity(e, item)}>
                                     <option value={item.quantity} selected disabled hidden>{item.quantity}</option>
                                     <option value={1}>1</option>
@@ -28,7 +28,7 @@ const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
                     <div className="item-remove">
                         <div className="item-price">
                             <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
-                            <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={() => removeItem(item)}>remove</p>
+                            <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={() => removeItem(item)}>Remove</p>
                         </div>
                     </div>
                 </div>

@@ -26,17 +26,14 @@ class Navigation extends Component {
                     <Link to={{ pathname: "/" }}>
                         <img className="navigation-logo" src={Logo} alt="EveryGoose logo" />                
                     </Link>
-                    <div className="menu" onClick={this.showMobileMenu}>
-                        <img className="hamburger-icon" src={Hamburger} alt="" />
-                        <Link to={{ pathname: "/checkout" }}>
-                        <div className="basket-wrapper mobile">
+                    <Link to={{ pathname: "/checkout" }}>
+                        <div className="menu basket-wrapper mobile">
                             <img className="basket-icon" src={Basket}></img>                    
                             {basket.length > 0 &&
                                 <div className="basket-amount">{basket && basket.length}</div>
                             }
                         </div>
                     </Link>
-                    </div>
                     <nav style={{ paddingLeft: shop && '-70px' }} className={`navigation-items ${this.state.show && 'hello'}`} >
                         <div className="hide-shop-mobile">
                             <Link to={{ pathname: "/" }}><h4>shop</h4></Link>

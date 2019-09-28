@@ -21,6 +21,11 @@ button {
       background: darken($color-red, 5);
     }
 
+    &:disabled {
+      background: $color-dull-as-fuck;
+      cursor: no-drop;
+    }
+
     &.disabled {
       background: $color-dull-as-fuck;
       cursor: no-drop;

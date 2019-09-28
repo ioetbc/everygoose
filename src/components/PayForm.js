@@ -11,14 +11,14 @@ class PayForm extends Component {
         super(props);
         this.state = {
             stripeComplete: false,
-            isLoading: false,
             firstName: '',
             lastName: '',
             email: '',
             basket: [],
-            addressFirst: '',
             addressSecond: '',
-            addressThird : '',
+            addressFirst: '',
+            addressSecondError: false,
+            addressThirdError : false,
             city: '',
             county: '',
             postcode: '',
@@ -30,16 +30,13 @@ class PayForm extends Component {
     }
 
     async handleSubmit(e, allValid) {
-        e.preventDefault();
-
         if (allValid && this.state.stripeComplete) {
             // const inputs = [...document.getElementsByTagName('input')]
             // inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: 'william' })
             const theyOrIt = this.props.length > 1 ? 'They' : 'It';
             const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
-            this.setState({ isLoading: true });
-
+            console.log('caaling axuios')
             axios({
                 method: 'post',
                 url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -107,14 +104,14 @@ class PayForm extends Component {
                 if (genericNotRequired.validate({ genericNotRequired: e.target.value }).error) {
                     this.setState({ addressSecondError: 'Whoops, please check your answer.' })
                 } else {
-                    this.setState({ addressSecond: e.target.value, addressSecondError: false });
+                    this.setState({ addressSecond: e.target.value });
                 }
             break
             case 'addressThirdLine':
                 if (genericNotRequired.validate({ genericNotRequired: e.target.value }).error) {
                     this.setState({ addressThirdError: 'Whoops, please check your answer.' })
                 } else {
-                    this.setState({ addressThird: e.target.value, addressThirdError: false });
+                    this.setState({ addressThird: e.target.value });
                 }
             break;
             case 'city':
@@ -188,14 +185,14 @@ class PayForm extends Component {
             allValid = true;
         }
 
-
-        console.log('ummmmmm', this.props.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0))
-
         const disableButton = (allValid && stripeComplete);
 
         return (
-            <form onSubmit={(e) => this.handleSubmit(e, allValid)}>
-                <h3>Personal details</h3>
+            <form onSubmit={(e) => {
+                e.preventDefault()
+                this.handleSubmit(e, allValid)
+                document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+            }}>
                 <div class="input-side-by-side">
                     <div className='text-field--container'>
                         <div className='text-field'>
@@ -227,22 +224,22 @@ class PayForm extends Component {
                     </div>
                 </div>
                 <div class="input-side-by-side">
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="email"
-                            id="email"
-                            placeholder=' '
-                            type='email'
-                            onBlur={(e) => this.handleInput(e)}
-                            style={{ textTransform: 'none' }}
-                        />
-                        <label className='text-field--label' for='email'>email</label>
+                    <div className='text-field--container'>
+                        <div className='text-field'>
+                            <input
+                                className='text-field--input'
+                                name="email"
+                                id="email"
+                                placeholder=' '
+                                type='email'
+                                onBlur={(e) => this.handleInput(e)}
+                                style={{ textTransform: 'none' }}
+                            />
+                            <label className='text-field--label' for='email'>email</label>
+                        </div>
+                        {emailError && <p className="error-message">{emailError}</p>}
                     </div>
-                    {emailError && <p className="error-message">{emailError}</p>}
-                </div>
-                <div className='text-field--container'>
+                    <div className='text-field--container'>
                     <div className='text-field'>
                         <input
                             className='text-field--input'
@@ -256,7 +253,7 @@ class PayForm extends Component {
                     </div>
                     {phoneError && <p className="error-message">{phoneError}</p>}
                 </div>
-            </div>
+                </div>
 
                 <h3>Shipping address</h3>
                 <div className='text-field--container'>
@@ -356,6 +353,7 @@ class PayForm extends Component {
                 <button
                     type="submit"
                     className={`button ${!disableButton && 'disabled'}`}
+                    id='submitButton'
                 >
                     pay now
                 </button>

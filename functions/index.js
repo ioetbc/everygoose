@@ -4,8 +4,7 @@ const stripeLoader = require('stripe');
 const cors = require('cors')({ origin: true });
 const uuid = require('uuidv4').default;
 const sendgrid = require('@sendgrid/mail');
-
-// TODO validate on the back end too using JOI
+const Joi = require('@hapi/joi')
 
 admin.initializeApp({
     apiKey: functions.config().db.api_key,
@@ -22,120 +21,158 @@ const stripe = new stripeLoader(functions.config().stripe.secret_key);
 const sendgridSecret = functions.config().sendgrid.secret_key;
 sendgrid.setApiKey(sendgridSecret);
 
+const formSchema = Joi.object({
+    firstName: Joi.string().required().min(2).max(50),
+    lastName: Joi.string().required().min(2).max(50),
+    //eslint-disable-next-line
+    email: Joi.string().required().pattern(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i),
+    addressFirst: Joi.string().required().min(2).max(50),
+    addressSecond: Joi.string().max(50).allow('').optional(),
+    addressThird: Joi.string().max(50).allow('').optional(),
+    city: Joi.string().required().min(2).max(50),
+    county: Joi.string().required().min(2).max(50),
+    //eslint-disable-next-line
+    postcode: Joi.string().required().pattern(/^[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}$/i),
+    //eslint-disable-next-line
+    phoneNumber: Joi.string().required().pattern(/^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/i),
+});
+
 exports.payment = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         console.log('req.body', req.body)
+
+        const validationError = formSchema.validate({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            addressFirst: req.body.addressFirst,
+            addressSecond: req.body.addressSecond,
+            addressThird: req.body.addressThird,
+            city: req.body.city,
+            county: req.body.county,
+            postcode: req.body.postcode,
+            phoneNumber: req.body.phoneNumber,
+        }).error
+        // TODO remove the else just throw if error
         try {
-            const deliveryCost = 2;
-            const total = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
-            const subtotal = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost;
-            const quantity = req.body.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
-            const customer_id = uuid();
-            const timeStamp = Date(Date.now()); 
-            const formatTimeStamp = timeStamp.toString();
-
-            const payload = {
-                customer: {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
-                    customerId: customer_id,
-                    timeStamp: formatTimeStamp,
-                    items: req.body.basket,
-                    addressFirstLine: req.body.addressFirst,
-                    addressSecondLine: req.body.addressSecond,
-                    addressThirdLine: req.body.addressThird,
-                    city: req.body.city,
-                    county: req.body.county,
-                    postcode: req.body.postcode,
-                    isPaid: false,
-                    total_cost: subtotal,
+            if (validationError) {
+                throw new Error(`form validation error: ${validationError}`);
+            } else {
+                const customer_id = uuid();
+                const deliveryCost = 2;
+                const total = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
+                const subtotal = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost;
+                const quantity = req.body.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
+                const timeStamp = Date(Date.now()); 
+                const formatTimeStamp = timeStamp.toString();
+                const items = req.body.basket.map(a => a.title);
+    
+                const payload = {
+                    customer: {
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        email: req.body.email,
+                        phoneNumber: req.body.phoneNumber,
+                        customerId: customer_id,
+                        timeStamp: formatTimeStamp,    
+                        items: items,
+                        addressFirstLine: req.body.addressFirst,
+                        addressSecondLine: req.body.addressSecond || false,
+                        addressThirdLine: req.body.addressThird || false,
+                        city: req.body.city,
+                        county: req.body.county,
+                        postcode: req.body.postcode,
+                        isPaid: false,
+                        total_cost: subtotal,
+                    }
                 }
-            }
-
-            const customerRef = db.collection('customers').doc(customer_id);
-
-            console.log('creating customer')
-            await customerRef.set(payload)
-            .catch((error) => {
-                throw new Error(`database error. customer_id: ${customer_id} `, error)
-
-            })
-
-            console.log('attempting to take payment');
-            await stripe.charges.create({
-                amount: 200,
-                currency: 'GBP',
-                source: req.body.stripeToken,
-                description: 'card the customer bought',
-            }, { idempotency_key: req.body.idempotencyKey })
-            .catch((error) => {
-                throw new Error('payment error. customer id: ', customer_id, error);
-            })
-
-            console.log('updating customer isPaid to true')
-            await customerRef.update({
-                'customer.isPaid': true,
-            })
-            .catch((error) => {
-                throw new Error(`is paid to true error. customer_id: ${customer_id} `, error);
-            })
-
-            const customerEmail = {
-                to: 'ioetbc@gmail.com',
-                from: {
-                    email: 'cole-09@hotmail.co.uk',
-                    name: 'customer email',
-                },
-                templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
-                dynamic_template_data: {
-                    firstName: req.body.firstName,
-                    amount: subtotal,
-                    last4: '1234',
-                    estimatedDelivery: req.body.estimatedDelivery,
-                    quantity: quantity,
-                    cardOrCards: req.body.cardOrCards,
-                    theyOrIt: req.body.theyOrIt,
+    
+                const customerRef = db.collection('customers').doc(customer_id);
+    
+                console.log('creating customer')
+                await customerRef.set(payload)
+                .catch((error) => {
+                    throw new Error(`database error. customer_id: ${customer_id} `, error)
+    
+                })
+    
+                console.log('attempting to take payment');
+                await stripe.charges.create({
+                    amount: 200,
+                    currency: 'GBP',
+                    source: req.body.stripeToken,
+                    description: 'card the customer bought',
+                }, { idempotency_key: req.body.idempotencyKey })
+                .catch((error) => {
+                    throw new Error('payment error. customer id: ', customer_id, error);
+                })
+    
+                console.log('updating customer isPaid to true')
+                await customerRef.update({
+                    'customer.isPaid': true,
+                })
+                .catch((error) => {
+                    throw new Error(`is paid to true error. customer_id: ${customer_id} `, error);
+                })
+    
+                const customerEmail = {
+                    to: 'ioetbc@gmail.com',
+                    from: {
+                        email: 'cole-09@hotmail.co.uk',
+                        name: 'customer email',
+                    },
+                    templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
+                    dynamic_template_data: {
+                        firstName: req.body.firstName,
+                        amount: subtotal,
+                        last4: '1234',
+                        estimatedDelivery: req.body.estimatedDelivery,
+                        quantity: quantity,
+                        cardOrCards: req.body.cardOrCards,
+                        theyOrIt: req.body.theyOrIt,
+                    }
                 }
-            }
-
-            const imogenEmail = {
-                to: 'ioetbc@gmail.com',
-                from: {
-                    email: 'cole-09@hotmail.co.uk',
-                    name: 'imogen email',
-                },
-                templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
-                dynamic_template_data: {
-                    total: total,
-                    subtotal: subtotal,
-                    last4: '1234',
-                    estimatedDelivery: req.body.estimatedDelivery,
-                    quantity: quantity,
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
-                    addressFirst: req.body.addressFirst,
-                    addressSecond: req.body.addressSecond,
-                    addressThird: req.body.addressThird,
-                    city: req.body.city,
-                    county: req.body.county,
-                    postcode: req.body.postcode,
+    
+                const imogenEmail = {
+                    to: 'ioetbc@gmail.com',
+                    from: {
+                        email: 'cole-09@hotmail.co.uk',
+                        name: 'imogen email',
+                    },
+                    templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
+                    dynamic_template_data: {
+                        total: total,
+                        subtotal: subtotal,
+                        last4: '1234',
+                        estimatedDelivery: req.body.estimatedDelivery,
+                        quantity: quantity,
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        email: req.body.email,
+                        phoneNumber: req.body.phoneNumber,
+                        addressFirstLine: req.body.addressFirst,
+                        addressSecondLine: req.body.addressSecond,
+                        addressThirdLine: req.body.addressThird,
+                        city: req.body.city,
+                        county: req.body.county,
+                        postcode: req.body.postcode,
+                        deliveryCost: deliveryCost,
+                        phone: req.body.phoneNumber,
+                        cardTitle: items,
+                    }
                 }
+    
+                console.log('sending customer email');
+                await sendgrid.send(customerEmail)
+    
+                console.log('sending imogen email');
+                await sendgrid.send(imogenEmail)
+    
+                .catch((error) => {
+                    throw new Error(`email error. customer_id: ${customer_id} `, error);
+                })
+                res.send('SUCCESS');
             }
-
-            console.log('sending customer email');
-            await sendgrid.send(customerEmail)
-
-            console.log('sending imogen email');
-            await sendgrid.send(imogenEmail)
-
-            .catch((error) => {
-                throw new Error(`email error. customer_id: ${customer_id} `, error);
-            })
-            res.send('SUCCESS');
         } catch (error) {
             console.log('an error occured', error)
             res.send('ERROR');

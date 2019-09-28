@@ -73,10 +73,11 @@ button {
         content:"\A";
         border-style: solid;
         border-color: transparent $color-red transparent transparent;
+        border-width: 3px;
         position: absolute;
         transform: rotate(-90deg);
         right: 10px;
-        top: 11px;
+        top: 9px;
     }
 
     .quantity-select {
@@ -88,7 +89,7 @@ button {
         padding: 0.2rem .5rem;
         color: $color-red;
         border-radius: 3px;
-        background: white; 
+        background: transparent; 
     }
 }
 

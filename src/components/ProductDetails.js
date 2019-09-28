@@ -11,8 +11,8 @@ const ProductDetails = ({ details, addToBasket }) => {
             <p>{details.description}</p>
             <ul className="key-features">
                 <li>10.5cm x 14.8cm</li>
-                <li>hand made</li>
-                <li>delivered by {EstimatedDelivery()}</li>
+                <li>Hand made</li>
+                <li>Delivered by {EstimatedDelivery()}</li>
             </ul>
             <Link to={{ pathname: "/checkout", state: { details } }}>
                 <Button

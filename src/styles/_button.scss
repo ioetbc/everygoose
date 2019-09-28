@@ -77,19 +77,14 @@ button {
     .quantity-select {
         border: 1px solid $color-red;
         outline: none;
-        margin-left: 16px;
         -webkit-appearance: none;
         color: $color-red;
         border-radius: 3px;
         background: transparent; 
         padding: 0.3rem .5rem;
-        min-width: 120px;
+        min-width: 110px;
         font-size: 0.8rem;
         text-transform: capitalize;
-
-        @media screen and (min-width: 1000px) {
-          min-width: 90px;
-        }
     }
 
     &:after {

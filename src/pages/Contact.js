@@ -60,7 +60,7 @@ class Contact extends Component {
                             <label className='text-field--label' for='message'>Message</label>
                         </div>
                     </div>
-                    <button class="pure-material-button-contained">submit</button>
+                    <button class="button">submit</button>
                 </form>
             </main>,
         ]

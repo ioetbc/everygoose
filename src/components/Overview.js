@@ -14,8 +14,11 @@ const Overview = ({ basket, payPage, }) => {
                 <ul className="list-flex">
                     {basket.map((item, key) =>
                         <li>
-                            <p>{item.title}. ({item.quantity})</p>
-                            <p>£{(item.price * item.quantity).toFixed(2)}</p>
+                                <div className="ellipsis">
+                                    {item.title}.
+                                </div>                            
+                                ({item.quantity})
+                                <p style={{ marginLeft: '30px' }}>£{(item.price * item.quantity).toFixed(2)}</p>
                         </li>
                     )}
                 </ul>,

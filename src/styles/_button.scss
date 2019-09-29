@@ -35,11 +35,7 @@ button {
 .back-button {
     display: inline-flex;
     cursor: pointer;
-    padding: 0 30px;
-
-    @media screen and (min-width: 1000px) {
-        padding: 0;
-    }
+    margin-top: 16px;
 
     img {
         width: 32px;
@@ -85,6 +81,10 @@ button {
         min-width: 110px;
         font-size: 0.8rem;
         text-transform: capitalize;
+        @media screen and (min-width: 1000px) {
+          margin-left: 16px;
+        }
+
     }
 
     &:after {

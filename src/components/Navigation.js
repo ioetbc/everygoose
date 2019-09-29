@@ -19,9 +19,13 @@ class Navigation extends Component {
     }
 
     render() {
-        const { navigationItems, handleNavigationFilter, shop, basket } = this.props;
+        const { navigationItems, handleNavigationFilter, shop, basket, classModifier } = this.props;
+        navigationItems.unshift('all');
+
+        console.log('classModifier', classModifier)
+
         return (
-            <div className="navigation">
+            <div className={`navigation ${classModifier}`}>
                 <div className="sticky">
                     <Link to={{ pathname: "/" }}>
                         <img className="navigation-logo" src={Logo} alt="EveryGoose logo" />                
@@ -42,7 +46,6 @@ class Navigation extends Component {
                                     {uniq(navigationItems).map(navItem =>
                                         <li onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
                                     )}
-                                    <li style={{ fontWeight: 'bolder' }} onClick={() => handleNavigationFilter('reset')}>reset</li>
                                 </ul>
                             }
                         </div>

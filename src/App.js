@@ -5,6 +5,7 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Link,
 } from 'react-router-dom';
 
 import history from './components/utils/history';
@@ -82,13 +83,13 @@ class App extends Component {
 	}
 
 	handleNavigationFilter(item) {
+		if (item === 'all') {
+			return this.setState({ filteredProducts: false });
+		}
+
 		this.setState({
 			filteredProducts: this.state.products.filter(product => product.type === item),
 		});
-
-		if (item === 'reset') {
-			this.setState({ filteredProducts: false });
-		}
 	}
 
 	async fetchPage() {
@@ -127,11 +128,12 @@ class App extends Component {
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
 								shop
+								classModifier="shop"
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
+							<div className="shop-page">
 								<Header
-									title='shop'
+									title='Shop'
 									shop
 									basket={basket}
 									navigationItems={cardTypes}
@@ -153,12 +155,21 @@ class App extends Component {
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
+								product
 							/>,
-							<div style={{ width: '100%' }}>
+							<div className="standard-page">
 								<Header
-									title='product'
+									title='Card'
 									basket={basket}
 								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<Product
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
@@ -174,12 +185,21 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket
 								basket={basket}
+								classModifier="wide"
 							/>,
-							<div style={{ width: '100%' }}>
+							<div className="checkout-page">
 								<Header
 									title='checkout'
 									basket={basket}
 								/>
+
+								<Link to={{ pathname: "/product" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to product details</p>
+									</div>
+								</Link>
+
 								<Checkout
 									{...routeProps}
 									basket={basket}
@@ -195,12 +215,21 @@ class App extends Component {
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
+								classModifier="wide"
 							/>,
-							<div style={{ width: '100%' }}>
+							<div className="checkout-page">
 								<Header
 									title='pay'
 									basket={basket}
 								/>
+
+								<Link to={{ pathname: "/checkout" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to checkout</p>
+									</div>
+								</Link>
+
 								<Pay
 									{...routeProps}
 									basket={basket}
@@ -217,11 +246,19 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
+							<div className="checkout-page">
 								<Header
-									title='contact'
+									title='Contact'
 									basket={basket}
 								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<Contact
 									{...routeProps}
 								/>
@@ -234,11 +271,19 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
+							<div className="checkout-page">
 								<Header
-									title='contact'
+									title='Terms & Conditions'
 									basket={basket}
 								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<TermsConditions prismicCtx={this.props.prismicCtx} />
 							</div>,
 						]} />
@@ -249,11 +294,19 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
-							<Header
-								title='trade'
-								basket={basket}
-							/>
+							<div className="checkout-page">
+								<Header
+									title='Trade'
+									basket={basket}
+								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<Trade prismicCtx={this.props.prismicCtx} />
 							</div>,
 						]} />
@@ -264,11 +317,19 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
-							<Header
-								title='trade'
-								basket={basket}
-							/>
+							<div className="checkout-page">
+								<Header
+									title='Delivery & Returns'
+									basket={basket}
+								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<Delivery prismicCtx={this.props.prismicCtx} />
 							</div>,
 						]} />
@@ -279,11 +340,19 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
-							<Header
-								title='about'
-								basket={basket}
-							/>
+							<div className="checkout-page">
+								<Header
+									title='About'
+									basket={basket}
+								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<About prismicCtx={this.props.prismicCtx}/>
 							</div>,
 						]} />
@@ -294,11 +363,19 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
-							<Header
-								title='Thank you!'
-								basket={basket}
-							/>
+							<div className="checkout-page">
+								<Header
+									title='Thank you'
+									basket={basket}
+								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<Done />
 							</div>,
 						]} />
@@ -309,11 +386,19 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket={basket}
 							/>,
-							<div style={{ width: '100%' }}>
-							<Header
-								title='Sorry'
-								basket={basket}
-							/>
+							<div className="checkout-page">
+								<Header
+									title='Sorry'
+									basket={basket}
+								/>
+
+								<Link to={{ pathname: "/" }}>
+									<div className="back-button">
+										<img src={BackIcon} alt="" />
+										<p className="back-button-text">back to homepage</p>
+									</div>
+								</Link>
+
 								<Sorry />
 							</div>,
 						]} />

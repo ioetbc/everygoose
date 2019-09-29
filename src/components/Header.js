@@ -4,28 +4,18 @@ import { Link } from 'react-router-dom';
 import Basket from '../images/icons/icon-basket.svg';
 
 export default function Header({ title, basket, shop, navigationItems, handleNavigationFilter }) {
+    navigationItems && navigationItems.unshift('all')
+
     return (
         <div className={`header ${shop && 'shop'}`}>
             <h1 className="header-title">{title}</h1>
-            {shop &&
+            {shop && 
                 <div className="mobile-filter item-quantity">
                     <select className="quantity-select" style={{ marginLeft: 0 }} onChange={(e) => handleNavigationFilter(e.target.value)}>
-                        {uniq(navigationItems).map(navItem =>
-                            <option value={navItem}>{navItem}</option>
-                        )}
+                        {uniq(navigationItems).map(navItem => {
+                            return <option value={navItem}>{navItem}</option>
+                        })}
                     </select>
-                    <p
-                        style={{
-                            marginTop: '8px',
-                            cursor: 'pointer',
-                            fontWeight: 'bolder',
-                            fontSize: '0.8rem',
-                            textTransform: 'uppercase'
-                        }}
-                        onClick={() => handleNavigationFilter('reset')}
-                    >
-                        reset
-                    </p>
                 </div>
             }
             <Link to={{ pathname: "/checkout" }}>

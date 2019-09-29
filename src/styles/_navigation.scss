@@ -1,10 +1,31 @@
 .navigation {
-    // padding: 25px 0;
-
-
-    padding: 30px 0 25px 0;
     background: white;
     margin-bottom: 40px;
+    padding: 40px 50px;
+
+    @media screen and (min-width: 600px) {
+        padding: 40px 100px;
+    }
+
+    &.wide {
+        padding: 40px 20px;
+
+        @media screen and (min-width: 600px) {
+            padding: 40px 90px;
+        }
+
+        @media screen and (min-width: 1000px) {
+            padding: 24px 0 0 0;
+        }
+    }
+
+    &.shop {
+        padding: 40px 20px;
+
+        @media screen and (min-width: 1000px) {
+            padding: 25px 0;
+        }
+    }
 
     @media screen and (min-width: 1000px) {
         margin: 0;
@@ -14,7 +35,6 @@
 
     .sticky {
         position: relative;
-        padding: 0 30px;
         @media screen and (min-width: 1000px) {
             position: sticky;
             top: 0;
@@ -24,8 +44,6 @@
         .menu {
             display: inline-block;
             cursor: pointer;
-            float: right;
-            height: 30px;
 
             .hamburger-icon {
                 width: 30px;
@@ -37,12 +55,6 @@
         }
 
         .navigation-logo {
-            // margin: 0 auto;
-            // position: absolute;
-            // left: 0;
-            // right: 0;
-            // width: 190px;
-
             margin: 0 auto;
             width: 210px;
             margin-left: -10px;
@@ -62,6 +74,7 @@
             display: none;
             @media screen and (min-width: 1000px) {
                 display: block;
+                max-width: 300px;
             }
             .hide-shop-mobile {
                 @media screen and (max-width: 1000px) {
@@ -169,7 +182,7 @@
         .social-items {
             display: flex;
             position: sticky;
-            top: 670px; 
+            top: 710px; 
             justify-content: end;
             padding-left: 30px;
 

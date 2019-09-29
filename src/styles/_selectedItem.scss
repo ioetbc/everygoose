@@ -19,6 +19,7 @@
 
     .item-image-wrapper {
         height: 100%;
+        width: 110px;
         overflow: hidden;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
@@ -44,8 +45,10 @@
         height: 100%;
 
         .item {
+            margin-left: 20px;
             .item-title {
                 margin-bottom: 8px;
+                max-width: 220px;
             }
         }
     }
@@ -61,6 +64,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            margin: 0 20px;
 
             .price {
                 font-size: 1.5rem;
@@ -83,9 +87,16 @@
 
     @media screen and (min-width: 768px) {
         max-width: 380px;  
-        margin-top: 0; 
         position: sticky;
         top: 80px;
+    }
+
+    @media screen and (min-width: 1000px) {
+        max-width: none;
+    }
+
+    @media screen and (min-width: 1200px) {
+        margin-top: 0;         
     }
 
     .total { 

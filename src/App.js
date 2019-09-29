@@ -6,6 +6,7 @@ import {
   Route,
   Switch,
   Link,
+  HashRouter
 } from 'react-router-dom';
 
 import history from './components/utils/history';
@@ -121,8 +122,8 @@ class App extends Component {
 
 		return ([
 			<div className="app">	
-				<Router history={history}>
-						<Switch>
+				<HashRouter>
+					<Switch>
 						<Route exact path="/" render={routeProps => [
 							<Navigation
 								navigationItems={cardTypes}
@@ -193,10 +194,10 @@ class App extends Component {
 									basket={basket}
 								/>
 
-								<Link to={{ pathname: "/product" }}>
+								<Link to={{ pathname: "/" }}>
 									<div className="back-button">
 										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to product details</p>
+										<p className="back-button-text">back to homepage</p>
 									</div>
 								</Link>
 
@@ -223,10 +224,10 @@ class App extends Component {
 									basket={basket}
 								/>
 
-								<Link to={{ pathname: "/checkout" }}>
+								<Link to={{ pathname: "/" }}>
 									<div className="back-button">
 										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to checkout</p>
+										<p className="back-button-text">back to homepage</p>
 									</div>
 								</Link>
 
@@ -405,7 +406,7 @@ class App extends Component {
 
 						<Route component={NotFound} />
 					</Switch>
-				</Router>
+				</HashRouter>
 			</div>,
 			<Router history={history}>
 				<Route>

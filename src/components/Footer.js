@@ -8,9 +8,9 @@ const Footer = () => {
             <img style={{ cursor: 'pointer' }} onClick={() => window.location='/'} className="footer-logo" src={Logo} alt="EveryGoose logo" />
             <div className="footer-items">
                 <ul>
-                    <li onClick={() => window.location='/contact'}>Contact</li>
-                    <li onClick={() => window.location='/delivery'}>Delivery & returns</li>
-                    <li onClick={() => window.location='/terms'}>Terms and conditions</li>
+                    <li onClick={() => window.location='/#/contact'}>Contact</li>
+                    <li onClick={() => window.location='/#/delivery'}>Delivery & returns</li>
+                    <li onClick={() => window.location='/#/terms'}>Terms and conditions</li>
                 </ul>
             </div>
         </footer>

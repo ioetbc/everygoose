@@ -1,7 +1,6 @@
 import React from 'react';
 
 const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
-    console.log('basket', basket)
     return (
         <div>
             {basket.map((item, key) =>

@@ -31,12 +31,11 @@ class PayForm extends Component {
 
     async handleSubmit(e, allValid) {
         if (allValid && this.state.stripeComplete) {
-            // const inputs = [...document.getElementsByTagName('input')]
-            // inputs.map(i => i.value = '');
+            const inputs = [...document.getElementsByTagName('input')]
+            inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: 'william' })
             const theyOrIt = this.props.length > 1 ? 'They' : 'It';
             const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
-            console.log('caaling axuios')
             axios({
                 method: 'post',
                 url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -191,7 +190,7 @@ class PayForm extends Component {
             <form onSubmit={(e) => {
                 e.preventDefault()
                 this.handleSubmit(e, allValid)
-                // document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+                document.getElementById('submitButton').setAttribute('disabled', 'disabled');
             }}>
                 <div class="input-side-by-side">
                     <div className='text-field--container'>

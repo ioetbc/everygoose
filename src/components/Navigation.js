@@ -22,8 +22,6 @@ class Navigation extends Component {
         const { navigationItems, handleNavigationFilter, shop, basket, classModifier } = this.props;
         navigationItems.unshift('all');
 
-        console.log('classModifier', classModifier)
-
         return (
             <div className={`navigation ${classModifier}`}>
                 <div className="sticky">

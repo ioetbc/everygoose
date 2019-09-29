@@ -20,11 +20,6 @@ class Delivery extends Component {
     }
 
     async fetchPage() {
-
-        Prismic.client('https://everygoose.prismic.io/api/v2').query('').then(res => {
-            console.log('res', res)
-        })
-
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XXxJixAAACMAJEAT');
         if (doc) {

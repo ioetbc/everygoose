@@ -29,6 +29,7 @@ $text-field-width: 300px;
 }
 
 .text-field {
+  border-radius: 4px;
   background-color: $color-input-background;
   cursor: text;
   height: $text-field-height;
@@ -38,12 +39,6 @@ $text-field-width: 300px;
   user-select: none;
   width: 100%;
   border: 1px $color-accent solid;
-  border-radius: 4px;
-
-  &.large {
-    height: 150px;
-  }
-
   .text-field--input,
   .text-field--label {
     font-size: 14px;

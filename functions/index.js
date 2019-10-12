@@ -117,7 +117,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 return last4 = data.payment_method_details.card.last4;
             })
             .catch((error) => {
-                throw new Error('payment error. customer id: ', customer_id, error);
+                throw new Error('payment error.', error);
             })
 
             console.log('updating customer isPaid to true')
@@ -183,11 +183,12 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             .catch((error) => {
                 throw new Error(`email error. customer_id: ${customer_id} `, error);
             })
-            res.send('/done');
+
+            return res.send('/#/done');
             
         } catch (error) {
             console.log('an error occured', error)
-            res.send('/sorry');
+            return res.send('/#/sorry');
         }
     });
 });

@@ -23,6 +23,7 @@ class PayForm extends Component {
             county: '',
             postcode: '',
             phoneNumber: '',
+            isLoading: false,
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -31,6 +32,7 @@ class PayForm extends Component {
 
     async handleSubmit(e, allValid) {
         if (allValid && this.state.stripeComplete) {
+            this.setState({ isLoading: true });
             const inputs = [...document.getElementsByTagName('input')]
             inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: 'william' })
@@ -69,15 +71,15 @@ class PayForm extends Component {
                     order,
                 },
             })
-            .then(function (response) {
-                window.location='/#/done'
+            .then((res) => {
+                this.setState({ isLoading: false });
+               return  window.location=`${res.data}`
             })
-            .catch(function (error) {
-                window.location='/#/sorry'
+            .catch((error) => {
+                this.setState({ isLoading: false });
+                return window.location=`${error.data}`
             });
         }
-
-        return false;
     }
 
     handleInput(e) {
@@ -170,6 +172,7 @@ class PayForm extends Component {
             emailError,
             phoneError,
             stripeComplete,
+            isLoading,
         } = this.state;
 
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
@@ -192,16 +195,8 @@ class PayForm extends Component {
 
         const disableButton = (allValid && stripeComplete);
 
-        console.log('basket;', this.props.basket);
-        const order = this.props.basket.map(a => {
-            return {
-                quantity: a.quantity,
-                title: a.title,
-            }})
-            
-        console.log('umm', order.map(u => `${u.quantity} x ${u.title}`))
-
-        return (
+        return [
+            isLoading && <div className="is-loading"><div /></div>,
             <form onSubmit={(e) => {
                 e.preventDefault()
                 this.handleSubmit(e, allValid)
@@ -371,8 +366,8 @@ class PayForm extends Component {
                 >
                     pay now
                 </button>
-            </form>
-        );
+            </form>,
+        ];
     }
 }
 

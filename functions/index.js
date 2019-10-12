@@ -38,6 +38,15 @@ const formSchema = Joi.object({
     phoneNumber: Joi.string().required().pattern(/^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/i),
 });
 
+const contactSchema = Joi.object({
+    name: Joi.string().required().min(2).max(50),
+    //eslint-disable-next-line
+    email: Joi.string().required().pattern(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i),
+    //eslint-disable-next-line
+    phone: Joi.string().required().pattern(/^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/i),
+    message: Joi.string().required().min(2).max(500),
+});
+
 exports.payment = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
 
@@ -141,7 +150,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 to: 'ioetbc@gmail.com',
                 from: {
                     email: 'hello@everygoose.com',
-                    name: 'imogen email',
+                    name: 'New order',
                 },
                 templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
                 dynamic_template_data: {
@@ -181,4 +190,47 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             res.send('/sorry');
         }
     });
+});
+
+exports.contact = functions.https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        console.log('calling contact schema')
+        const validationError = contactSchema.validate({
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            message: req.body.message,
+
+        }).error;
+
+        try {
+            if (validationError) throw new Error(`form validation error: ${validationError}`);
+
+            const contactEmail = {
+                to: 'ioetbc@gmail.com',
+                from: {
+                    email: 'hello@everygoose.com',
+                    name: 'contact',
+                },
+                templateId: 'd-2608b42e516e427e82685d3fb18f4e73',
+                dynamic_template_data: {
+                    name: req.body.name,
+                    email: req.body.email,
+                    phone: req.body.phone,
+                    message: req.body.message,
+                }
+            }
+
+            console.log('sending contact email');
+            await sendgrid.send(contactEmail)
+
+            .catch((error) => {
+                throw new Error('email error.', error);
+            })
+            res.send('success');
+        } catch (error) {
+            console.log('contact email error', error);
+            res.send('error');
+        }
+    })
 });

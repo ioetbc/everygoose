@@ -218,7 +218,7 @@ class PayForm extends Component {
                                 type='text'
                                 onBlur={(e) => this.handleInput(e)}
                             />
-                            <label className='text-field--label' for='firstName'>first name</label>
+                            <label className='text-field--label' for='firstName'>First name</label>
                         </div>
                         {firstNameError && <p className="error-message">{firstNameError}</p>}
                     </div>
@@ -232,7 +232,7 @@ class PayForm extends Component {
                                 type='text'
                                 onBlur={(e) => this.handleInput(e)}
                             />
-                            <label className='text-field--label' for='lastName'>last name</label>
+                            <label className='text-field--label' for='lastName'>Last name</label>
                         </div>
                         {lastNameError && <p className="error-message">{lastNameError}</p>}
                     </div>
@@ -249,7 +249,7 @@ class PayForm extends Component {
                                 onBlur={(e) => this.handleInput(e)}
                                 style={{ textTransform: 'none' }}
                             />
-                            <label className='text-field--label' for='email'>email</label>
+                            <label className='text-field--label' for='email'>Email</label>
                         </div>
                         {emailError && <p className="error-message">{emailError}</p>}
                     </div>
@@ -263,7 +263,7 @@ class PayForm extends Component {
                             type='number'
                             onBlur={(e) => this.handleInput(e)}
                         />
-                        <label className='text-field--label' for='phone'>phone number</label>
+                        <label className='text-field--label' for='phone'>Phone number</label>
                     </div>
                     {phoneError && <p className="error-message">{phoneError}</p>}
                 </div>
@@ -280,7 +280,7 @@ class PayForm extends Component {
                             type='text'
                             onBlur={(e) => this.handleInput(e)}
                         />
-                        <label className='text-field--label' for='address'>address first line</label>
+                        <label className='text-field--label' for='address'>Address first line</label>
                     </div>
                     {addressFirstError && <p className="error-message">{addressFirstError}</p>}
                 </div>
@@ -294,7 +294,7 @@ class PayForm extends Component {
                             type='text'
                             onBlur={(e) => this.handleInput(e)}
                         />
-                        <label className='text-field--label' for='address'>address second line</label>
+                        <label className='text-field--label' for='address'>Address second line</label>
                     </div>
                     {addressSecondError && <p className="error-message">{addressSecondError}</p>}
                 </div>
@@ -308,7 +308,7 @@ class PayForm extends Component {
                             type='text'
                             onBlur={(e) => this.handleInput(e)}
                         />
-                        <label className='text-field--label' for='address'>address third line</label>
+                        <label className='text-field--label' for='address'>Address third line</label>
                     </div>
                     {addressThirdError && <p className="error-message">{addressThirdError}</p>}
                 </div>
@@ -322,7 +322,7 @@ class PayForm extends Component {
                             type='text'
                             onBlur={(e) => this.handleInput(e)}
                         />
-                        <label className='text-field--label' for='city'>city</label>
+                        <label className='text-field--label' for='city'>City</label>
                     </div>
                     {cityError && <p className="error-message">{cityError}</p>}
                 </div>
@@ -337,7 +337,7 @@ class PayForm extends Component {
                                 type='text'
                                 onBlur={(e) => this.handleInput(e)}
                             />
-                            <label className='text-field--label' for='county'>county</label>
+                            <label className='text-field--label' for='county'>County</label>
                         </div>
                         {countyError && <p className="error-message">{countyError}</p>}
                     </div>
@@ -352,7 +352,7 @@ class PayForm extends Component {
                                 onBlur={(e) => this.handleInput(e)}
                                 style={{ textTransform: 'uppercase' }}
                             />
-                            <label className='text-field--label' for='postcode'>postcode</label>
+                            <label className='text-field--label' for='postcode'>Postcode</label>
                         </div>
                         {postcodeError && <p className="error-message">{postcodeError}</p>}
                     </div>

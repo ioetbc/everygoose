@@ -19,3 +19,7 @@ export const phone = Joi.object({
 export const genericNotRequired = Joi.object({
     genericNotRequired: Joi.string().max(50).allow('').optional()
 })
+
+export const message = Joi.object({
+    message: Joi.string().required().min(2).max(1500)
+})

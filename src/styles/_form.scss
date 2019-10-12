@@ -30,7 +30,6 @@ $text-field-width: 300px;
 
 .text-field {
   background-color: $color-input-background;
-  border-radius: 4px;
   cursor: text;
   height: $text-field-height;
   overflow: hidden;
@@ -38,7 +37,12 @@ $text-field-width: 300px;
   transition: background 166ms ease-in-out;
   user-select: none;
   width: 100%;
-  border: 1px $color-red solid;
+  border: 1px $color-accent solid;
+  border-radius: 4px;
+
+  &.large {
+    height: 150px;
+  }
 
   .text-field--input,
   .text-field--label {
@@ -47,7 +51,8 @@ $text-field-width: 300px;
     line-height: $text-field-height;
     position: absolute;
     width: calc(100% - 24px);
-    text-transform: capitalize;
+    line-height: 15px;
+    padding-top: 8px;
 
     &:hover {
       background: darken($color-input-background, 3%);
@@ -58,8 +63,9 @@ $text-field-width: 300px;
     appearance: none;
     background: transparent;
     border: none;
-    color: $color-charcoal;
+    color: black;
     padding: 6px 12px;
+    font-size: 12px;
 
     &:focus {
       outline: none;
@@ -72,11 +78,16 @@ $text-field-width: 300px;
   }
 
   .text-field--label {
-    color: $color-charcoal;
+    color: black;
     margin: 0 12px;
-    pointer-events: none;
+    pointer-events: none; 
     transform-origin: 0 0;
     transition: transform 166ms ease-in-out;
+    margin-top: 3px;
+  }
+
+  #message {
+    padding-top: 22px;
   }
 
   .text-field--line,

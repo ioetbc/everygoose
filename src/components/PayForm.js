@@ -36,6 +36,11 @@ class PayForm extends Component {
             const { token } = await this.props.stripe.createToken({ name: 'william' })
             const theyOrIt = this.props.length > 1 ? 'They' : 'It';
             const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
+            const order = this.props.basket.map(a => {
+                return {
+                    quantity: a.quantity,
+                    title: a.title,
+                }});
             axios({
                 method: 'post',
                 url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -61,13 +66,14 @@ class PayForm extends Component {
                     estimatedDelivery: estimatedDelivery(),
                     cardOrCards,
                     theyOrIt,
+                    order,
                 },
             })
             .then(function (response) {
-                console.log('the respoonse', response);
+                window.location='/#/done'
             })
             .catch(function (error) {
-                console.log('the error', error);
+                window.location='/#/sorry'
             });
         }
 
@@ -185,6 +191,15 @@ class PayForm extends Component {
         }
 
         const disableButton = (allValid && stripeComplete);
+
+        console.log('basket;', this.props.basket);
+        const order = this.props.basket.map(a => {
+            return {
+                quantity: a.quantity,
+                title: a.title,
+            }})
+            
+        console.log('umm', order.map(u => `${u.quantity} x ${u.title}`))
 
         return (
             <form onSubmit={(e) => {

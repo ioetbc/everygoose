@@ -17,6 +17,7 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+
 const stripe = new stripeLoader(functions.config().stripe.secret_key);
 const sendgridSecret = functions.config().sendgrid.secret_key;
 sendgrid.setApiKey(sendgridSecret);
@@ -39,7 +40,6 @@ const formSchema = Joi.object({
 
 exports.payment = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
-        console.log('req.body', req.body)
 
         const validationError = formSchema.validate({
             firstName: req.body.firstName,
@@ -66,6 +66,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             const formatTimeStamp = timeStamp.toString();
             const items = req.body.basket.map(a => a.title);
             let last4 = 'XXXX';
+            const order = req.body.order.map(u => `${u.quantity} x ${u.title}`)
 
             const payload = {
                 customer: {
@@ -98,7 +99,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
             console.log('attempting to take payment');
             await stripe.charges.create({
-                amount: 200,
+                amount: subtotal * 100,
                 currency: 'GBP',
                 source: req.body.stripeToken,
                 description: 'card the customer bought',
@@ -119,10 +120,10 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             })
 
             const customerEmail = {
-                to: 'ioetbc@gmail.com',
+                to: req.body.email,
                 from: {
-                    email: 'cole-09@hotmail.co.uk',
-                    name: 'customer email',
+                    email: 'hello@everygoose.com',
+                    name: 'Every Goose order confirmation',
                 },
                 templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
                 dynamic_template_data: {
@@ -139,7 +140,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             const imogenEmail = {
                 to: 'ioetbc@gmail.com',
                 from: {
-                    email: 'cole-09@hotmail.co.uk',
+                    email: 'hello@everygoose.com',
                     name: 'imogen email',
                 },
                 templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
@@ -160,7 +161,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     postcode: req.body.postcode,
                     deliveryCost: deliveryCost,
                     phone: req.body.phoneNumber,
-                    cardTitle: items,
+                    cardTitle: order,
                 }
             }
 

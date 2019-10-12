@@ -35,14 +35,22 @@ class PayForm extends Component {
             this.setState({ isLoading: true });
             const inputs = [...document.getElementsByTagName('input')]
             inputs.map(i => i.value = '');
-            const { token } = await this.props.stripe.createToken({ name: 'william' })
-            const theyOrIt = this.props.length > 1 ? 'They' : 'It';
+            const { token } = await this.props.stripe.createToken({ name: this.state.email });
             const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
             const order = this.props.basket.map(a => {
                 return {
                     quantity: a.quantity,
                     title: a.title,
                 }});
+
+            const quantity = parseInt(this.props.basket.map(i => i.quantity)[0], 10);
+    
+            let theyOrIt;
+            if (quantity < 2 && this.props.basket.length === 1) {
+                theyOrIt = 'It'
+            } else {
+                theyOrIt = 'They'; 
+            }
             axios({
                 method: 'post',
                 url: process.env.REACT_APP_PAY_ENDPOINT,

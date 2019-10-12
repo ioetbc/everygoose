@@ -111,7 +111,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 amount: subtotal * 100,
                 currency: 'GBP',
                 source: req.body.stripeToken,
-                description: 'card the customer bought',
+                description: 'Card',
             }, { idempotency_key: req.body.idempotencyKey })
             .then((data) => {
                 return last4 = data.payment_method_details.card.last4;
@@ -147,7 +147,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             }
 
             const imogenEmail = {
-                to: 'ioetbc@gmail.com',
+                to: 'hello@everygoose.com',
                 from: {
                     email: 'hello@everygoose.com',
                     name: 'New order',
@@ -208,7 +208,7 @@ exports.contact = functions.https.onRequest(async (req, res) => {
             if (validationError) throw new Error(`form validation error: ${validationError}`);
 
             const contactEmail = {
-                to: 'ioetbc@gmail.com',
+                to: 'hello@everygoose.com',
                 from: {
                     email: 'hello@everygoose.com',
                     name: 'contact',

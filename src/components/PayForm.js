@@ -37,7 +37,7 @@ class PayForm extends Component {
             inputs.map(i => i.value = '');
             const { token } = await this.props.stripe.createToken({ name: this.state.email });
             const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
-            const order = this.props.basket.map(a => {
+            const breakdown = this.props.basket.map(a => {
                 return {
                     quantity: a.quantity,
                     title: a.title,
@@ -76,7 +76,7 @@ class PayForm extends Component {
                     estimatedDelivery: estimatedDelivery(),
                     cardOrCards,
                     theyOrIt,
-                    order,
+                    breakdown,
                 },
             })
             .then((res) => {

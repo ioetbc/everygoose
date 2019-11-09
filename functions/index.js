@@ -50,51 +50,70 @@ const contactSchema = Joi.object({
 exports.payment = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
 
+        const {
+            firstName,
+            lastName,
+            email,
+            addressFirst,
+            addressSecond,
+            addressThird,
+            city,
+            county,
+            postcode,
+            basket,
+            breakdown,
+            stripeToken,
+            idempotencyKey,
+            estimatedDelivery,
+            cardOrCards,
+            theyOrIt,
+            phoneNumber,
+        } = req.body;
+
         const validationError = formSchema.validate({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            addressFirst: req.body.addressFirst,
-            addressSecond: req.body.addressSecond,
-            addressThird: req.body.addressThird,
-            city: req.body.city,
-            county: req.body.county,
-            postcode: req.body.postcode,
-            phoneNumber: req.body.phoneNumber,
+            firstName,
+            lastName,
+            email,
+            addressFirst,
+            addressSecond,
+            addressThird,
+            city,
+            county,
+            postcode,
+            phoneNumber,
         }).error
 
         try {
             if (validationError) throw new Error(`form validation error: ${validationError}`);
-
             const customer_id = uuid();
-            // TODO update the delivery cost to be dynamic
-            const deliveryCost = 2;
-            const total = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
-            const subtotal = (req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost).toFixed(2);
-            const quantity = req.body.basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
+            const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
+            const deliveryCharge = total > 35 ? 0 : 2;
+            const subtotal = (basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCharge).toFixed(2);
+            const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
             const timeStamp = Date(Date.now()); 
             const formatTimeStamp = timeStamp.toString();
-            const items = req.body.basket.map(a => a.title);
+            const items = basket.map(a => a.title);
             let last4 = 'XXXX';
-            const order = req.body.order.map(u => `${u.quantity} x ${u.title}`)
+            const breakdownMapped = breakdown.map(u => `${u.quantity} x ${u.title}`)
 
             const payload = {
                 customer: {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
                     customerId: customer_id,
                     timeStamp: formatTimeStamp,    
-                    items: items,
-                    addressFirstLine: req.body.addressFirst,
-                    addressSecondLine: req.body.addressSecond || false,
-                    addressThirdLine: req.body.addressThird || false,
-                    city: req.body.city,
-                    county: req.body.county,
-                    postcode: req.body.postcode,
+                    items,
+                    addressFirstLine: addressFirst,
+                    addressSecondLine: addressSecond || false,
+                    addressThirdLine: addressThird || false,
+                    city,
+                    county,
+                    postcode,
                     isPaid: false,
-                    total_cost: subtotal,
+                    totalCost: subtotal,
+                    deliveryCharge,
                 }
             }
 
@@ -104,16 +123,15 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             await customerRef.set(payload)
             .catch((error) => {
                 throw new Error(`database error. customer_id: ${customer_id} `, error)
-
             })
 
             console.log('attempting to take payment');
             await stripe.charges.create({
                 amount: subtotal * 100,
                 currency: 'GBP',
-                source: req.body.stripeToken,
+                source: stripeToken,
                 description: 'Card',
-            }, { idempotency_key: req.body.idempotencyKey })
+            }, { idempotency_key: idempotencyKey })
             .then((data) => {
                 return last4 = data.payment_method_details.card.last4;
             })
@@ -130,20 +148,20 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             })
 
             const customerEmail = {
-                to: req.body.email,
+                to: email,
                 from: {
                     email: 'hello@everygoose.com',
                     name: 'Every Goose order confirmation',
                 },
                 templateId: 'd-28bdd238699d43a09f4520acb84cfa7c',
                 dynamic_template_data: {
-                    firstName: req.body.firstName,
+                    firstName: firstName,
                     amount: subtotal,
                     last4: last4,
-                    estimatedDelivery: req.body.estimatedDelivery,
+                    estimatedDelivery: estimatedDelivery,
                     quantity: quantity,
-                    cardOrCards: req.body.cardOrCards,
-                    theyOrIt: req.body.theyOrIt,
+                    cardOrCards: cardOrCards,
+                    theyOrIt: theyOrIt,
                 }
             }
 
@@ -157,21 +175,21 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 dynamic_template_data: {
                     total: total,
                     subtotal: subtotal,
-                    estimatedDelivery: req.body.estimatedDelivery,
+                    estimatedDelivery: estimatedDelivery,
                     quantity: quantity,
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
-                    addressFirstLine: req.body.addressFirst,
-                    addressSecondLine: req.body.addressSecond,
-                    addressThirdLine: req.body.addressThird,
-                    city: req.body.city,
-                    county: req.body.county,
-                    postcode: req.body.postcode,
-                    deliveryCost: deliveryCost,
-                    phone: req.body.phoneNumber,
-                    cardTitle: order,
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phoneNumber: phoneNumber,
+                    addressFirstLine: addressFirst,
+                    addressSecondLine: addressSecond,
+                    addressThirdLine: addressThird,
+                    city: city,
+                    county: county,
+                    postcode: postcode,
+                    deliveryCost: deliveryCharge,
+                    phone: phoneNumber,
+                    cardTitle: breakdownMapped,
                 }
             }
 
@@ -198,10 +216,10 @@ exports.contact = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         console.log('calling contact schema')
         const validationError = contactSchema.validate({
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            message: req.body.message,
+            name: name,
+            email: email,
+            phone: phone,
+            message: message,
 
         }).error;
 
@@ -216,10 +234,10 @@ exports.contact = functions.https.onRequest(async (req, res) => {
                 },
                 templateId: 'd-2608b42e516e427e82685d3fb18f4e73',
                 dynamic_template_data: {
-                    name: req.body.name,
-                    email: req.body.email,
-                    phone: req.body.phone,
-                    message: req.body.message,
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    message: message,
                 }
             }
 

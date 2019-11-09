@@ -67,6 +67,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             if (validationError) throw new Error(`form validation error: ${validationError}`);
 
             const customer_id = uuid();
+            // TODO update the delivery cost to be dynamic
             const deliveryCost = 2;
             const total = req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
             const subtotal = (req.body.basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCost).toFixed(2);

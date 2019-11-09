@@ -3,7 +3,9 @@ import Button from './Shared/Button';
 import { Link } from 'react-router-dom';
 
 const Overview = ({ basket, payPage, }) => {
-    const total = (basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + 2).toFixed(2);
+    const total = (basket.reduce((a, item) =>  item.price * item.quantity + a, 0));
+    const deliveryCharge = total > 35 ? 0 : 2;
+    const subTotal = (parseFloat(total) + deliveryCharge).toFixed(2);
 
     return (
         <div className="checkout-overview">
@@ -13,11 +15,11 @@ const Overview = ({ basket, payPage, }) => {
             {basket.length > 0 ? [
                 <ul className="list-flex">
                     {basket.map((item, key) =>
-                        <li>
+                        <li key={key}>
                                 <div className="ellipsis">
                                     {item.title}.
                                 </div>                            
-                                ({item.quantity})
+                                <span>({item.quantity})</span>
                                 <p style={{ marginLeft: '30px' }}>£{(item.price * item.quantity).toFixed(2)}</p>
                         </li>
                     )}
@@ -26,13 +28,13 @@ const Overview = ({ basket, payPage, }) => {
                     <ul className="list-flex">
                         <li>
                             <p className="overview-delivery-cost">Delivery Cost</p>
-                            <p>£2.00</p>
+                            <p>{deliveryCharge > 0 ? '£' + deliveryCharge.toFixed(2) : 'Nothing'}</p>
                         </li>
                     </ul>
                     <ul className="list-flex sub-total">
                         <li>
                             <p className="overview-total-text">total</p>
-                            <p className="overview-total-price">£{total}</p>
+                            <p className="overview-total-price">£{subTotal}</p>
                         </li>
                     </ul>
                 </div>,

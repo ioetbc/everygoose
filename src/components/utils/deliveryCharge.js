@@ -1,16 +1,21 @@
-export default function deliveryCharge(products) {
-    const allCharges = products.map(p => {
-        const type = p.product_type;
+export default function deliveryCharge(products, country) {
 
-        if (type === 'bundle') {
-            return 4;
-        } else if (type === 'print') {
-            return 2;
-        } else {
-            return 1;
-        }
-    });
-    return Math.max(...allCharges);
+    console.log('prddddddoducts', products)
+    console.log('couddddddntry', country)
+
+
+    // const allCharges = products.map(p => {
+    //     const type = p.product_type;
+
+    //     if (type === 'bundle') {
+    //         return 4;
+    //     } else if (type === 'print') {
+    //         return 2;
+    //     } else {
+    //         return 1;
+    //     }
+    // });
+    // return Math.max(...allCharges);
 }
 
 

@@ -20,6 +20,7 @@
     "prismic-reactjs": "^0.3.2",
     "qs": "^6.4.0",
     "react": "^16.2.0",
+    "react-country-region-selector": "^1.4.5",
     "react-dom": "^16.2.0",
     "react-responsive-carousel": "^3.1.50",
     "react-router": "^5.0.1",

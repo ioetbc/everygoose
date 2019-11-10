@@ -2,9 +2,31 @@ import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import axios from 'axios';
 import uuid from 'uuid/v4';
+import { get } from 'lodash';
 
 import estimatedDelivery from './utils/EstimatedDelivery';
 import validateSingle from './utils/validateSingle';
+import deliveryCharge from './utils/deliveryCharge';
+import PersonalInfo from './form/PersonalInfo';
+import ShippingInfo from './form/ShippingInfo';
+
+function handleValidation(e) {
+    e.preventDefault();
+    const validate = validateSingle(e);
+    const errorMessagePresent = document.getElementById(`error-${e.target.name}`);
+    if (get(validate, 'error')) {
+        const newNode = document.createElement('div');
+            newNode.innerHTML = `<p>${validate.errorMessage}</p>`;
+            newNode.classList.add('error-message');
+            newNode.setAttribute('id', `error-${e.target.name}`);
+        if (!errorMessagePresent) {
+            const referenceNode = document.getElementsByName(e.target.name)[0].parentNode;
+            referenceNode.after(newNode);
+        }
+    } else {
+        if (errorMessagePresent) errorMessagePresent.parentNode.removeChild(errorMessagePresent);
+    }
+}
 
 class PayForm extends Component {
     constructor(props) {
@@ -25,13 +47,12 @@ class PayForm extends Component {
             phoneNumber: '',
             isLoading: false,
         }
-
-        this.handleInput = this.handleInput.bind(this);
+        this.handleCountry = this.handleCountry.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    async handleSubmit(e, allValid) {
-        if (allValid && this.state.stripeComplete) {
+    async handleSubmit(e) {
+        if (this.state.stripeComplete) {
             this.setState({ isLoading: true });
             const inputs = [...document.getElementsByTagName('input')]
             inputs.map(i => i.value = '');
@@ -90,210 +111,41 @@ class PayForm extends Component {
         }
     }
 
-    handleInput(e) {
-        e.preventDefault();
-        const validate = validateSingle(e)
-        if (validate.error) {
-            const erroredInput = document.getElementsByName(e.taget.name)[0].tagName;
-            console.log('errrr', erroredInput);
-        }
+    handleCountry(country) {
+        deliveryCharge(this.props.basket, country);
     }
 
     render() {
         const {
-            firstNameError,
-            lastNameError,
-            addressFirstError,
-            addressSecondError,
-            addressThirdError,
-            cityError,
-            countyError,
-            postcodeError,
-            emailError,
-            phoneError,
             stripeComplete,
             isLoading,
         } = this.state;
 
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
-        let allValid = false;
-        if (
-            firstNameError === false &&
-            lastNameError === false &&
-            addressFirstError === false &&
-            addressSecondError === false &&
-            addressThirdError === false &&
-            cityError === false &&
-            countyError === false &&
-            postcodeError === false &&
-            emailError === false &&
-            phoneError === false &&
-            !hasErrors
-        ) {
-            allValid = true;
-        }
-
-        const disableButton = (allValid && stripeComplete);
+        const disableButton = (!hasErrors && stripeComplete);
 
         return [
             isLoading && <div className="is-loading"><div /></div>,
             <form onSubmit={(e) => {
                 e.preventDefault()
-                this.handleSubmit(e, allValid)
+                this.handleSubmit(e)
+                // TODO at this to the button onClick
                 document.getElementById('submitButton').setAttribute('disabled', 'disabled');
             }}>
-                <div class="input-side-by-side">
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="firstName"
-                                id="firstName"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                            />
-                            <label className='text-field--label' for='firstName'>First name</label>
-                        </div>
-                        {firstNameError && <p className="error-message">{firstNameError}</p>}
-                    </div>
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="lastName"
-                                id="lastName"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                            />
-                            <label className='text-field--label' for='lastName'>Last name</label>
-                        </div>
-                        {lastNameError && <p className="error-message">{lastNameError}</p>}
-                    </div>
-                </div>
-                <div class="input-side-by-side">
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="email"
-                                id="email"
-                                placeholder=' '
-                                type='email'
-                                onBlur={(e) => this.handleInput(e)}
-                                style={{ textTransform: 'none' }}
-                            />
-                            <label className='text-field--label' for='email'>Email</label>
-                        </div>
-                        {emailError && <p className="error-message">{emailError}</p>}
-                    </div>
-                    <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="phone"
-                            id="phone"
-                            placeholder=' '
-                            type='number'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='phone'>Phone number</label>
-                    </div>
-                    {phoneError && <p className="error-message">{phoneError}</p>}
-                </div>
-                </div>
+
+                <PersonalInfo
+                    onBlur={(e) => handleValidation(e)}
+                />
 
                 <h3>Shipping address</h3>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="addressFirstLine"
-                            id="addressFirstLine"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='address'>Address first line</label>
-                    </div>
-                    {addressFirstError && <p className="error-message">{addressFirstError}</p>}
-                </div>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="addressSecondLine"
-                            id="addressSecondLine"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='address'>Address second line</label>
-                    </div>
-                    {addressSecondError && <p className="error-message">{addressSecondError}</p>}
-                </div>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="addressThirdLine"
-                            id="addressThirdLine"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='address'>Address third line</label>
-                    </div>
-                    {addressThirdError && <p className="error-message">{addressThirdError}</p>}
-                </div>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="city"
-                            id="city"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='city'>City</label>
-                    </div>
-                    {cityError && <p className="error-message">{cityError}</p>}
-                </div>
-                <div class="input-side-by-side">
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="county"
-                                id="county"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                            />
-                            <label className='text-field--label' for='county'>County</label>
-                        </div>
-                        {countyError && <p className="error-message">{countyError}</p>}
-                    </div>
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="postcode"
-                                id="postcode"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                                style={{ textTransform: 'uppercase' }}
-                            />
-                            <label className='text-field--label' for='postcode'>Postcode</label>
-                        </div>
-                        {postcodeError && <p className="error-message">{postcodeError}</p>}
-                    </div>
-                </div>
+
+                <ShippingInfo
+                    onBlur={(e) => handleValidation(e)}
+                    handleCountry={this.handleCountry}
+                />
 
                 <h3 style={{ marginTop: '12px' }}>Payment details</h3>
+
                 <CardElement
                     hidePostalCode
                     onChange={(e) => this.setState({ stripeComplete: e.complete })}
@@ -306,6 +158,7 @@ class PayForm extends Component {
                 >
                     pay now
                 </button>
+
             </form>,
         ];
     }

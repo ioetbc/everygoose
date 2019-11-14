@@ -1,46 +1,24 @@
-export default function deliveryCharge(products, country) {
+import { includes } from 'lodash';
 
-    console.log('prddddddoducts', products)
-    console.log('couddddddntry', country)
+export default function deliveryCharge(country, europeanCountries, basket, total) {
+    let charge = 2.50;
 
+    if (total > 35 && includes(country, 'United Kingdom')) {
+        charge = 0;
+        return charge;
+    } else if (europeanCountries) {
+        const productType = basket.map(i => i.product_type);
+        const europenCountry = europeanCountries.map(c => c.name);
 
-    // const allCharges = products.map(p => {
-    //     const type = p.product_type;
-
-    //     if (type === 'bundle') {
-    //         return 4;
-    //     } else if (type === 'print') {
-    //         return 2;
-    //     } else {
-    //         return 1;
-    //     }
-    // });
-    // return Math.max(...allCharges);
+        if (includes(productType, 'card')) {
+            if (includes(country, 'United Kingdom')) charge = 1;
+            if (includes(europenCountry, country) && !includes(country, 'United Kingdom') ) charge = 2;
+        }
+        if (includes(productType, 'bundle')) {
+            charge = 4.85;
+            if (includes(country, 'United Kingdom')) charge = 1.50;
+            if (includes(europenCountry, country) && !includes(country, 'United Kingdom')) charge = 3.85;
+        }
+    }
+    return charge;
 }
-
-
-// const deliveryCharge = total > 35 ? 0 : 2;
-// const deliveryPricing = [
-//     {
-//         cards: {
-//             uk: 1,
-//             europe: 2,
-//             ROW: 2.50
-//         }
-//     },
-//     {
-
-//         prints: {
-//             uk: 2,
-//             europe: 3,
-//             ROW: 3,
-//         }
-//     },
-//     {
-//         bundles: {
-//             uk: 3,
-//             europe: 4,
-//             ROW: 5,
-//         }
-//     },
-// ];

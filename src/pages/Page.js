@@ -34,7 +34,7 @@ export default class Page extends Component {
 						<div className="shop-gallery">
 							{[1,2,3,4,5,6].map((item, key) => {
 								return (		
-									<div key={key} className="shop-items" >
+									<div key={key} className="shop-items placeholder" >
 										<div key={key} className="palceholder-shop-image"></div>
 										<div className="placeholder-shop-title"></div>
 										<div className="placeholder-shop-price"></div>

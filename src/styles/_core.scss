@@ -93,3 +93,9 @@
         100%{transform:rotate(360deg)}
     }
 }
+
+.hide-desktop {
+    @media screen and (min-width: 1000px) {
+        display: none!important;
+    }
+}

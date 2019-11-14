@@ -2,31 +2,12 @@ import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import axios from 'axios';
 import uuid from 'uuid/v4';
-import { get } from 'lodash';
 
 import estimatedDelivery from './utils/EstimatedDelivery';
-import validateSingle from './utils/validateSingle';
-import deliveryCharge from './utils/deliveryCharge';
+import handleValidationMessage from './utils/handleValidationMessage';
+
 import PersonalInfo from './form/PersonalInfo';
 import ShippingInfo from './form/ShippingInfo';
-
-function handleValidation(e) {
-    e.preventDefault();
-    const validate = validateSingle(e);
-    const errorMessagePresent = document.getElementById(`error-${e.target.name}`);
-    if (get(validate, 'error')) {
-        const newNode = document.createElement('div');
-            newNode.innerHTML = `<p>${validate.errorMessage}</p>`;
-            newNode.classList.add('error-message');
-            newNode.setAttribute('id', `error-${e.target.name}`);
-        if (!errorMessagePresent) {
-            const referenceNode = document.getElementsByName(e.target.name)[0].parentNode;
-            referenceNode.after(newNode);
-        }
-    } else {
-        if (errorMessagePresent) errorMessagePresent.parentNode.removeChild(errorMessagePresent);
-    }
-}
 
 class PayForm extends Component {
     constructor(props) {
@@ -44,10 +25,9 @@ class PayForm extends Component {
             city: '',
             county: '',
             postcode: '',
-            phoneNumber: '',
+            phoneNumber: '',     
             isLoading: false,
         }
-        this.handleCountry = this.handleCountry.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -111,10 +91,6 @@ class PayForm extends Component {
         }
     }
 
-    handleCountry(country) {
-        deliveryCharge(this.props.basket, country);
-    }
-
     render() {
         const {
             stripeComplete,
@@ -122,7 +98,6 @@ class PayForm extends Component {
         } = this.state;
 
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
-        const disableButton = (!hasErrors && stripeComplete);
 
         return [
             isLoading && <div className="is-loading"><div /></div>,
@@ -134,14 +109,14 @@ class PayForm extends Component {
             }}>
 
                 <PersonalInfo
-                    onBlur={(e) => handleValidation(e)}
+                    onBlur={(e) => handleValidationMessage(e)}
                 />
 
                 <h3>Shipping address</h3>
 
                 <ShippingInfo
-                    onBlur={(e) => handleValidation(e)}
-                    handleCountry={this.handleCountry}
+                    onBlur={(e) => handleValidationMessage(e)}
+                    handleCountry={this.props.handleCountry}
                 />
 
                 <h3 style={{ marginTop: '12px' }}>Payment details</h3>
@@ -153,8 +128,9 @@ class PayForm extends Component {
 
                 <button
                     type="submit"
-                    className={`button ${!disableButton && 'disabled'}`}
+                    className={`button`}
                     id='submitButton'
+                    // onClick={() => }
                 >
                     pay now
                 </button>

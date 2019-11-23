@@ -41,7 +41,6 @@ class App extends Component {
 			doc: null,
 			filtered: false,
 		}
-		this.removeItem = this.removeItem.bind(this);
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 
 		if (this.props.prismicCtx) {
@@ -54,13 +53,6 @@ class App extends Component {
 		if (!prevProps.prismicCtx) {
 			this.fetchPage(this.props);
 		}
-	}
-
-	removeItem(item) {
-		this.setState(() => ({
-            basket: this.state.basket.filter(element => {
-				return element.title !== item.title
-        })}), () => localStorage.setItem('session', JSON.stringify(this.state.basket)));
 	}
 
 	handleNavigationFilter(item) {
@@ -177,7 +169,6 @@ class App extends Component {
 								<Checkout
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
-									removeItem={this.removeItem}
 								/>
 							</div>
 						]} />
@@ -203,7 +194,6 @@ class App extends Component {
 								<Pay
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
-									removeItem={this.removeItem}
 								/>
 							</div>,
 						]} />

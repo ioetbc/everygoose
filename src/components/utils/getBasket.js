@@ -1,1 +1,1 @@
-export default () => JSON.parse(localStorage.getItem('session'));
+export default () => JSON.parse(localStorage.getItem('session')) || [];

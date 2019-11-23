@@ -1,7 +1,7 @@
 import React from 'react';
 import updateBasket from '../components/utils/updateBasket';
 
-const SelectedItem = ({ basket, removeItem }) => {
+const SelectedItem = ({ basket }) => {
 
     return (
         <div>
@@ -37,7 +37,7 @@ const SelectedItem = ({ basket, removeItem }) => {
                     <div className="item-remove">
                         <div className="item-price">
                             <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
-                            <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={() => removeItem(item)}>Remove</p>
+                            <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={() => updateBasket(item, false, true)}>Remove</p>
                         </div>
                     </div>
                 </div>

@@ -41,7 +41,6 @@ class App extends Component {
 			doc: null,
 			filtered: false,
 		}
-        this.selectQuantity = this.selectQuantity.bind(this);
 		this.removeItem = this.removeItem.bind(this);
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 
@@ -55,14 +54,6 @@ class App extends Component {
 		if (!prevProps.prismicCtx) {
 			this.fetchPage(this.props);
 		}
-	}
-
-	selectQuantity(e, item) {
-        const quantity = e.target.value;
-        this.setState(() => ({
-            basket: this.state.basket.map(element => {
-                return element.title === item.title ? { ...element, quantity: quantity } : element
-        })}), () => localStorage.setItem('session', JSON.stringify(this.state.basket)));
 	}
 
 	removeItem(item) {
@@ -186,7 +177,6 @@ class App extends Component {
 								<Checkout
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
-									selectQuantity={this.selectQuantity}
 									removeItem={this.removeItem}
 								/>
 							</div>
@@ -213,7 +203,6 @@ class App extends Component {
 								<Pay
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
-									selectQuantity={this.selectQuantity}
 									removeItem={this.removeItem}
 								/>
 							</div>,

@@ -6,14 +6,14 @@ import ScrollToTop from '../components/utils/ScrollTop';
 import SelectedItem from '../components/SelectedItem'; 
 import Overview from '../components/Overview';
 
-const Checkout = ({ selectQuantity, removeItem }) => {
+const Checkout = ({ removeItem }) => {
     const basket = getBasket();
+    console.log('basket from checkout', basket);
     return [
         <ScrollToTop />,
         <main className="main-content">
             <div className="checkout-not-equal">
                 <SelectedItem
-                    selectQuantity={selectQuantity}
                     removeItem={removeItem}
                     basket={basket}
                 />

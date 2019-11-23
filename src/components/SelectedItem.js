@@ -1,6 +1,8 @@
 import React from 'react';
+import updateBasket from '../components/utils/updateBasket';
 
-const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
+const SelectedItem = ({ basket, removeItem }) => {
+
     return (
         <div>
             {basket.map((item, key) =>
@@ -13,7 +15,15 @@ const SelectedItem = ({ basket, selectQuantity, removeItem }) => {
                             <p className="item-title">{item.title}.</p>
                             <div className="item-quantity">
                                 <p className="text-small">Quantity</p>
-                                <select className="quantity-select" onChange={(e) => selectQuantity(e, item)}>
+                                <select
+                                    className="quantity-select"
+                                        onChange={(e) => {
+                                            updateBasket(item, {
+                                                key: 'quantity',
+                                                value: e.target.value
+                                            }
+                                        )}}
+                                    >
                                     <option value={item.quantity} selected disabled hidden>{item.quantity}</option>
                                     <option value={1}>1</option>
                                     <option value={2}>2</option>

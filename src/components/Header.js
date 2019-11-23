@@ -2,9 +2,11 @@ import React from 'react';
 import { uniq } from 'lodash';
 import { Link } from 'react-router-dom';
 import Basket from '../images/icons/icon-basket.svg';
+import getBasket from './utils/getBasket';
 
-export default function Header({ title, basket, shop, navigationItems, handleNavigationFilter }) {
-    navigationItems && navigationItems.unshift('all')
+export default function Header({ title, shop, navigationItems, handleNavigationFilter }) {
+    navigationItems && navigationItems.unshift('all');
+    const basket = getBasket();
 
     return (
         <div className={`header ${shop && 'shop'}`}>

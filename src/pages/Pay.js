@@ -9,6 +9,7 @@ import getPrice from '../components/utils/getPrice';
 import ScrollToTop from '../components/utils/ScrollTop';
 import Overview from '../components/Overview';
 import PayForm from '../components/PayForm'
+import getBasket from '../components/utils/getBasket';
 
 class Product extends Component {
     constructor(props) {
@@ -26,14 +27,16 @@ class Product extends Component {
     }
 
     handleCountry(country) {
-        const total = getPrice(this.props.location.state.basket);
-        const deliveryCharge = getDeliveryCharge(country, this.state.europeanCountries, this.props.location.state.basket, total);
+        const basket = getBasket();
+        const total = getPrice(basket);
+        const deliveryCharge = getDeliveryCharge(country, this.state.europeanCountries, basket, total);
         this.setState({ deliveryCharge });
     }
 
     render() {
-        const { location } = this.props;
-        if (location.state) {
+        const basket = getBasket();
+
+        if (basket) {
             return [
                 <ScrollToTop />,
                 <main className="main-content">
@@ -41,13 +44,13 @@ class Product extends Component {
                         <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE}>
                         <Elements>
                             <PayForm
-                                basket={location.state.basket}
+                                basket={basket}
                                 handleCountry={this.handleCountry}
                             />
                         </Elements>
                         </StripeProvider>
                         <Overview
-                            basket={location.state.basket}
+                            basket={basket}
                             payPage
                             deliveryCharge={this.state.deliveryCharge}
                             europeanCountries={this.state.europeanCountries}

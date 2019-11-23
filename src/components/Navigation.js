@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Logo from '../images/misc/logo-animated.gif';
 import Hamburger from '../images/misc/hamburger.svg';
-import Basket from '../images/icons/icon-basket.svg';
-
-// TODO refactor the navigation into two separate componets
+import getBasket from './utils/getBasket';
 
 class Navigation extends Component {
     constructor() {
@@ -15,8 +13,9 @@ class Navigation extends Component {
     }
 
     render() {
-        const { navigationItems, handleNavigationFilter, shop, basket, classModifier } = this.props;
+        const { navigationItems, handleNavigationFilter, shop, classModifier } = this.props;
         navigationItems.unshift('all');
+        const basket = getBasket();
 
         return (
             <div className={`navigation ${classModifier}`}>

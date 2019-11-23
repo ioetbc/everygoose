@@ -41,7 +41,7 @@ const Overview = ({ basket, payPage, deliveryCharge, europeanCountries }) => {
                     </ul>
                 </div>,
                 !payPage &&
-                    <Link to={{ pathname: "/pay", state: { basket } }}>
+                    <Link to={{ pathname: "/pay" }}>
                         <Button
                             text="proceed to payment"
                         />

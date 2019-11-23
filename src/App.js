@@ -28,6 +28,8 @@ import './App.scss';
 import Header from './components/Header';
 
 import BackIcon from './images/misc/back-button.svg';
+import updateBasket from './components/utils/updateBasket';
+import getBasket from './components/utils/getBasket';
 
 class App extends Component {
 	constructor(props) {
@@ -40,7 +42,6 @@ class App extends Component {
 			filtered: false,
 		}
         this.selectQuantity = this.selectQuantity.bind(this);
-		this.addToBasket = this.addToBasket.bind(this);
 		this.removeItem = this.removeItem.bind(this);
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 
@@ -54,18 +55,6 @@ class App extends Component {
 		if (!prevProps.prismicCtx) {
 			this.fetchPage(this.props);
 		}
-	}
-
-	addToBasket(item) {
-		let itemArray = this.state.basket;
-        
-        if (!itemArray.find(o => o.title === get(item, 'title'))) itemArray.push(item);
-
-        localStorage.setItem('session', JSON.stringify(itemArray));
-
-        const basket = JSON.parse(localStorage.getItem('session'));
-
-        this.setState({ basket })
 	}
 
 	selectQuantity(e, item) {
@@ -118,7 +107,8 @@ class App extends Component {
 	}
 	
 	render() {
-		const { basket, cardTypes, doc, products, filteredProducts } = this.state;
+		const { cardTypes, doc, products, filteredProducts } = this.state;
+		const basket = getBasket();
 
 		return ([
 			<div className="app">	
@@ -130,20 +120,17 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								shop
 								classModifier="shop"
-								basket={basket}
 							/>,
 							<div className="shop-page">
 								<Header
 									title='Shop'
 									shop
-									basket={basket}
 									navigationItems={cardTypes}
 									handleNavigationFilter={this.handleNavigationFilter}
 								/>
 								<Page
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
-									basket={basket}
 									getCardType={this.getCardType}
 									doc={doc}
 									products={filteredProducts || products}
@@ -155,13 +142,11 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 								product
 							/>,
 							<div className="standard-page">
 								<Header
 									title='Card'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -174,8 +159,7 @@ class App extends Component {
 								<Product
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
-									addToBasket={this.addToBasket}
-									basket={basket}
+									addToBasket={updateBasket}
 								/>
 							</div>
 						]} />
@@ -185,13 +169,11 @@ class App extends Component {
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket
-								basket={basket}
 								classModifier="wide"
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='checkout'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -203,7 +185,6 @@ class App extends Component {
 
 								<Checkout
 									{...routeProps}
-									basket={basket}
 									prismicCtx={this.props.prismicCtx}
 									selectQuantity={this.selectQuantity}
 									removeItem={this.removeItem}
@@ -215,13 +196,11 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 								classModifier="wide"
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='pay'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -233,7 +212,6 @@ class App extends Component {
 
 								<Pay
 									{...routeProps}
-									basket={basket}
 									prismicCtx={this.props.prismicCtx}
 									selectQuantity={this.selectQuantity}
 									removeItem={this.removeItem}
@@ -245,12 +223,10 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='Contact'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -270,12 +246,10 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='Terms & Conditions'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -293,12 +267,10 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='Trade'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -316,12 +288,10 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='Delivery & Returns'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -339,12 +309,10 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='About'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>
@@ -385,12 +353,10 @@ class App extends Component {
 							<Navigation
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
 							/>,
 							<div className="checkout-page">
 								<Header
 									title='Sorry'
-									basket={basket}
 								/>
 
 								<Link to={{ pathname: "/" }}>

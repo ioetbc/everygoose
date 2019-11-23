@@ -8,8 +8,6 @@ const Overview = ({ basket, payPage, deliveryCharge, europeanCountries }) => {
     const total = getPrice(basket);
     const subTotal = (parseFloat(total) + (deliveryCharge || 0)).toFixed(2);
 
-    console.log('europeanCountries', europeanCountries)
-
     return (
         <div className="checkout-overview">
             <h3>Overview</h3>

@@ -17,8 +17,6 @@ class Product extends Component {
         this.handleCountry = this.handleCountry.bind(this);
     }
 
-
-    // TODO put this logic on the checkout page
     componentDidMount() {
         axios.get('https://restcountries.eu/rest/v2/region/europe')
         .then(res => {
@@ -28,7 +26,6 @@ class Product extends Component {
     }
 
     handleCountry(country) {
-        console.log('long', JSON.stringify(this.props.location.state.basket, null, 4))
         const total = getPrice(this.props.location.state.basket);
         const deliveryCharge = getDeliveryCharge(country, this.state.europeanCountries, this.props.location.state.basket, total);
         this.setState({ deliveryCharge });

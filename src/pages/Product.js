@@ -22,7 +22,7 @@ const Product = ({ location, addToBasket }) => {
                         slideshowImages={slideshowImages}
                     />
                     <ProductDetails
-                        details={location.state.item}
+                        product={location.state.item}
                         addToBasket={addToBasket}
                     />
                 </div>

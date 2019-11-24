@@ -1,27 +1,31 @@
 import React from 'react';
 import Button from './Shared/Button';
 import { Link } from 'react-router-dom';
+import getBasket from '../components/utils/getBasket';
 
 import getPrice from '../components/utils/getPrice';
 
-const Overview = ({ basket, payPage, deliveryCharge, europeanCountries }) => {
+const Overview = ({ payPage, deliveryCharge, europeanCountries }) => {
+    const basket = getBasket();
     const total = getPrice(basket);
     const subTotal = (parseFloat(total) + (deliveryCharge || 0)).toFixed(2);
+
 
     return (
         <div className="checkout-overview">
             <h3>Overview</h3>
             {basket.length > 0 ? [
                 <ul className="list-flex">
-                    {basket.map((item, key) =>
+                    {basket.map((item, key) => [
                         <li key={key}>
                                 <div className="ellipsis">
                                     {item.title}.
-                                </div>                            
+                                </div>
                                 <span>({item.quantity})</span>
                                 <p style={{ marginLeft: '30px' }}>£{(item.price * item.quantity).toFixed(2)}</p>
-                        </li>
-                    )}
+                        </li>,
+                        item.framed === 'true' && <li className="title-option" key={key}>framed</li>,
+                    ])}
                 </ul>,
                 <div className="total" style={{ marginBottom: payPage && 0 }}>
                     {europeanCountries &&
@@ -45,8 +49,8 @@ const Overview = ({ basket, payPage, deliveryCharge, europeanCountries }) => {
                         <Button
                             text="proceed to payment"
                         />
-                    </Link> 
-            ]   
+                    </Link>
+            ]
             :
             <p>There are no items in your basket.</p>
             }

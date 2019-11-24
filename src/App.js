@@ -81,6 +81,7 @@ class App extends Component {
 				description: item.product_description[0].text,
 				type: item.type_of_card,
 				product_type: item.product_type,
+				product_dimensions: item.product_dimensions,
 			});
 			
 			cardTypes.push(item.type_of_card);

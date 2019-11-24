@@ -1,5 +1,5 @@
 
-import { get, find } from 'lodash';
+import { get, includes } from 'lodash';
 
 const updateBasket = (item, update = false, remove = false) => {
     let basket = JSON.parse(localStorage.getItem('session')) || [];
@@ -8,9 +8,12 @@ const updateBasket = (item, update = false, remove = false) => {
 
     if (update) {
         const { key, value } = update;
-        basket.map(element => {
-            if (element.title === item.title) element[key] = value;
-        });
+
+        if (basket.find(o => o.title === get(item, 'title'))) {
+            basket.map(element => {
+                if (element.title === item.title) element[key] = value;
+            });
+        }
     }
 
     if (remove) basket = basket.filter(element => element.title !== item.title);

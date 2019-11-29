@@ -8,6 +8,7 @@ import handleValidationMessage from './utils/handleValidationMessage';
 
 import PersonalInfo from './form/PersonalInfo';
 import ShippingInfo from './form/ShippingInfo';
+import PayPal from './form/Paypal';
 
 class PayForm extends Component {
     constructor(props) {
@@ -121,10 +122,33 @@ class PayForm extends Component {
 
                 <h3 style={{ marginTop: '12px' }}>Payment details</h3>
 
-                <CardElement
-                    hidePostalCode
-                    onChange={(e) => this.setState({ stripeComplete: e.complete })}
-                />
+                <div className="payment-method-container">
+                    <div
+                        onClick={() => this.setState({ paymentMethod: 'stripe' })}
+                        className="payment-method"
+                        style={{ background: this.state.paymentMethod === 'stripe' && 'white' }}
+                    >
+                        <p>credit / debit card</p>
+                    </div>
+                    <div
+                        onClick={() => this.setState({ paymentMethod: 'paypal' })}
+                        className="payment-method"
+                        style={{ background: this.state.paymentMethod === 'paypal' && 'white' }}
+                    >
+                        <p>paypal</p>
+                    </div>
+                </div>
+
+                {this.state.paymentMethod === 'stripe' &&
+                    <CardElement
+                        hidePostalCode
+                        onChange={(e) => this.setState({ stripeComplete: e.complete })}
+                    />
+                }
+
+                {this.state.paymentMethod === 'paypal' &&
+                    <PayPal />
+                }
 
                 <button
                     type="submit"

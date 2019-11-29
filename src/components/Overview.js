@@ -8,7 +8,8 @@ import getPrice from '../components/utils/getPrice';
 const Overview = ({ payPage, deliveryCharge, europeanCountries }) => {
     const basket = getBasket();
     const total = getPrice(basket);
-    const subTotal = (parseFloat(total) + (deliveryCharge || 0)).toFixed(2);
+    // const subTotal = (parseFloat(total) + (deliveryCharge || 0)).toFixed(2);
+    const subTotal = 2;
 
 
     return (

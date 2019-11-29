@@ -108,10 +108,12 @@ button {
 		padding: 10px 20px;
 		color: $color-red;
 		background-color: transparent;	
-		border-radius: 8px;
+    border-radius: 4px;
 		border: 1px solid $color-red;
-		max-width: 100px;
-		cursor: pointer;
+    cursor: pointer;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 
 		&:hover {
 			background: white;

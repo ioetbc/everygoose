@@ -15,18 +15,18 @@ class PayForm extends Component {
         super(props);
         this.state = {
             stripeComplete: false,
-            firstName: '',
-            lastName: '',
-            email: '',
+            firstName: 'will',
+            lastName: 'cole',
+            email: 'ioetbc@gmail.com',
             basket: [],
-            addressSecond: '',
-            addressFirst: '',
+            addressFirst: '50 parchmewnt',
+            addressSecond: '34 parhment ster',
             addressSecondError: false,
             addressThirdError : false,
-            city: '',
-            county: '',
-            postcode: '',
-            phoneNumber: '',     
+            city: 'winchester',
+            county: 'hampshiert',
+            postcode: 'so238ba',
+            phoneNumber: '07493774943',     
             isLoading: false,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -72,7 +72,7 @@ class PayForm extends Component {
                     city: this.state.city,
                     county: this.state.county,
                     postcode: this.state.postcode,
-                    phoneNumber: this.state.phone,
+                    phoneNumber: this.state.phoneNumber,
                     stripeToken: token.id,
                     idempotencyKey: uuid(),
                     estimatedDelivery: estimatedDelivery(),
@@ -97,6 +97,8 @@ class PayForm extends Component {
             stripeComplete,
             isLoading,
         } = this.state;
+
+        console.log('this.state', this.state)
 
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
 

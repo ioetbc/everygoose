@@ -14,7 +14,7 @@ import getBasket from '../components/utils/getBasket';
 class Product extends Component {
     constructor(props) {
         super(props);
-        this.state = { europeanCountries: [], deliveryCharge: 1 }
+        this.state = { europeanCountries: [], deliveryCharge: 0 }
         this.handleCountry = this.handleCountry.bind(this);
     }
 
@@ -35,6 +35,8 @@ class Product extends Component {
 
     render() {
         const basket = getBasket();
+        const total = getPrice(basket);
+        const subTotal = (parseFloat(total) + (this.state.deliveryCharge || 0)).toFixed(2);
 
         if (basket) {
             return [
@@ -42,18 +44,20 @@ class Product extends Component {
                 <main className="main-content">
                     <div className="checkout-not-equal">
                         <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE}>
-                        <Elements>
-                            <PayForm
-                                basket={basket}
-                                handleCountry={this.handleCountry}
-                            />
-                        </Elements>
+                            <Elements>
+                                <PayForm
+                                    basket={basket}
+                                    handleCountry={this.handleCountry}
+                                    subTotal={subTotal}
+                                />
+                            </Elements>
                         </StripeProvider>
                         <Overview
                             basket={basket}
                             payPage
                             deliveryCharge={this.state.deliveryCharge}
                             europeanCountries={this.state.europeanCountries}
+                            subTotals={subTotal}
                         />
                     </div>
                 </main>,

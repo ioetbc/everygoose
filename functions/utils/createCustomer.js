@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 const uuid = require('uuidv4').default;
 
-const createCustomer = (data, subtotal, deliveryCharge) => {
+const createCustomer = async (data, subtotal, deliveryCharge) => {
     const {
         firstName,
         lastName,
@@ -40,8 +40,10 @@ const createCustomer = (data, subtotal, deliveryCharge) => {
         }
     }
 
-    db.collection('customers').doc(customer_id).set(payload)
-        .catch((error) => new Error(`database error. customer_id: ${customer_id} `, error));
+    return db.collection('customers').doc(customer_id).set(payload)
+    .catch((error) => {
+        throw new Error(error);
+    });
 }
 
 module.exports = createCustomer;

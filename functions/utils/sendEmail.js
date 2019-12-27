@@ -27,8 +27,6 @@ const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4) =>
     const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
     const breakdownMapped = breakdown.map(u => `${u.quantity} x ${u.title}`)
 
-
-
     if (event === 'customer') {
         communication = {
             to: email,

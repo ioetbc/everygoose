@@ -20,29 +20,45 @@ admin.initializeApp({
 
 exports.payment = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
-        try {
-            const { basket, stripeToken, idempotencyKey } = req.body;
-            const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
-            const deliveryCharge = total > 35 ? 0 : 2;
-            const subtotal = (basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCharge).toFixed(2);
-            validateForm(req.body);
+        console.log('before fun', req.body)
+        const validationSuccess = validateForm(req.body);
+        console.log('validationSuccess', validationSuccess)
 
-            const { chargeId, last4 } = await preAuthPayment(subtotal, stripeToken, idempotencyKey);
+        if (validationSuccess) {
+            try {
+                const { basket, stripeToken, idempotencyKey } = req.body;
 
-            await createCustomer(req.body, subtotal, deliveryCharge);
+                const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
+                const deliveryCharge = total > 35 ? 0 : 2;
+                const subtotal = (basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCharge).toFixed(2);
 
-            await capturePayment(chargeId);
+                let chargeId;
+                let last4;
 
-            await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4);
+                if (req.body.paymentMethod === 'stripe') {
+                    const paymentObj = await preAuthPayment(subtotal, stripeToken, idempotencyKey);
+                    chargeId = paymentObj.chargeId;
+                    last4 = paymentObj.last4;
+                }
+        
+                await createCustomer(req.body, subtotal, deliveryCharge);
 
-            await sendEmail('imogen', req.body, subtotal, total, deliveryCharge);
+                if (req.body.paymentMethod === 'stripe') {
+                    await capturePayment(chargeId);
+                }
 
-            return res.send('/#/done');
-            
-        } catch (error) {
-            console.log('an error occured', error)
-            return res.send('/#/sorry');
+                await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4);
+        
+                await sendEmail('imogen', req.body, subtotal, total, deliveryCharge);
+        
+                return res.send('/#/done');
+                
+            } catch (error) {
+                console.log('in the catch', error)
+                return res.send('/#/sorry');
+            }
         }
+        return res.send('/#/sorry');
     });
 });
 

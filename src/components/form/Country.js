@@ -14,6 +14,7 @@ class Country extends Component {
             <CountryDropdown
                 value={country}
                 onChange={(value) => this.setState({ country: value }, this.props.onClick(value)) }
+                className="select"
             />,
             <RegionDropdown
                 country={country}

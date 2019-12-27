@@ -5,13 +5,10 @@ import getBasket from '../components/utils/getBasket';
 
 import getPrice from '../components/utils/getPrice';
 
-const Overview = ({ payPage, deliveryCharge, europeanCountries }) => {
+const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotals }) => {
     const basket = getBasket();
-    const total = getPrice(basket);
-    // const subTotal = (parseFloat(total) + (deliveryCharge || 0)).toFixed(2);
     const subTotal = 2;
-
-
+    
     return (
         <div className="checkout-overview">
             <h3>Overview</h3>

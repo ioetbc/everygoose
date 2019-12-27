@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import axios from 'axios';
-import uuid from 'uuid/v4';
 
-import estimatedDelivery from './utils/EstimatedDelivery';
 import handleValidationMessage from './utils/handleValidationMessage';
+import capturePaypalPayment from './utils/capturePaypalPayment';
 
 import PersonalInfo from './form/PersonalInfo';
 import ShippingInfo from './form/ShippingInfo';
-import PayPal from './form/Paypal';
+import handleOrder from './utils/handleOrder';
 
 class PayForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            stripeComplete: false,
+            stripeComplete: true,
             firstName: 'will',
             lastName: 'cole',
             email: 'ioetbc@gmail.com',
@@ -28,69 +26,37 @@ class PayForm extends Component {
             postcode: 'so238ba',
             phoneNumber: '07493774943',     
             isLoading: false,
+            paymentMethod: null,
         }
-        this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleStripePayment = this.handleStripePayment.bind(this);
     }
 
-    async handleSubmit(e) {
+    componentDidUpdate(undefined, prevState) {
+        if (prevState.paymentMethod !== this.state.paymentMethod) {
+            const data = {
+                ...this.state,
+                subTotal: this.props.subTotal
+            }
+            capturePaypalPayment(data);
+        }
+    }
+
+    async handleStripePayment() {
+        console.log('in the handleopayment duncr')
         if (this.state.stripeComplete) {
             this.setState({ isLoading: true });
             const inputs = [...document.getElementsByTagName('input')]
             inputs.map(i => i.value = '');
-            const { token } = await this.props.stripe.createToken({ name: this.state.email });
-            const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
-            const breakdown = this.props.basket.map(a => {
-                return {
-                    quantity: a.quantity,
-                    title: a.title,
-                }});
 
-            const quantity = parseInt(this.props.basket.map(i => i.quantity)[0], 10);
-    
-            let theyOrIt;
-            if (quantity < 2 && this.props.basket.length === 1) {
-                theyOrIt = 'It'
-            } else {
-                theyOrIt = 'They'; 
+            const { token } = await this.props.stripe.createToken({ name: this.state.email });
+            const data = {
+                ...this.state,
+                subTotal: this.props.subTotal,
+                stripeToken: token.id,
             }
-            axios({
-                method: 'post',
-                url: process.env.REACT_APP_PAY_ENDPOINT,
-                config: {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                },
-                data: {
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    email: this.state.email,
-                    basket: this.props.basket,
-                    addressFirst: this.state.addressFirst,
-                    addressSecond: this.state.addressSecond,
-                    addressThird: this.state.addressThird,
-                    city: this.state.city,
-                    county: this.state.county,
-                    postcode: this.state.postcode,
-                    phoneNumber: this.state.phoneNumber,
-                    stripeToken: token.id,
-                    idempotencyKey: uuid(),
-                    estimatedDelivery: estimatedDelivery(),
-                    cardOrCards,
-                    theyOrIt,
-                    breakdown,
-                },
-            })
-            .then((res) => {
-                this.setState({ isLoading: false });
-               return  window.location=`${res.data}`
-            })
-            .catch((error) => {
-                this.setState({ isLoading: false });
-                return window.location=`${error.data}`
-            });
+            handleOrder(data, 'stripe');
         }
-    }
+    };
 
     render() {
         const {
@@ -98,15 +64,13 @@ class PayForm extends Component {
             isLoading,
         } = this.state;
 
-        console.log('this.state', this.state)
-
-        const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
+        const hasErrors = [...document.getElementsByClassName('error-message')].length > 0
 
         return [
             isLoading && <div className="is-loading"><div /></div>,
             <form onSubmit={(e) => {
                 e.preventDefault()
-                this.handleSubmit(e)
+                this.handleStripePayment()
                 // TODO at this to the button onClick
                 document.getElementById('submitButton').setAttribute('disabled', 'disabled');
             }}>
@@ -148,8 +112,8 @@ class PayForm extends Component {
                     />
                 }
 
-                {this.state.paymentMethod === 'paypal' &&
-                    <PayPal />
+                {this.state.paymentMethod === 'paypal' && 
+                    <div id="paypal-button-container"></div>
                 }
 
                 <button

@@ -6,6 +6,8 @@ import uuid from 'uuid/v4';
 const handleOrder = async (payload, paymentMethod) => {
     console.log('payload', payload);  
     const basket = JSON.parse(localStorage.getItem('session')) || [];
+    const inputs = [...document.getElementsByTagName('input')];
+    inputs.map(i => i.value = '');
 
     const emailQuantityAndTitle = basket.map(a => {
         return {
@@ -43,11 +45,13 @@ const handleOrder = async (payload, paymentMethod) => {
         theyOrIt,
         breakdown: emailQuantityAndTitle,
         estimatedDelivery: estimatedDelivery(),
-
     }
 
     if (paymentMethod === 'paypal') {
         data.paymentMethod = 'paypal';
+        Object.assign(data, {
+            orderID: payload.orderID,
+        });
     } else {
         Object.assign(data, {
             stripeToken: payload.stripeToken,
@@ -57,7 +61,7 @@ const handleOrder = async (payload, paymentMethod) => {
 
     console.log('data', data);
 
-    await axios({
+    return axios({
         method: 'post',
         url: process.env.REACT_APP_PAY_ENDPOINT,
         config: {
@@ -69,12 +73,16 @@ const handleOrder = async (payload, paymentMethod) => {
     })
     .then((res) => {
         // this.setState({ isLoading: false });
-       return  window.location=`${res.data}`
+        console.log('the ritzy', res);
+        return res;
     })
     .catch((error) => {
+        console.log('errror erorrro ritzy', error)
         // this.setState({ isLoading: false });
-        return window.location=`${error.data}`
+        return error;
     });
+
+    // return true;
 };
 
 export default handleOrder;

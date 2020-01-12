@@ -1,46 +1,38 @@
 const admin = require('firebase-admin');
 const uuid = require('uuidv4').default;
 
-const createCustomer = async (data, subtotal, deliveryCharge) => {
-    const {
-        firstName,
-        lastName,
-        email,
-        addressFirst,
-        addressSecond,
-        addressThird,
-        city,
-        county,
-        postcode,
-        basket,
-        phoneNumber,
-    } = data;
+const createCustomer = async (data) => {
     const timeStamp = Date(Date.now()); 
     const formatTimeStamp = timeStamp.toString();
-    const items = basket.map(a => a.title);
+    const items = data.basket.map(a => a.title);
     const db = admin.firestore();
-    const customer_id = uuid();
+    const customerId = uuid();
+    
+    console.log('the data i the create customer function', data)
+
     const payload = {
         customer: {
-            firstName,
-            lastName,
-            email,
-            phoneNumber,
-            customerId: customer_id,
-            timeStamp: formatTimeStamp,    
-            items,
-            addressFirstLine: addressFirst,
-            addressSecondLine: addressSecond || false,
-            addressThirdLine: addressThird || false,
-            city,
-            county,
-            postcode,
-            totalCost: subtotal,
-            deliveryCharge,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            customerId,
+            timeStamp: formatTimeStamp,
+            items: items,   
+            addressFirstLine: data.addressFirst,
+            addressSecondLine: data.addressSecond || false,
+            addressThirdLine: data.addressThird || false,
+            city: data.city,
+            county: data.county,
+            postcode: data.postcode,
+            totalCost: data.subtotal,
+            deliveryCharge: data.deliveryCharge,
         }
     }
 
-    return db.collection('customers').doc(customer_id).set(payload)
+    console.log('the payload for the db', payload);
+
+    return db.collection('customers').doc(customerId).set(payload)
     .catch((error) => {
         throw new Error(error);
     });

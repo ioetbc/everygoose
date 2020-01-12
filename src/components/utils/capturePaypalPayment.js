@@ -9,16 +9,13 @@ const capturePaypalPayment = (fuck) => {
                 {
                   amount: {
                     currency_code: 'USD',
-                    // value: payload.subTotal,
-                    value: 1,
+                    value: fuck.subTotal,
                   },
                 },
               ],
             });
         },
-        onApprove: (data, actions) => { 
-            console.log('the data in onapprove order', fuck)
-            console.log('the payload in onapprove order', fuck.subTotal)
+        onApprove: async (data, actions) => { 
             const payload = {
                 firstName: fuck.firstName,
                 lastName: fuck.lastName,
@@ -32,12 +29,18 @@ const capturePaypalPayment = (fuck) => {
                 phoneNumber: fuck.phoneNumber,
                 paymentMethod: 'stripe',
                 subTotal: fuck.subTotal,
+                orderID: data.orderID,
             }
-    
-            return actions.order.capture().then(function() {
-                console.log('fuck', fuck);
-                handleOrder(payload, 'paypal');
-            });
+
+            const approveOrder = await handleOrder(payload, 'paypal');
+
+            console.log('approveOrder', approveOrder);
+
+            if (approveOrder.status === 200) {
+				actions.order.capture().then(() => window.location='/#/done');
+            } else {
+				window.location='/#/sorry';
+			}
         }
     }).render('#paypal-button-container');
 }

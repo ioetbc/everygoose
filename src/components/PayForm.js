@@ -39,15 +39,11 @@ class PayForm extends Component {
             }
             capturePaypalPayment(data);
         }
-    }
+    };
 
     async handleStripePayment() {
-        console.log('in the handleopayment duncr')
         if (this.state.stripeComplete) {
             this.setState({ isLoading: true });
-            const inputs = [...document.getElementsByTagName('input')]
-            inputs.map(i => i.value = '');
-
             const { token } = await this.props.stripe.createToken({ name: this.state.email });
             const data = {
                 ...this.state,

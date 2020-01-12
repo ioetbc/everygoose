@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const cors = require('cors')({ origin: true });
+const rp = require('request-promise');
 
 const validateForm = require('./utils/validateForm')
 const createCustomer = require('./utils/createCustomer');
@@ -29,8 +30,9 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                 const { basket, stripeToken, idempotencyKey } = req.body;
 
                 const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
-                const deliveryCharge = total > 35 ? 0 : 2;
-                const subtotal = (basket.reduce((a, item) =>  item.price * item.quantity + a, 0) + deliveryCharge).toFixed(2);
+                // Need to get the delivery charge using the function
+                const deliveryCharge = 0;
+                const subtotal = (total + deliveryCharge).toFixed(2);
 
                 let chargeId;
                 let last4;
@@ -39,26 +41,96 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     const paymentObj = await preAuthPayment(subtotal, stripeToken, idempotencyKey);
                     chargeId = paymentObj.chargeId;
                     last4 = paymentObj.last4;
-                }
-        
-                await createCustomer(req.body, subtotal, deliveryCharge);
+                } else {
+                    const paypalOauthApi = functions.config().paypal.paypal_oauth_api;
+                    const paypalOrderApi = functions.config().paypal.paypal_order_api;
+                    const paypalClient = functions.config().paypal.paypal_client;
+                    const paypalSecret = functions.config().paypal.paypal_secret;
 
-                if (req.body.paymentMethod === 'stripe') {
-                    await capturePayment(chargeId);
+                    const options = {
+                        'method': 'POST',
+                        'url': 'https://api.sandbox.paypal.com/v1/oauth2/token',
+                        'headers': {
+                          'Content-Type': 'application/x-www-form-urlencoded',
+                          'Authorization': 'Basic QVd4bWpmOFE5SmVYTzRueUJNSFZIblpZZEE2UEs1U01vZzB1dHVMVjFuazgxRlRQVlZpZDNjSnc2bmdTamhfZld5NVZhNUNsN0JCbEl3UW46RUhmM1NiWGJ5WXd6WXBRUXpyNlhnT0Q3cGJ4MHUzR0ZJNmJMcnNmeG5fNWNqQnRnOXpVcWNqQXB0ck1SYVdtQ2lHM1BpZkFYYXF3WUZDTHg='
+                        },
+                        form: {
+                          'grant_type': 'client_credentials'
+                        }
+                    };
+
+                    const authToken = await rp(options)
+                        .then((result) => {
+                            console.log('parsedBody', result);
+                            const resultObj = JSON.parse(result);
+                            return resultObj.access_token;
+                        })
+                        .catch((error) => {
+                            console.log('request promise error', error);
+                            throw new Error(error);
+                        });
+
+                    const orderOptions = {
+                        'method': 'GET',
+                        'url': `https://api.sandbox.paypal.com/v2/checkout/orders/${req.body.orderID}`,
+                        'headers': {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                    };
+
+                    await rp(orderOptions)
+                        .then((result) => {
+                            console.log('capture body', result);
+                            const resultObj = JSON.parse(result);
+                            console.log('resultObj', resultObj);
+
+                            const fronEndTotal = resultObj.purchase_units[0].amount.value + deliveryCharge;
+
+                            const backendTotal = subtotal;
+
+                            console.log('frontend total', parseInt(fronEndTotal, 10).toFixed(2));
+                            console.log('back end total', parseInt(backendTotal, 10).toFixed(2));
+
+                            console.log('equals?', fronEndTotal === backendTotal);
+                            console.log('type of front end', typeof fronEndTotal);
+                            console.log('toye of backedn totlal', typeof backendTotal);
+
+                            if (parseInt(fronEndTotal, 10).toFixed(2) !== parseInt(backendTotal, 10).toFixed(2)) throw new Error('difference in totals');
+
+                            return true;
+                        })
+                        .catch((error) => {
+                            console.log('request captutr promise error', error);
+                            throw new Error(error);
+                        });
                 }
 
-                await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4);
-        
-                await sendEmail('imogen', req.body, subtotal, total, deliveryCharge);
-        
-                return res.send('/#/done');
-                
+                // const customerData = req.body;
+                // Object.assign(customerData, { subtotal, deliveryCharge });
+
+                // console.log('customerData', customerData);
+
+                // await createCustomer(customerData);
+
+                // console.log('did it creat the customer?')
+
+                // if (req.body.paymentMethod === 'stripe') {
+                //     await capturePayment(chargeId);
+                // }
+
+                // await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4);
+
+                // await sendEmail('imogen', req.body, subtotal, total, deliveryCharge);
+
+                return res.send(200);
+
             } catch (error) {
                 console.log('in the catch', error)
-                return res.send('/#/sorry');
+                return res.send(500);
             }
         }
-        return res.send('/#/sorry');
+        return res.send(500)
     });
 });
 

@@ -12,22 +12,21 @@ class PayForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            stripeComplete: true,
-            firstName: 'will',
-            lastName: 'cole',
-            email: 'ioetbc@gmail.com',
-            basket: [],
-            addressFirst: '50 parchmewnt',
-            addressSecond: '34 parhment ster',
-            addressSecondError: false,
-            addressThirdError : false,
-            city: 'winchester',
-            county: 'hampshiert',
-            country: ['Spain'],
-            postcode: 'so238ba',
-            phoneNumber: '07493774943',     
+            stripeComplete: false,
+            firstName: '',
+            lastName: '',
+            email: '',
+            basket: this.props.basket,
+            addressFirstLine: '',
+            addressSecondLine: '',
+            addressThirdLine: '',
+            city: '',
+            county: '',
+            country: [],
+            postcode: '',
+            phone: '',     
             isLoading: false,
-            paymentMethod: null,
+            paymentMethod: '',
         }
 		this.handleStripePayment = this.handleStripePayment.bind(this);
     }
@@ -80,13 +79,21 @@ class PayForm extends Component {
             }}>
 
                 <PersonalInfo
-                    onBlur={(e) => handleValidationMessage(e)}
+                    onBlur={(e) => {
+                        const value = handleValidationMessage(e)
+                        const key = e.target.name;
+                        this.setState({ [key]: value })
+                    }}
                 />
 
                 <h3>Shipping address</h3>
 
                 <ShippingInfo
-                    onBlur={(e) => handleValidationMessage(e)}
+                    onBlur={(e) => {
+                        const value = handleValidationMessage(e)
+                        const key = e.target.name;
+                        this.setState({ [key]: value });
+                    }}
                     handleCountry={this.props.handleCountry}
                 />
 

@@ -29,6 +29,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
         if (validationSuccess) {
             try {
                 const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID } = req.body;
+
                 const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
                 const deliveryCharge = getDeliveryCharge(country, europeanCountries, basket, total);
 
@@ -48,7 +49,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     chargeId = paymentObj.chargeId;
                     last4 = paymentObj.last4;
                 } else {
-                    await preAuthPaypalPayment(orderID, deliveryCharge);
+                    await preAuthPaypalPayment(orderID, deliveryCharge, subtotal);
                 }
 
                 const customerData = req.body;

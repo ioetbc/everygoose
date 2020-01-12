@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const rp = require('request-promise');
 
-const preAuthPaypalPayment = async (orderID, deliveryCharge) => {
+const preAuthPaypalPayment = async (orderID, deliveryCharge, subtotal) => {
     const paypalOauthApi = functions.config().paypal.paypal_oauth_api;
     const paypalOrderApi = functions.config().paypal.paypal_order_api;
     const paypalClient = functions.config().paypal.paypal_client;
@@ -46,7 +46,7 @@ const preAuthPaypalPayment = async (orderID, deliveryCharge) => {
             console.log('resultObj', resultObj);
             const fronEndTotal = resultObj.purchase_units[0].amount.value + deliveryCharge;
 
-            // if (parseInt(fronEndTotal, 10).toFixed(2) !== parseInt(subtotal, 10).toFixed(2)) throw new Error('difference in totals');
+            if (parseInt(fronEndTotal, 10).toFixed(2) !== parseInt(subtotal, 10).toFixed(2)) throw new Error('difference in totals');
 
             return true;
         })

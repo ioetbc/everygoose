@@ -10,7 +10,7 @@ const input = ({ name, type, label, onBlur, style }) => {
                     id={name}
                     placeholder=' '
                     type={type}
-                    onBlur={(e) => onBlur(e)}type
+                    onBlur={(e) => onBlur(e)}
                     style={style}
                 />
                 <label className='text-field--label' for={name}>{label}</label>

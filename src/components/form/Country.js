@@ -10,16 +10,21 @@ class Country extends Component {
 
     render () {
         const { country, region } = this.state;
+        const { onBlur } = this.props;
         return [
             <CountryDropdown
                 value={country}
+                name="country"
                 onChange={(value) => this.setState({ country: value }, this.props.onClick(value)) }
                 className="select"
+                onBlur={(e) => onBlur(e)}
             />,
             <RegionDropdown
                 country={country}
+                name="county"
                 value={region}
                 onChange={(value) => this.setState({ region: value })}
+                onBlur={(e) => onBlur(e)}
             />,
         ];
     }

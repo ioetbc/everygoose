@@ -19,6 +19,7 @@ const handleValidationMessage = (e) => {
         }
     } else {
         if (errorMessagePresent) errorMessagePresent.parentNode.removeChild(errorMessagePresent);
+        return e.target.value;
     }
 }
 

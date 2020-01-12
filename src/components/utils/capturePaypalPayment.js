@@ -1,6 +1,7 @@
 import handleOrder from './handleOrder';
 
 const capturePaypalPayment = (details) => {
+    console.log('details m8', details)
     window.paypal.Buttons({
         createOrder: (data, actions) => {
             return actions.order.create({
@@ -20,17 +21,18 @@ const capturePaypalPayment = (details) => {
                 firstName: details.firstName,
                 lastName: details.lastName,
                 email: details.email,
-                addressFirst: details.addressFirst,
-                addressSecond: details.addressSecond,
-                addressThird: details.addressThird,
+                addressFirstLine: details.addressFirstLine,
+                addressSecondLine: details.addressSecondLine,
+                addressThirdLine: details.addressThirdLine,
                 city: details.city,
                 county: details.county,
+                country: details.country,
                 postcode: details.postcode,
-                phoneNumber: details.phoneNumber,
+                phone: details.phone,
                 paymentMethod: 'stripe',
                 subTotal: details.subTotal,
                 orderID: data.orderID,
-                europeanCountries: data.europeanCountries,
+                europeanCountries: details.europeanCountries,
             }
 
             const approveOrder = await handleOrder(payload, 'paypal');

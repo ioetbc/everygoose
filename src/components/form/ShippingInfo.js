@@ -24,6 +24,7 @@ const ShippingInfo = ({ onBlur, handleCountry }) => {
         />,
         <Country
             onClick={handleCountry}
+            onBlur={onBlur}
         />,
         <div class="input-side-by-side">
             <Input

@@ -38,9 +38,6 @@ class Product extends Component {
         const total = getPrice(basket);
         const subTotal = (parseFloat(total) + (this.state.deliveryCharge || 0)).toFixed(2);
 
-        console.log('frontend delivery charge', this.state.deliveryCharge);
-        console.log('basket', basket)
-
         if (basket) {
             return [
                 <ScrollToTop />,

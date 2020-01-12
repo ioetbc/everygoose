@@ -19,7 +19,7 @@ class Product extends Component {
     }
 
     componentDidMount() {
-        axios.get('https://restcountries.eu/rest/v2/region/europe')
+        axios.get(process.env.REACT_APP_EUROPEAN_COUNTRIES)
         .then(res => {
           const europeanCountries = res.data;
           this.setState({ europeanCountries });

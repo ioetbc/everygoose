@@ -47,9 +47,10 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     const paypalClient = functions.config().paypal.paypal_client;
                     const paypalSecret = functions.config().paypal.paypal_secret;
 
+                    // need to combine the client and secret using btoa?
                     const options = {
                         'method': 'POST',
-                        'url': 'https://api.sandbox.paypal.com/v1/oauth2/token',
+                        'url': paypalOauthApi,
                         'headers': {
                           'Content-Type': 'application/x-www-form-urlencoded',
                           'Authorization': 'Basic QVd4bWpmOFE5SmVYTzRueUJNSFZIblpZZEE2UEs1U01vZzB1dHVMVjFuazgxRlRQVlZpZDNjSnc2bmdTamhfZld5NVZhNUNsN0JCbEl3UW46RUhmM1NiWGJ5WXd6WXBRUXpyNlhnT0Q3cGJ4MHUzR0ZJNmJMcnNmeG5fNWNqQnRnOXpVcWNqQXB0ck1SYVdtQ2lHM1BpZkFYYXF3WUZDTHg='
@@ -72,7 +73,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
                     const orderOptions = {
                         'method': 'GET',
-                        'url': `https://api.sandbox.paypal.com/v2/checkout/orders/${req.body.orderID}`,
+                        'url': paypalOrderApi + req.body.orderID,
                         'headers': {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${authToken}`
@@ -87,41 +88,34 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
                             const fronEndTotal = resultObj.purchase_units[0].amount.value + deliveryCharge;
 
-                            const backendTotal = subtotal;
-
-                            console.log('frontend total', parseInt(fronEndTotal, 10).toFixed(2));
-                            console.log('back end total', parseInt(backendTotal, 10).toFixed(2));
-
-                            console.log('equals?', fronEndTotal === backendTotal);
-                            console.log('type of front end', typeof fronEndTotal);
-                            console.log('toye of backedn totlal', typeof backendTotal);
-
-                            if (parseInt(fronEndTotal, 10).toFixed(2) !== parseInt(backendTotal, 10).toFixed(2)) throw new Error('difference in totals');
+                            if (parseInt(fronEndTotal, 10).toFixed(2) !== parseInt(subtotal, 10).toFixed(2)) throw new Error('difference in totals');
 
                             return true;
                         })
                         .catch((error) => {
-                            console.log('request captutr promise error', error);
+                            console.log('request capture promise error', error);
                             throw new Error(error);
                         });
                 }
 
-                // const customerData = req.body;
-                // Object.assign(customerData, { subtotal, deliveryCharge });
+                const customerData = req.body;
+                Object.assign(customerData, {
+                    subtotal,
+                    deliveryCharge,
+                    paymentMethod: req.body.paymentMethod,
+                });
 
-                // console.log('customerData', customerData);
+                console.log('customerData', customerData);
 
-                // await createCustomer(customerData);
+                await createCustomer(customerData);
 
-                // console.log('did it creat the customer?')
+                console.log('did it creat the customer?')
 
-                // if (req.body.paymentMethod === 'stripe') {
-                //     await capturePayment(chargeId);
-                // }
+                if (req.body.paymentMethod === 'stripe') await capturePayment(chargeId);
 
-                // await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4);
+                await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4);
 
-                // await sendEmail('imogen', req.body, subtotal, total, deliveryCharge);
+                await sendEmail('imogen', req.body, subtotal, total, deliveryCharge);
 
                 return res.send(200);
 

@@ -72,13 +72,11 @@ const handleOrder = async (payload, paymentMethod) => {
         data,
     })
     .then((res) => {
-        // this.setState({ isLoading: false });
         console.log('the ritzy', res);
         return res;
     })
     .catch((error) => {
         console.log('errror erorrro ritzy', error)
-        // this.setState({ isLoading: false });
         return error;
     });
 

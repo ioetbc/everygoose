@@ -4,8 +4,6 @@ const sendgridSecret = functions.config().sendgrid.secret_key;
 sendgrid.setApiKey(sendgridSecret);
 
 const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4) => {
-    let communication;
-
     const {
         firstName,
         lastName,
@@ -22,10 +20,12 @@ const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4) =>
         theyOrIt,
         phoneNumber,
         basket,
+        paymentMethod
     } = data;
 
     const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
     const breakdownMapped = breakdown.map(u => `${u.quantity} x ${u.title}`)
+    let communication;
 
     if (event === 'customer') {
         communication = {
@@ -37,7 +37,7 @@ const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4) =>
             dynamic_template_data: {
                 firstName: firstName,
                 amount: subtotal,
-                last4: last4,
+                transactionInfo: paymentMethod === 'stripe' ? `to your card ending in ${last4}` : 'to your Paypal account',
                 estimatedDelivery: estimatedDelivery,
                 quantity: quantity,
                 cardOrCards: cardOrCards,
@@ -49,31 +49,31 @@ const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4) =>
     if (event === 'imogen') {
         communication = {
             to: 'ioetbc@gmail.com',
-                from: {
-                    email: 'hello@everygoose.com',
-                },
-                templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
-                dynamic_template_data: {
-                    total: total,
-                    subtotal: subtotal,
-                    estimatedDelivery: estimatedDelivery,
-                    quantity: quantity,
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    addressFirstLine: addressFirst,
-                    addressSecondLine: addressSecond,
-                    addressThirdLine: addressThird,
-                    city: city,
-                    county: county,
-                    postcode: postcode,
-                    deliveryCost: deliveryCharge,
-                    phone: phoneNumber,
-                    cardTitle: breakdownMapped,
-                }
+            from: {
+                email: 'hello@everygoose.com',
+            },
+            templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
+            dynamic_template_data: {
+                total: total,
+                subtotal: subtotal,
+                estimatedDelivery: estimatedDelivery,
+                quantity: quantity,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                addressFirstLine: addressFirst,
+                addressSecondLine: addressSecond,
+                addressThirdLine: addressThird,
+                city: city,
+                county: county,
+                postcode: postcode,
+                deliveryCost: deliveryCharge,
+                phone: phoneNumber,
+                cardTitle: breakdownMapped,
+                paymentMethod,
+            }
         }
     }
-
 
     await sendgrid.send(communication)
         .catch((error) => {

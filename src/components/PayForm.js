@@ -45,12 +45,20 @@ class PayForm extends Component {
         if (this.state.stripeComplete) {
             this.setState({ isLoading: true });
             const { token } = await this.props.stripe.createToken({ name: this.state.email });
-            const data = {
+            const payload = {
                 ...this.state,
                 subTotal: this.props.subTotal,
                 stripeToken: token.id,
             }
-            handleOrder(data, 'stripe');
+            const approveOrder = await handleOrder(payload, 'stripe');
+            console.log('const approveOrder?', approveOrder);
+
+            if (approveOrder.status === 200) {
+                console.log('its a 200 m8');
+                window.location='/#/done';
+            } else {
+				window.location='/#/sorry';
+			}
         }
     };
 

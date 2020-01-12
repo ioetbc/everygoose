@@ -27,6 +27,7 @@ const createCustomer = async (data) => {
             postcode: data.postcode,
             totalCost: data.subtotal,
             deliveryCharge: data.deliveryCharge,
+            paymentMethod: data.paymentMethod,
         }
     }
 

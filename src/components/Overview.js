@@ -7,7 +7,6 @@ import getPrice from '../components/utils/getPrice';
 
 const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotals }) => {
     const basket = getBasket();
-    const subTotal = 2;
     
     return (
         <div className="checkout-overview">
@@ -38,7 +37,7 @@ const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotals }) => 
                     <ul className="list-flex sub-total">
                         <li>
                             <p className="overview-total-text">total</p>
-                            <p className="overview-total-price">£{subTotal}</p>
+                            <p className="overview-total-price">£{subTotals}</p>
                         </li>
                     </ul>
                 </div>,

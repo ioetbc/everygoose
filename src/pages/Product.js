@@ -6,12 +6,17 @@ import ProductDetails from '../components/ProductDetails';
 import { Link } from 'react-router-dom';
 
 const Product = ({ location, addToBasket }) => {
-    const { item } = location.state || false;
+    const lastItemAddedToBasket = JSON.parse(localStorage.getItem('session')).slice(-1).pop();
+    const prevItem = {
+        item: {
+            ...lastItemAddedToBasket,
+        }
+    };
+
+    const { item } = location.state || prevItem;
 
     let slideshowImages;
-    if (item) {
-        slideshowImages = [item.image_1_url, item.image_2_url, item.image_3_url];
-    }
+    if (item) slideshowImages = [item.image_1_url, item.image_2_url, item.image_3_url];
 
     if (item) {
         return [
@@ -22,7 +27,7 @@ const Product = ({ location, addToBasket }) => {
                         slideshowImages={slideshowImages}
                     />
                     <ProductDetails
-                        product={location.state.item}
+                        product={item}
                         addToBasket={addToBasket}
                     />
                 </div>
@@ -31,7 +36,7 @@ const Product = ({ location, addToBasket }) => {
     } else {
         return (
             <main className="main-content">
-                <p>No items selected, <Link to={{ pathname: "/"}}>back to homepage</Link></p>        
+                <p>No items selected, <Link to={{ pathname: "/"}}>back to homepage</Link></p>
             </main>
         )
     }

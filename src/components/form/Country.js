@@ -11,22 +11,27 @@ class Country extends Component {
     render () {
         const { country, region } = this.state;
         const { onBlur } = this.props;
-        return [
-            <CountryDropdown
-                value={country}
-                name="country"
-                onChange={(value) => this.setState({ country: value }, this.props.onClick(value)) }
-                className="select"
-                onBlur={(e) => onBlur(e)}
-            />,
-            <RegionDropdown
-                country={country}
-                name="county"
-                value={region}
-                onChange={(value) => this.setState({ region: value })}
-                onBlur={(e) => onBlur(e)}
-            />,
-        ];
+
+        return (
+            <div className="input-side-by-side item-quantity">
+                <CountryDropdown
+                    value={country}
+                    name="country"
+                    onChange={(value) => this.setState({ country: value }, this.props.onClick(value)) }
+                    className="select quantity-select"
+                    onBlur={(e) => onBlur(e)}
+                />
+                <RegionDropdown
+                    country={country}
+                    name="county"
+                    value={region}
+                    className={`select ${this.state.country === '' ? 'disabled' : ''} quantity-select`}
+                    disabled={this.state.country === '' ? true : false}
+                    onChange={(value) => this.setState({ region: value })}
+                    onBlur={(e) => onBlur(e)}
+                />
+            </div>
+        );
     }
 }
 

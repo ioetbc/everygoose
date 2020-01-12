@@ -160,10 +160,10 @@ class App extends Component {
 									title='checkout'
 								/>
 
-								<Link to={{ pathname: "/" }}>
+								<Link to={{ pathname: "/product" }}>
 									<div className="back-button">
 										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
+										<p className="back-button-text">back to product page</p>
 									</div>
 								</Link>
 
@@ -185,10 +185,10 @@ class App extends Component {
 									title='pay'
 								/>
 
-								<Link to={{ pathname: "/" }}>
+								<Link to={{ pathname: "/checkout" }}>
 									<div className="back-button">
 										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
+										<p className="back-button-text">back to checkout page</p>
 									</div>
 								</Link>
 

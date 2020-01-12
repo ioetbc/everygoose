@@ -1,11 +1,12 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const cors = require('cors')({ origin: true });
-const rp = require('request-promise');
 
-const validateForm = require('./utils/validateForm')
+const validateForm = require('./utils/validateForm');
+const getDeliveryCharge = require('./utils/deliveryCharge');
 const createCustomer = require('./utils/createCustomer');
 const preAuthPayment = require('./utils/preAuthPayment');
+const preAuthPaypalPayment = require('./utils/preAuthPaypalPayment');
 const capturePayment = require('./utils/capturePayment');
 const sendEmail = require('./utils/sendEmail');
 
@@ -27,11 +28,16 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
         if (validationSuccess) {
             try {
-                const { basket, stripeToken, idempotencyKey } = req.body;
-
+                const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID } = req.body;
                 const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
-                // Need to get the delivery charge using the function
-                const deliveryCharge = 0;
+                const deliveryCharge = getDeliveryCharge(country, europeanCountries, basket, total);
+
+                console.log('country', country)
+                console.log('europeanCountries', europeanCountries)
+                console.log('basket', basket)
+                console.log('total', total)
+                console.log('delivery charge backend', deliveryCharge);
+
                 const subtotal = (total + deliveryCharge).toFixed(2);
 
                 let chargeId;
@@ -42,60 +48,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     chargeId = paymentObj.chargeId;
                     last4 = paymentObj.last4;
                 } else {
-                    const paypalOauthApi = functions.config().paypal.paypal_oauth_api;
-                    const paypalOrderApi = functions.config().paypal.paypal_order_api;
-                    const paypalClient = functions.config().paypal.paypal_client;
-                    const paypalSecret = functions.config().paypal.paypal_secret;
-
-                    // need to combine the client and secret using btoa?
-                    const options = {
-                        'method': 'POST',
-                        'url': paypalOauthApi,
-                        'headers': {
-                          'Content-Type': 'application/x-www-form-urlencoded',
-                          'Authorization': 'Basic QVd4bWpmOFE5SmVYTzRueUJNSFZIblpZZEE2UEs1U01vZzB1dHVMVjFuazgxRlRQVlZpZDNjSnc2bmdTamhfZld5NVZhNUNsN0JCbEl3UW46RUhmM1NiWGJ5WXd6WXBRUXpyNlhnT0Q3cGJ4MHUzR0ZJNmJMcnNmeG5fNWNqQnRnOXpVcWNqQXB0ck1SYVdtQ2lHM1BpZkFYYXF3WUZDTHg='
-                        },
-                        form: {
-                          'grant_type': 'client_credentials'
-                        }
-                    };
-
-                    const authToken = await rp(options)
-                        .then((result) => {
-                            console.log('parsedBody', result);
-                            const resultObj = JSON.parse(result);
-                            return resultObj.access_token;
-                        })
-                        .catch((error) => {
-                            console.log('request promise error', error);
-                            throw new Error(error);
-                        });
-
-                    const orderOptions = {
-                        'method': 'GET',
-                        'url': paypalOrderApi + req.body.orderID,
-                        'headers': {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`
-                        },
-                    };
-
-                    await rp(orderOptions)
-                        .then((result) => {
-                            console.log('capture body', result);
-                            const resultObj = JSON.parse(result);
-                            console.log('resultObj', resultObj);
-
-                            const fronEndTotal = resultObj.purchase_units[0].amount.value + deliveryCharge;
-
-                            if (parseInt(fronEndTotal, 10).toFixed(2) !== parseInt(subtotal, 10).toFixed(2)) throw new Error('difference in totals');
-
-                            return true;
-                        })
-                        .catch((error) => {
-                            console.log('request capture promise error', error);
-                            throw new Error(error);
-                        });
+                    await preAuthPaypalPayment(orderID, deliveryCharge);
                 }
 
                 const customerData = req.body;

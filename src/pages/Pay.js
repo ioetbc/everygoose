@@ -38,6 +38,9 @@ class Product extends Component {
         const total = getPrice(basket);
         const subTotal = (parseFloat(total) + (this.state.deliveryCharge || 0)).toFixed(2);
 
+        console.log('frontend delivery charge', this.state.deliveryCharge);
+        console.log('basket', basket)
+
         if (basket) {
             return [
                 <ScrollToTop />,
@@ -49,6 +52,7 @@ class Product extends Component {
                                     basket={basket}
                                     handleCountry={this.handleCountry}
                                     subTotal={subTotal}
+                                    europeanCountries={this.state.europeanCountries}
                                 />
                             </Elements>
                         </StripeProvider>

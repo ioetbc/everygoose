@@ -23,6 +23,7 @@ class PayForm extends Component {
             addressThirdError : false,
             city: 'winchester',
             county: 'hampshiert',
+            country: ['Spain'],
             postcode: 'so238ba',
             phoneNumber: '07493774943',     
             isLoading: false,
@@ -35,7 +36,8 @@ class PayForm extends Component {
         if (prevState.paymentMethod !== this.state.paymentMethod) {
             const data = {
                 ...this.state,
-                subTotal: this.props.subTotal
+                subTotal: this.props.subTotal,
+                europeanCountries: this.props.europeanCountries,
             }
             capturePaypalPayment(data);
         }
@@ -49,12 +51,10 @@ class PayForm extends Component {
                 ...this.state,
                 subTotal: this.props.subTotal,
                 stripeToken: token.id,
+                europeanCountries: this.props.europeanCountries,
             }
             const approveOrder = await handleOrder(payload, 'stripe');
-            console.log('const approveOrder?', approveOrder);
-
             if (approveOrder.status === 200) {
-                console.log('its a 200 m8');
                 window.location='/#/done';
             } else {
 				window.location='/#/sorry';

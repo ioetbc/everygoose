@@ -1,10 +1,8 @@
-
 import axios from 'axios';
 import estimatedDelivery from './EstimatedDelivery';
 import uuid from 'uuid/v4';
 
 const handleOrder = async (payload, paymentMethod) => {
-    console.log('payload', payload);  
     const basket = JSON.parse(localStorage.getItem('session')) || [];
     const inputs = [...document.getElementsByTagName('input')];
     inputs.map(i => i.value = '');
@@ -24,7 +22,7 @@ const handleOrder = async (payload, paymentMethod) => {
         theyOrIt = 'It'
         cardOrCards = 'card'
     } else {
-        theyOrIt = 'They'; 
+        theyOrIt = 'They';
         cardOrCards = 'cards'
     }
 
@@ -35,6 +33,8 @@ const handleOrder = async (payload, paymentMethod) => {
         addressFirst: payload.addressFirst,
         addressSecond: payload.addressSecond,
         addressThird: payload.addressThird,
+        country: payload.country,
+        europeanCountries: payload.europeanCountries,
         city: payload.city,
         county: payload.county,
         postcode: payload.postcode,
@@ -59,8 +59,6 @@ const handleOrder = async (payload, paymentMethod) => {
         })
     }
 
-    console.log('data', data);
-
     return axios({
         method: 'post',
         url: process.env.REACT_APP_PAY_ENDPOINT,
@@ -79,8 +77,6 @@ const handleOrder = async (payload, paymentMethod) => {
         console.log('errror erorrro ritzy', error)
         return error;
     });
-
-    // return true;
 };
 
 export default handleOrder;

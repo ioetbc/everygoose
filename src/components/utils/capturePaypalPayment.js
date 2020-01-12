@@ -1,7 +1,6 @@
 import handleOrder from './handleOrder';
 
 const capturePaypalPayment = (details) => {
-  console.log('in the new function that handles paypal capture', details)
     window.paypal.Buttons({
         createOrder: (data, actions) => {
             return actions.order.create({
@@ -31,11 +30,10 @@ const capturePaypalPayment = (details) => {
                 paymentMethod: 'stripe',
                 subTotal: details.subTotal,
                 orderID: data.orderID,
+                europeanCountries: data.europeanCountries,
             }
 
             const approveOrder = await handleOrder(payload, 'paypal');
-
-            console.log('approveOrder?', approveOrder);
 
             if (approveOrder.status === 200) {
 				actions.order.capture()

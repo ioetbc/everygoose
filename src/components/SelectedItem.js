@@ -7,14 +7,13 @@ const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
         <div>
             {READONLYBASKET.map((item) =>
                 <div className="selected-item">
-                    <div className="item-image-wrapper">
+                    <div className="item-image-wrapper desktop">
                         <img src={item.image_1_url} className="item-image" />
                     </div>
                     <div className="item-content">
                         <div className="item">
                             <p className="item-title">{item.title}.</p>
                             <div className="item-quantity">
-                                <p className="text-small">Quantity</p>
                                 <select
                                     className="quantity-select"
                                         onChange={(e) => updateCheckout(e, item, 'quantity')}
@@ -27,14 +26,24 @@ const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
                                     <option value={5}>5</option>
                                 </select>
                             </div>
+                            <div className="item-remove mobile">
+                                <div className="item-price">
+                                    <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
+                                    <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={(e) => updateCheckout(e, item, 'remove')}>Remove</p>
+                                </div>
+                            </div>
                         </div>
+                        
                     </div>
-                    <div className="item-remove">
-                        <div className="item-price">
-                            <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
-                            <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={(e) => updateCheckout(e, item, 'remove')}>Remove</p>
+                    <div className="item-image-wrapper mobile">
+                        <img src={item.image_1_url} className="item-image" />
+                    </div>
+                    <div className="item-remove desktop">
+                            <div className="item-price">
+                                <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
+                                <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={(e) => updateCheckout(e, item, 'remove')}>Remove</p>
+                            </div>
                         </div>
-                    </div>
                 </div>
             )}
         </div>

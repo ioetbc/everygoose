@@ -55,6 +55,7 @@ button {
 .item-quantity {
 	position: relative;
   display: inline-block;
+  margin-bottom: 16px;
   
   .text-small {
     display: none;
@@ -81,9 +82,6 @@ button {
         min-width: 110px;
         font-size: 0.8rem;
         text-transform: capitalize;
-        @media screen and (min-width: 1000px) {
-          margin-left: 16px;
-        }
     }
 
     &:after {

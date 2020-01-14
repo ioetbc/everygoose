@@ -8,6 +8,7 @@ import getPrice from '../components/utils/getPrice';
 import ScrollToTop from '../components/utils/ScrollTop';
 import SelectedItem from '../components/SelectedItem'; 
 import Overview from '../components/Overview';
+import getDeliveryCharge from '../components/utils/deliveryCharge';
 
 class Checkout extends Component {
     constructor(props) {
@@ -25,7 +26,11 @@ class Checkout extends Component {
     render() {
         const basket = getBasket();
         const total = getPrice(basket);
-        const subTotal = (parseFloat(total) + (this.state.deliveryCharge || 0)).toFixed(2);
+        const deliveryCharge = getDeliveryCharge(null, null, basket, total);
+        console.log('parseFloat(total)', parseFloat(total))
+        console.log('deliveryCharge', parseInt(deliveryCharge, 10))
+        const subTotal = (parseFloat(total) + (parseInt(deliveryCharge, 10) || 0)).toFixed(2);
+
         return [
             <ScrollToTop />,
             <main className="main-content">
@@ -37,6 +42,7 @@ class Checkout extends Component {
                     <Overview
                         READONLYBASKET={this.state.READONLYBASKET}
                         checkout
+                        deliveryCharge={deliveryCharge}
                         subTotal={subTotal}
                     />
                 </div>

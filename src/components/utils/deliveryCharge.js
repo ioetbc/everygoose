@@ -5,6 +5,8 @@ export default function deliveryCharge(country, europeanCountries, basket, total
 
     // console.log('basket', basket)
 
+    if (!country && !europeanCountries) return '2.00';
+
     if (includes(basket.map(i => i.product_type), 'print')) {
         if (includes(country, 'United Kingdom')) charge.push(0);
     }

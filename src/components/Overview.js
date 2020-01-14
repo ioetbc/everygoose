@@ -8,9 +8,11 @@ import getPrice from '../components/utils/getPrice';
 const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotal, checkout }) => {
     const basket = getBasket();
 
+    console.log('deliveryCharge pay', deliveryCharge)
+
     return (
         <div className="checkout-overview">
-            <h3>Overview</h3>
+            {!checkout && <h3>Overview</h3>}
             {basket.length > 0 ? [
                 <ul className="list-flex">
                     {!checkout &&
@@ -26,16 +28,17 @@ const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotal, checko
                     ])}
                 </ul>,
                 <div className="total" style={{ marginBottom: payPage && 0 }}>
-                    {europeanCountries &&
-                        <ul className="list-flex">
+                        <ul
+                            className="list-flex"
+                            style={{ marginTop: checkout && '-20px' }}
+                        >
                             <li>
                                 <p className="overview-delivery-cost">Delivery Cost</p>
-                                <p>{deliveryCharge > 0 ? '£' + deliveryCharge.toFixed(2) : 'Nothing'}</p>
+                                <p>{'£' + deliveryCharge}</p>
                             </li>
                         </ul>
-                    }
-
-                    <ul className="list-flex sub-total">
+                    <ul
+                        className="list-flex sub-total">
                         <li>
                             <p className="overview-total-text">total</p>
                             <p className="overview-total-price">£{subTotal}</p>

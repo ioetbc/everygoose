@@ -13,8 +13,11 @@ import getBasket from '../components/utils/getBasket';
 
 class Product extends Component {
     constructor(props) {
+        const basket = getBasket();
+        const total = getPrice(basket);
+        const defaultDeliveryCharge = getDeliveryCharge(null, null, basket, total);
         super(props);
-        this.state = { europeanCountries: [], deliveryCharge: 0 }
+        this.state = { europeanCountries: [], deliveryCharge: parseInt(defaultDeliveryCharge, 10)}
         this.handleCountry = this.handleCountry.bind(this);
     }
 
@@ -36,7 +39,7 @@ class Product extends Component {
     render() {
         const basket = getBasket();
         const total = getPrice(basket);
-        const subTotal = (parseFloat(total) + (this.state.deliveryCharge || 0)).toFixed(2);
+        const subTotal = (parseFloat(total) + this.state.deliveryCharge).toFixed(2);
 
         if (basket) {
             return [

@@ -5,7 +5,7 @@ import SlideShow from '../components/SlideShow';
 import ProductDetails from '../components/ProductDetails';
 import { Link } from 'react-router-dom';
 
-const Product = ({ location, addToBasket, basket }) => {
+const Product = ({ location, addToBasket }) => {
     const lastItemAddedToBasket = JSON.parse(localStorage.getItem('session')).slice(-1).pop();
     const prevItem = {
         item: {

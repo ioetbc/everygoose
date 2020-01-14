@@ -120,7 +120,6 @@ class App extends Component {
 									getCardType={this.getCardType}
 									doc={doc}
 									products={filteredProducts || products}
-									basket={basket}
 								/>
 							</div>,
 							<FloatingButton />
@@ -148,7 +147,6 @@ class App extends Component {
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
 									addToBasket={updateBasket}
-									basket={basket}
 								/>
 								<FloatingButton />
 							</div>

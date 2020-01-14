@@ -26,6 +26,8 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer'
 import './App.scss';
 import Header from './components/Header';
+import FloatingButton from './components/utils/floatingBasket';
+
 
 import BackIcon from './images/misc/back-button.svg';
 import updateBasket from './components/utils/updateBasket';
@@ -118,8 +120,10 @@ class App extends Component {
 									getCardType={this.getCardType}
 									doc={doc}
 									products={filteredProducts || products}
+									basket={basket}
 								/>
-							</div>
+							</div>,
+							<FloatingButton />
 						]} />
 
 						<Route exact path="/product" render={routeProps => [
@@ -144,7 +148,9 @@ class App extends Component {
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
 									addToBasket={updateBasket}
+									basket={basket}
 								/>
+								<FloatingButton />
 							</div>
 						]} />
 
@@ -154,6 +160,7 @@ class App extends Component {
 								handleNavigationFilter={this.handleNavigationFilter}
 								basket
 								classModifier="wide"
+								basket={basket}
 							/>,
 							<div className="checkout-page">
 								<Header

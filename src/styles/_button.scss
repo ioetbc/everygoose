@@ -48,7 +48,6 @@ button {
         letter-spacing: 1.4px;
         margin-top: 5px;
         margin-left: 10px;
-    
     }
 }
 
@@ -121,4 +120,15 @@ button {
 			background: white;
 		}
 	}
+}
+
+.floating-basket {
+  position: fixed;
+  bottom: 24px;
+  right: 25px;
+  display: block;
+  filter: drop-shadow(5px 3px 12px rgba(0, 0, 0, 0.7));
+  @media screen and (min-width: 1000px) {
+    display: none;
+  }
 }

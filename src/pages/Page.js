@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import ScrollToTop from '../components/utils/ScrollTop';
 
-const Page = ({ doc, products }) => {
+const Page = ({ doc, products, basket }) => {
 	return [
 		<ScrollToTop />,
 		<main className="main-content">

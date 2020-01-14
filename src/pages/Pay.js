@@ -58,7 +58,7 @@ class Product extends Component {
                             payPage
                             deliveryCharge={this.state.deliveryCharge}
                             europeanCountries={this.state.europeanCountries}
-                            subTotals={subTotal}
+                            subTotal={subTotal}
                         />
                     </div>
                 </main>,

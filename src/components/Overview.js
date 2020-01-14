@@ -5,15 +5,16 @@ import getBasket from '../components/utils/getBasket';
 
 import getPrice from '../components/utils/getPrice';
 
-const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotals }) => {
+const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotal, checkout }) => {
     const basket = getBasket();
-    
+
     return (
         <div className="checkout-overview">
             <h3>Overview</h3>
             {basket.length > 0 ? [
                 <ul className="list-flex">
-                    {basket.map((item, key) => [
+                    {!checkout &&
+                    basket.map((item, key) => [
                         <li key={key}>
                                 <div className="ellipsis">
                                     {item.title}.
@@ -37,7 +38,7 @@ const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotals }) => 
                     <ul className="list-flex sub-total">
                         <li>
                             <p className="overview-total-text">total</p>
-                            <p className="overview-total-price">£{subTotals}</p>
+                            <p className="overview-total-price">£{subTotal}</p>
                         </li>
                     </ul>
                 </div>,

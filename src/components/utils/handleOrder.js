@@ -1,5 +1,6 @@
 import axios from 'axios';
 import estimatedDelivery from './EstimatedDelivery';
+import updateBasket from './updateBasket';
 import uuid from 'uuid/v4';
 
 const handleOrder = async (payload, paymentMethod) => {
@@ -70,6 +71,7 @@ const handleOrder = async (payload, paymentMethod) => {
         data,
     })
     .then((res) => {
+        updateBasket(null, false, false, true)
         console.log('the ritzy', res);
         return res;
     })

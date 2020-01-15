@@ -38,7 +38,7 @@ const Overview = ({ payPage, deliveryCharge, subTotal, checkout }) => {
                         >
                             <li>
                                 <p className="overview-delivery-cost">Delivery Cost</p>
-                                <p>{'£' + deliveryCharge}</p>
+                                <p>{'£' + deliveryCharge.toFixed(2)}</p>
                             </li>
                         </ul>
                     <ul

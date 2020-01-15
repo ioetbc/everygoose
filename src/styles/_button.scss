@@ -103,7 +103,10 @@ button {
 		.quantity-select {
 			color: black;
 			font-family: 'Merriweather', serif;
-			font-size: 12px;
+      font-size: 12px;
+      margin-bottom: 8px;
+      background: white;
+      padding-left: 12px;
 		}
 	}
 }
@@ -140,7 +143,7 @@ button {
   bottom: 24px;
   right: 25px;
   display: block;
-  filter: drop-shadow(5px 3px 12px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(5px 3px 12px rgba(0, 0, 0, 0.4));
   @media screen and (min-width: 1000px) {
     display: none;
   }

@@ -1,7 +1,7 @@
 
 import { get, includes } from 'lodash';
 
-const updateBasket = (item, update = false, remove = false) => {
+const updateBasket = (item, update = false, remove = false, blat = false) => {
     let basket = JSON.parse(localStorage.getItem('session')) || [];
 
     if (!basket.find(o => o.title === get(item, 'title'))) basket.push(item);
@@ -17,6 +17,8 @@ const updateBasket = (item, update = false, remove = false) => {
     }
 
     if (remove) basket = basket.filter(element => element.title !== item.title);
+
+    if (blat) basket = [];
 
     localStorage.setItem('session', JSON.stringify(basket));
 

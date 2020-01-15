@@ -24,9 +24,11 @@ exports.payment = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
         console.log('before fun', req.body)
         const validationSuccess = validateForm(req.body);
-        console.log('validationSuccess', validationSuccess)
+        console.log('validationSuccess', validationSuccess);
+        console.log('req.body.basket.length', req.body.basket.length);
+        console.log('req.body.basket.length > 0', req.body.basket.length > 0)
 
-        if (validationSuccess) {
+        if (validationSuccess && req.body.basket.length > 0) {
             try {
                 const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID } = req.body;
 

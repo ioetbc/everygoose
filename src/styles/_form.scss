@@ -47,7 +47,7 @@ $text-field-width: 300px;
     position: absolute;
     width: calc(100% - 24px);
     line-height: 15px;
-    padding-top: 8px;
+    padding-top: 12px;
 
     &:hover {
       background: darken($color-input-background, 3%);

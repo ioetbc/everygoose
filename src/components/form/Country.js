@@ -17,7 +17,7 @@ class Country extends Component {
                 <div className="item-quantity large">
                     <CountryDropdown
                         value={country}
-                        name="country"
+                        name="region"
                         onChange={(value) => this.setState({ country: value }, this.props.onClick(value)) }
                         className="select quantity-select"
                         onBlur={(e) => onBlur(e)}
@@ -29,7 +29,7 @@ class Country extends Component {
                             country={country}
                             name="county"
                             value={region}
-                            className={`select ${this.state.country === '' ? 'disabled' : ''} quantity-select large`}
+                            className="select quantity-select large"
                             disabled={this.state.country === '' ? true : false}
                             onChange={(value) => this.setState({ region: value })}
                             onBlur={(e) => onBlur(e)}

@@ -38,7 +38,6 @@ class Checkout extends Component {
                         READONLYBASKET={this.state.READONLYBASKET}
                     />
                     <Overview
-                        READONLYBASKET={basket}
                         checkout
                         deliveryCharge={deliveryCharge}
                         subTotal={subTotal}

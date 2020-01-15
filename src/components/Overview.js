@@ -5,14 +5,14 @@ import getBasket from '../components/utils/getBasket';
 
 import getPrice from '../components/utils/getPrice';
 
-const getBasketLength = (basket) => {
+const hideBackButton = () => {
     const backButton = document.getElementsByClassName('back-button')[0];
     if (backButton) backButton.style.display = 'none';
 }
 
-const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotal, checkout, READONLYBASKET }) => {
+const Overview = ({ payPage, deliveryCharge, subTotal, checkout }) => {
     const basket = getBasket();
-    basket.length < 1 && getBasketLength(basket)
+    basket.length < 1 && hideBackButton()
 
     return (
         <div className="checkout-overview">

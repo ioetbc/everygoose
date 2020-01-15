@@ -81,6 +81,7 @@ button {
         min-width: 110px;
         font-size: 0.8rem;
         text-transform: capitalize;
+        width: 100%;
     }
 
     &:after {
@@ -92,7 +93,19 @@ button {
       transform: rotate(-90deg);
       right: 10px;
       top: 12px;
-  }
+	}
+	&.large {
+		&:after {
+			right: 16px;
+			top: 22px;
+      		border-color: transparent $color-red transparent transparent;
+		}
+		.quantity-select {
+			color: black;
+			font-family: 'Merriweather', serif;
+			font-size: 12px;
+		}
+	}
 }
 
 .payment-method-container {

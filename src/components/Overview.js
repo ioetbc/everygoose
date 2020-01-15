@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from './Shared/Button';
 import { Link } from 'react-router-dom';
 import getBasket from '../components/utils/getBasket';
 
 import getPrice from '../components/utils/getPrice';
 
-const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotal, checkout }) => {
-    const basket = getBasket();
+const getBasketLength = (basket) => {
+    const backButton = document.getElementsByClassName('back-button')[0];
+    if (backButton) backButton.style.display = 'none';
+}
 
-    console.log('deliveryCharge pay', deliveryCharge)
+const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotal, checkout, READONLYBASKET }) => {
+    const basket = getBasket();
+    basket.length < 1 && getBasketLength(basket)
 
     return (
         <div className="checkout-overview">
@@ -53,7 +57,14 @@ const Overview = ({ payPage, deliveryCharge, europeanCountries, subTotal, checko
                     </Link>
             ]
             :
-            <p>There are no items in your basket.</p>
+            <div>
+                <p style={{ marginBottom: '24px' }}>There are no items in your basket.</p>
+                <Link to={{ pathname: "/" }}>
+                    <Button
+                        text="back to homepage"
+                    />
+                </Link>
+            </div>
             }
         </div>
     )

@@ -27,8 +27,6 @@ class Checkout extends Component {
         const basket = getBasket();
         const total = getPrice(basket);
         const deliveryCharge = getDeliveryCharge(null, null, basket, total);
-        console.log('parseFloat(total)', parseFloat(total))
-        console.log('deliveryCharge', parseInt(deliveryCharge, 10))
         const subTotal = (parseFloat(total) + (parseInt(deliveryCharge, 10) || 0)).toFixed(2);
 
         return [
@@ -40,7 +38,7 @@ class Checkout extends Component {
                         READONLYBASKET={this.state.READONLYBASKET}
                     />
                     <Overview
-                        READONLYBASKET={this.state.READONLYBASKET}
+                        READONLYBASKET={basket}
                         checkout
                         deliveryCharge={deliveryCharge}
                         subTotal={subTotal}

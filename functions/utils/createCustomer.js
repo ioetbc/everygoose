@@ -1,12 +1,7 @@
-const admin = require('firebase-admin');
-const uuid = require('uuidv4').default;
-
-const createCustomer = async (data) => {
+const createCustomer = async (data, db) => {
     const timeStamp = Date(Date.now()); 
     const formatTimeStamp = timeStamp.toString();
     const items = data.basket.map(a => a.title);
-    const db = admin.firestore();
-    const customerId = uuid();
     
     console.log('the data i the create customer function', data)
 
@@ -16,7 +11,7 @@ const createCustomer = async (data) => {
             lastName: data.lastName,
             email: data.email,
             phoneNumber: data.phoneNumber,
-            customerId,
+            customerId: data.customerId,
             timeStamp: formatTimeStamp,
             items: items,   
             addressFirstLine: data.addressFirst,
@@ -28,12 +23,13 @@ const createCustomer = async (data) => {
             totalCost: data.subtotal,
             deliveryCharge: data.deliveryCharge,
             paymentMethod: data.paymentMethod,
+            isPaid: false,
         }
     }
 
     console.log('the payload for the db', payload);
 
-    return db.collection('customers').doc(customerId).set(payload)
+    return db.collection('customers').doc(data.customerId).set(payload)
     .catch((error) => {
         throw new Error(error);
     });

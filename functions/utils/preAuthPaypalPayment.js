@@ -41,12 +41,13 @@ const preAuthPaypalPayment = async (orderID, deliveryCharge, subtotal) => {
 
     await rp(orderOptions)
         .then((result) => {
-            console.log('capture body', result);
             const resultObj = JSON.parse(result);
-            console.log('resultObj', resultObj);
-            const fronEndTotal = resultObj.purchase_units[0].amount.value + deliveryCharge;
+            const fronEndTotal = resultObj.purchase_units[0].amount.value;
 
-            if (parseInt(fronEndTotal, 10).toFixed(2) !== parseInt(subtotal, 10).toFixed(2)) throw new Error('difference in totals');
+            console.log('fronEndTotal', fronEndTotal)
+            console.log('subtotal', subtotal)
+
+            if (fronEndTotal !== subtotal) throw new Error('difference in totals');
 
             return true;
         })

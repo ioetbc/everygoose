@@ -20,14 +20,14 @@ export default function Header({ title, shop, navigationItems, handleNavigationF
                     </select>
                 </div>
             }
-            <Link to={{ pathname: "/checkout" }}>
-                <div className="basket-wrapper">
-                    <img className="basket-icon" src={Basket}></img>                    
-                    {basket.length > 0 &&
-                        <div className="basket-amount">{basket && basket.length}</div>
-                    }
-                </div>
-            </Link>
+            {basket.length > 0 &&
+                <Link to={{ pathname: "/checkout" }}>
+                    <div className="basket-wrapper">
+                        <img className="basket-icon" src={Basket}></img>                    
+                            <div className="basket-amount">{basket && basket.length}</div>
+                    </div>
+                </Link>
+            }
         </div>
     )
 }

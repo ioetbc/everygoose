@@ -113,3 +113,19 @@ $text-field-width: 300px;
   border: 1px $color-red solid;
   margin-bottom: 24px;
 }
+
+.question-lock-up {
+	width: 100%;
+	border: $color-dull-as-fuck 1px solid;
+	height: 70px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+
+	h3 {
+		margin: 0;
+		padding-left: 24px;
+		color: $color-dull-as-fuck;
+		user-select: none;
+	}
+}

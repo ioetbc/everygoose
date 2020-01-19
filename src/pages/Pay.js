@@ -59,7 +59,7 @@ class Product extends Component {
                         <Overview
                             basket={basket}
                             payPage
-                            deliveryCharge={this.state.deliveryCharge}
+                            deliveryCharge={this.state.deliveryCharge.toFixed(2)}
                             europeanCountries={this.state.europeanCountries}
                             subTotal={subTotal}
                         />

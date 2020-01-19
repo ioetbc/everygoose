@@ -35,6 +35,7 @@ const handleOrder = async (payload, paymentMethod) => {
         addressSecond: payload.addressSecondLine,
         addressThird: payload.addressThirdLine,
         country: payload.country,
+        // TODO dont send this whole array through get it on the backend
         europeanCountries: payload.europeanCountries,
         city: payload.city,
         county: payload.county,

@@ -1,11 +1,12 @@
+import React from 'react';
 import handleOrder from './handleOrder';
+import loadingState from './LoadingState';
 
 const capturePaypalPayment = (details) => {
     console.log('details m8', details)
     window.paypal.Buttons({
         createOrder: (data, actions) => {
             return actions.order.create({
-				// add more context to the transaction here?
 				purchase_units: [
 					{
 						amount: {
@@ -35,6 +36,7 @@ const capturePaypalPayment = (details) => {
                 europeanCountries: details.europeanCountries,
             }
 
+            loadingState();
             const approveOrder = await handleOrder(payload, 'paypal');
 
             if (approveOrder.status === 200) {
@@ -43,7 +45,7 @@ const capturePaypalPayment = (details) => {
 					.catch(() => window.location='/#/sorry');
             } else {
 				window.location='/#/sorry';
-			}
+            }
         }
     }).render('#paypal-button-container');
 }

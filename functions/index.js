@@ -1,10 +1,15 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const cors = require('cors')({ origin: true });
+const { FirebaseFunctionsRateLimiter } = require("firebase-functions-rate-limiter");
+const stripeLoader = require('stripe');
+const stripe = new stripeLoader(functions.config().stripe.secret_key);
+const uuid = require('uuidv4').default;
 
 const validateForm = require('./utils/validateForm');
 const getDeliveryCharge = require('./utils/deliveryCharge');
 const createCustomer = require('./utils/createCustomer');
+const updateCustomer = require('./utils/updateCustomer');
 const preAuthPayment = require('./utils/preAuthPayment');
 const preAuthPaypalPayment = require('./utils/preAuthPaypalPayment');
 const capturePayment = require('./utils/capturePayment');
@@ -20,21 +25,39 @@ admin.initializeApp({
     storageBucket: functions.config().db.storage_bucket,
 });
 
+const db = admin.firestore();
+
+const limiter = FirebaseFunctionsRateLimiter.withFirestoreBackend(
+    {
+        name: "rate_limiter_collection",
+        maxCalls: 2,
+        periodSeconds: 15,
+    },
+    db,
+);
+
 exports.payment = functions.https.onRequest(async (req, res) => {
+    const quotaExceeded = await limiter.rejectOnQuotaExceededOrRecordUsage();
+
+    if (quotaExceeded) return res.send('Too many requests', 500);
+
     cors(req, res, async () => {
+        console.log('req', req);
+        console.log('ip maybe', req.headers["x-forwarded-for"]);
         console.log('before fun', req.body)
         const validationSuccess = validateForm(req.body);
         console.log('validationSuccess', validationSuccess);
         console.log('req.body.basket.length', req.body.basket.length);
-        console.log('req.body.basket.length > 0', req.body.basket.length > 0)
+        console.log('req.body.basket.length > 0', req.body.basket.length > 0);
 
-        if (validationSuccess && req.body.basket.length > 0) {
+
+        if (validationSuccess && req.body.basket.length > 0 ) {
             try {
                 const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID } = req.body;
 
                 const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
                 const deliveryCharge = getDeliveryCharge(country, europeanCountries, basket, total);
-
+                const customerId = uuid();
                 console.log('country', country)
                 console.log('europeanCountries', europeanCountries)
                 console.log('basket', basket)
@@ -59,19 +82,26 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                     subtotal,
                     deliveryCharge,
                     paymentMethod: req.body.paymentMethod,
+                    customerId,
                 });
 
-                console.log('customerData', customerData);
+                await createCustomer(customerData, db);
 
-                await createCustomer(customerData);
+                if (req.body.paymentMethod === 'stripe') {
+                    stripe.charges.capture(chargeId, (error, charge) => {
+                        if (error) {
+                            console.log('cepture error', error);       
+                            return res.send(500);
+                        }
+                        return true;
+                    });
+                }
 
-                console.log('did it creat the customer?')
+                await updateCustomer(db, customerId);
 
-                if (req.body.paymentMethod === 'stripe') await capturePayment(chargeId);
+                await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4, customerId);
 
-                await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4);
-
-                await sendEmail('imogen', req.body, subtotal, total, deliveryCharge);
+                await sendEmail('imogen', req.body, subtotal, total, deliveryCharge, customerId);
 
                 return res.send(200);
 

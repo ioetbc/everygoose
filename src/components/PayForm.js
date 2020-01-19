@@ -7,26 +7,42 @@ import capturePaypalPayment from './utils/capturePaypalPayment';
 import PersonalInfo from './form/PersonalInfo';
 import ShippingInfo from './form/ShippingInfo';
 import handleOrder from './utils/handleOrder';
+import loadingState from './utils/LoadingState';
 
 class PayForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            // stripeComplete: false,
+            // firstName: 'wiil',
+            // lastName: 'sqsq',
+            // email: 'ioetbc@gmail.com',
+            // basket: this.props.basket,
+            // addressFirstLine: 'grgrgrgrgr',
+            // addressSecondLine: '',
+            // addressThirdLine: '',
+            // city: 'winchester',
+            // county: 'fefef',
+            // country: ['Spain'],
+            // postcode: 'so238ba',
+            // phone: '07493774943',     
+            // isLoading: false,
+            // paymentMethod: 'stripe',
             stripeComplete: false,
-            firstName: '',
-            lastName: '',
-            email: '',
+            firstName: undefined,
+            lastName: undefined,
+            email: undefined,
             basket: this.props.basket,
-            addressFirstLine: '',
-            addressSecondLine: '',
-            addressThirdLine: '',
-            city: '',
-            county: '',
+            addressFirstLine: undefined,
+            addressSecondLine: undefined,
+            addressThirdLine: undefined,
+            city: undefined,
+            county: undefined,
             country: [],
-            postcode: '',
-            phone: '',     
+            postcode: undefined,
+            phone: undefined,     
             isLoading: false,
-            paymentMethod: '',
+            paymentMethod: undefined,
         }
 		this.handleStripePayment = this.handleStripePayment.bind(this);
     }
@@ -42,9 +58,19 @@ class PayForm extends Component {
         }
     };
 
+    componentWillUnmount() {
+        const loadingState = document.getElementsByClassName('is-loading')[0];
+        const loadingSpinner = document.getElementsByClassName('loading-spinner')[0];
+    
+        if (loadingState && loadingSpinner) {
+            loadingState.remove();
+            loadingSpinner.remove();
+        }
+    }
+
     async handleStripePayment() {
         if (this.state.stripeComplete) {
-            this.setState({ isLoading: true });
+            loadingState();
             const { token } = await this.props.stripe.createToken({ name: this.state.email });
             const payload = {
                 ...this.state,
@@ -62,36 +88,50 @@ class PayForm extends Component {
     };
 
     render() {
-        const {
-            stripeComplete,
-            isLoading,
-        } = this.state;
-
+        const { stripeComplete } = this.state;
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
-
         let formFilledIn = false;
 
         if (
-            this.state.firstName !== '' &&
-            this.state.lastName !== '' &&
-            this.state.email !== '' &&
+            this.state.firstName !== undefined &&
+            this.state.lastName !== undefined &&
+            this.state.email !== undefined &&
             this.state.basket.length > 0 &&
-            this.state.addressFirstLine !== '' &&
-            this.state.city !== '' &&
-            this.state.county !== '' &&
-            this.state.country !== '' &&
-            this.state.postcode !== '' &&
-            this.state.phone !== ''
+            this.state.addressFirstLine !== undefined &&
+            this.state.city !== undefined &&
+            this.state.county !== undefined &&
+            this.state.country.length > 0 &&
+            this.state.postcode !== undefined &&
+            this.state.phone !== undefined
         ) formFilledIn = true;
 
-        const showBuyNowButton = this.state.paymentMethod === 'stripe' && formFilledIn && !hasErrors && this.state.stripeComplete;
+		const showBuyNowButton = this.state.paymentMethod === 'stripe' && formFilledIn && !hasErrors && stripeComplete;
+
+		const rednerShippingQuestions =
+			this.state.firstName !== undefined &&
+			this.state.firstName !== undefined &&
+			this.state.lastName !== undefined &&
+			this.state.lastName !== undefined &&
+			this.state.email !== undefined &&
+			this.state.email !== undefined &&
+            this.state.phone !== undefined
+
+		const renderPaymentQuestions = formFilledIn && !hasErrors;
+		let showFakeButton = true;
+	
+		if (this.state.paymentMethod === 'paypal' || this.state.stripeComplete) {
+			showFakeButton = false;
+		}
+
+		console.log('rednerShippingQuestions', rednerShippingQuestions);
+		
+		console.log('this.state.pgone', this.state.phone)
 
         return [
-            isLoading && <div className="is-loading"><div /></div>,
+            // <div className="shit"></div>,
             <form onSubmit={(e) => {
                 e.preventDefault()
                 this.handleStripePayment()
-                // TODO at this to the button onClick
                 document.getElementById('submitButton').setAttribute('disabled', 'disabled');
             }}>
 
@@ -100,10 +140,8 @@ class PayForm extends Component {
                         const value = handleValidationMessage(e)
                         const key = e.target.name;
                         this.setState({ [key]: value })
-                    }}
+					}}
                 />
-
-                <h3>Shipping address</h3>
 
                 <ShippingInfo
                     onBlur={(e) => {
@@ -111,61 +149,68 @@ class PayForm extends Component {
                         const key = e.target.name;
                         this.setState({ [key]: value });
                     }}
+                    rednerShippingQuestions={rednerShippingQuestions}
                     handleCountry={this.props.handleCountry}
                 />
 
-                {formFilledIn && !hasErrors &&
-                    <div>
-                    <h3 style={{ marginTop: '12px' }}>Payment details</h3>
+                {renderPaymentQuestions ?
+					<Fragment>
+						<h3 style={{ marginTop: '12px' }}>Payment details</h3>
 
-                    <div className="payment-method-container">
-                        <div
-                            onClick={() => {
-                                this.setState({ paymentMethod: 'stripe' })
-                            }}
-                            className="payment-method"
-                            style={{ background: this.state.paymentMethod === 'stripe' && 'white' }}
-                        >
-                            <p>credit / debit card</p>
-                        </div>
-                        <div
-                            onClick={() => {
-                                formFilledIn = false
-                                this.setState({
-                                    paymentMethod: 'paypal',
-                                })}
-                            }
-                            className="payment-method"
-                            style={{ background: this.state.paymentMethod === 'paypal' && 'white' }}
-                        >
-                            <p>paypal</p>
-                        </div>
-                    </div>
+						<div className="payment-method-container">
+							<div
+								onClick={() => {
+									this.setState({ paymentMethod: 'stripe' })
+								}}
+								className="payment-method"
+								style={{ background: this.state.paymentMethod === 'stripe' && 'white' }}
+							>
+								<p>credit / debit card</p>
+							</div>
+							<div
+								onClick={() => {
+									formFilledIn = false
+									this.setState({
+										paymentMethod: 'paypal',
+									})}
+								}
+								className="payment-method"
+								style={{ background: this.state.paymentMethod === 'paypal' && 'white' }}
+							>
+								<p>paypal</p>
+							</div>
+						</div>
 
-                    {this.state.paymentMethod === 'stripe' &&
-                        <Fragment>
-                            <CardElement
-                                hidePostalCode
-                                onChange={(e) => this.setState({ stripeComplete: e.complete})}
-                            />
-                            {showBuyNowButton &&
-                            <button
-                                type="submit"
-                                className={`button`}
-                                id='submitButton'
-                            >
-                                pay now
-                            </button>
-                            }
-                        </Fragment>
-                    }
+						{this.state.paymentMethod === 'stripe' &&
+							<Fragment>
+								<CardElement
+									hidePostalCode
+									onChange={(e) => this.setState({ stripeComplete: e.complete})}
+								/>
+								{showBuyNowButton &&
+									<button
+										type="submit"
+										className={`button`}
+										id='submitButton'
+									>
+										pay now
+									</button>
+								}
+							</Fragment>
+						}
 
-                    {this.state.paymentMethod === 'paypal' && 
-                        <div id="paypal-button-container"></div>
-                    }
-                 
-                    </div>
-                }
+						{this.state.paymentMethod === 'paypal' && 
+							<div id="paypal-button-container"></div>
+						}
+					</Fragment>
+					:
+					<div className="question-lock-up" style={{ marginTop: '24px' }}>
+						<h3>Payment details</h3>
+					</div>
+				}
+				{showFakeButton &&
+					<button className="button fake">pay now</button>
+				} 
             </form>,
         ];
     }

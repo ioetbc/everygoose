@@ -3,7 +3,7 @@ const sendgrid = require('@sendgrid/mail');
 const sendgridSecret = functions.config().sendgrid.secret_key;
 sendgrid.setApiKey(sendgridSecret);
 
-const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4) => {
+const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4, customerId) => {
     const {
         firstName,
         lastName,
@@ -77,7 +77,7 @@ const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4) =>
 
     await sendgrid.send(communication)
         .catch((error) => {
-            throw new Error(`email error. customer_id: ${customer_id} `, error);
+            throw new Error(`email error. customer_id: ${customerId} `, error);
         });
 }
 

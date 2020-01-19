@@ -147,6 +147,7 @@ class App extends Component {
 									{...routeProps}
 									prismicCtx={this.props.prismicCtx}
 									addToBasket={updateBasket}
+									basket={basket}
 								/>
 								<FloatingButton />
 							</div>

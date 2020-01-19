@@ -47,7 +47,6 @@ class Navigation extends Component {
                             <h4 className="hide-desktop">basket ({basket.length > 0 && basket.length})</h4>
                         </Link>
                     </nav>
-  
                 </div>
                 <div className="social-items">
                     <div

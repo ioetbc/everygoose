@@ -1,0 +1,220 @@
+[debug] [2020-01-19T13:52:39.852Z] ----------------------------------------------------------------------
+[debug] [2020-01-19T13:52:39.855Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2020-01-19T13:52:39.855Z] CLI Version:   7.8.1
+[debug] [2020-01-19T13:52:39.855Z] Platform:      darwin
+[debug] [2020-01-19T13:52:39.856Z] Node Version:  v12.13.0
+[debug] [2020-01-19T13:52:39.857Z] Time:          Sun Jan 19 2020 13:52:39 GMT+0000 (Greenwich Mean Time)
+[debug] [2020-01-19T13:52:39.857Z] ----------------------------------------------------------------------
+[debug] [2020-01-19T13:52:39.858Z] 
+[debug] [2020-01-19T13:52:39.869Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-01-19T13:52:39.869Z] > authorizing via signed-in user
+[debug] [2020-01-19T13:52:39.869Z] [iam] checking project everygoose for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-01-19T13:52:39.872Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/everygoose:testIamPermissions  
+
+[debug] [2020-01-19T13:52:40.783Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:40.786Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/everygoose  
+ 
+[debug] [2020-01-19T13:52:41.088Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'everygoose'...
+[info] 
+[info] i  deploying functions, hosting
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] ✔  functions: Finished running predeploy script.
+[debug] [2020-01-19T13:52:55.830Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "test": "jest"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "@hapi/joi": "^16.1.4",
+    "@sendgrid/mail": "^6.4.0",
+    "cors": "^2.8.5",
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^3.1.0",
+    "firebase-functions-rate-limiter": "^3.6.1",
+    "lodash": "^4.17.15",
+    "request-promise": "^4.2.5",
+    "stripe": "^7.9.1",
+    "uuidv4": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "firebase-functions-test": "^0.1.6",
+    "jest": "^24.9.0"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2020-01-19T13:52:55.831Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/everygoose/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2020-01-19T13:52:55.832Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/everygoose/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2020-01-19T13:52:56.758Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:56.771Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2020-01-19T13:52:56.772Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/everygoose/adminSdkConfig  
+ 
+[debug] [2020-01-19T13:52:56.943Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:56.944Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/everygoose/versions  
+
+[debug] [2020-01-19T13:52:58.291Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2020-01-19T13:52:58.299Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs  
+ 
+[debug] [2020-01-19T13:52:58.597Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:58.599Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/sendgrid/variables  
+ 
+[debug] [2020-01-19T13:52:58.599Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/stripe/variables  
+ 
+[debug] [2020-01-19T13:52:58.599Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables  
+ 
+[debug] [2020-01-19T13:52:58.600Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/paypal/variables  
+ 
+[debug] [2020-01-19T13:52:58.810Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:58.811Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/sendgrid/variables/secret_key  
+ 
+[debug] [2020-01-19T13:52:58.814Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:58.815Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/paypal/variables/paypal_client  
+ 
+[debug] [2020-01-19T13:52:58.815Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/paypal/variables/paypal_oauth_api  
+ 
+[debug] [2020-01-19T13:52:58.815Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/paypal/variables/paypal_order_api  
+ 
+[debug] [2020-01-19T13:52:58.815Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/paypal/variables/paypal_secret  
+ 
+[debug] [2020-01-19T13:52:58.816Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:58.816Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/stripe/variables/secret_key  
+ 
+[debug] [2020-01-19T13:52:58.982Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:59.002Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:59.006Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:59.007Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:59.063Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:59.064Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:59.828Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:52:59.829Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables/app_id  
+ 
+[debug] [2020-01-19T13:52:59.829Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables/auth_domain  
+ 
+[debug] [2020-01-19T13:52:59.829Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables/message_sender_id  
+ 
+[debug] [2020-01-19T13:52:59.829Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables/project_id  
+ 
+[debug] [2020-01-19T13:52:59.830Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables/storage_bucket  
+ 
+[debug] [2020-01-19T13:52:59.830Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables/url  
+ 
+[debug] [2020-01-19T13:52:59.830Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/everygoose/configs/db/variables/api_key  
+ 
+[debug] [2020-01-19T13:53:00.133Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:00.134Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:00.136Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:00.137Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:00.138Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:00.750Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:01.055Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (90.12 KB) for uploading
+[debug] [2020-01-19T13:53:06.416Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/everygoose/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2020-01-19T13:53:06.907Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:06.908Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-9ec6edbf-a5f5-450c-bb4d-113a425e7c4e/5db45b4f-0452-49b9-87b2-cc2ac1d82744.zip?GoogleAccessId=service-557966012633@gcf-admin-robot.iam.gserviceaccount.com&Expires=1579443786&Signature=FwRPoCKrWnqK81ob1AxsdO7Ssn8NoOmENVFpwmKSwVckjAQ8MZb%2FwlmpnySkjxTA8%2F66MvV3N565JMd%2Bp3ifY8o76oXMWmKgLo5LP5Ra83z3a19ApgHHcuVOh0Pl8BJHw3zWxaPIYaJpH0c4WFq10jxQxVNePf6EndUciN3yZfjT%2F%2FS%2FbBw%2BB5XqhdtMmqnOZPl94ZdxkgEkaUzZPC1qvkEZ7JO0lcPCS8aqOp%2B%2BwqvzXAEDriqgsXM6DxTrcoKg%2BC6eK9tOEAxEPPO1zv8F9ZUAAG1YSCoFNSNTTAOxdgHJ%2BvRFu3%2Bxo172BqTXbKhvQfbL4Xn7%2Fs5rYNWo5TQtzA%3D%3D  
+ <request body omitted>
+[debug] [2020-01-19T13:53:07.182Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting[everygoose]: beginning deploy...
+[info] i  hosting[everygoose]: found 31 files in build
+[debug] [2020-01-19T13:53:07.929Z] [hosting] hash cache [YnVpbGQ] stored for 31 files
+[debug] [2020-01-19T13:53:07.929Z] [hosting][hash queue][FINAL]
+[debug] [2020-01-19T13:53:07.930Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/everygoose/versions/f2377be28ee17943:populateFiles  
+ <request body omitted>
+[debug] [2020-01-19T13:53:09.555Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:09.564Z] [hosting][populate queue][FINAL]
+[debug] [2020-01-19T13:53:09.564Z] [hosting] uploads queued: 8
+[debug] [2020-01-19T13:53:12.217Z] [hosting][upload queue][FINAL]
+[info] ✔  hosting[everygoose]: file upload complete
+[debug] [2020-01-19T13:53:12.220Z] [hosting] deploy completed after 5037ms
+[debug] [2020-01-19T13:53:12.287Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/everygoose/locations/-/functions  
+ 
+[debug] [2020-01-19T13:53:12.729Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating Node.js 8 function payment(us-central1)...
+[debug] [2020-01-19T13:53:12.732Z] Trigger is:  {"httpsTrigger":{}}
+[info] i  functions: updating Node.js 8 function contact(us-central1)...
+[debug] [2020-01-19T13:53:12.732Z] Trigger is:  {"httpsTrigger":{}}
+[debug] [2020-01-19T13:53:12.733Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/everygoose/services/cloudscheduler.googleapis.com  
+ 
+[debug] [2020-01-19T13:53:13.652Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:13.653Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/everygoose/locations/us-central1/functions/payment {"updateMask":"sourceUploadUrl,name,labels,runtime,httpsTrigger"} 
+
+[debug] [2020-01-19T13:53:13.654Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/everygoose/locations/us-central1/functions/contact {"updateMask":"sourceUploadUrl,name,labels,runtime,httpsTrigger"} 
+
+[debug] [2020-01-19T13:53:13.957Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:13.959Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:13.960Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/everygoose/locations/-/functions  
+ 
+[debug] [2020-01-19T13:53:14.575Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:14.576Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:14.576Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:14.879Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:14.881Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:16.884Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:16.884Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:17.179Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:17.338Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:19.184Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:19.338Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:19.368Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:19.795Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:21.368Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:21.637Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:21.800Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:22.253Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:23.640Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:24.098Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:24.259Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:24.711Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:26.103Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:26.555Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:26.717Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:26.917Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:28.560Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:28.923Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:28.929Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:29.191Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:30.933Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:31.163Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:31.195Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:31.470Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:33.164Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9wYXltZW50L3ZKT2gwd1pKT1Vv  
+ 
+[debug] [2020-01-19T13:53:33.472Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/ZXZlcnlnb29zZS91cy1jZW50cmFsMS9jb250YWN0L0UxcWJUVzlneUFJ  
+ 
+[debug] [2020-01-19T13:53:33.478Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-19T13:53:33.927Z] <<< HTTP RESPONSE 200

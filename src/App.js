@@ -27,9 +27,8 @@ import Footer from './components/Footer'
 import './App.scss';
 import Header from './components/Header';
 import FloatingButton from './components/utils/floatingBasket';
+import BackButton from './components/utils/BackButton'
 
-
-import BackIcon from './images/misc/back-button.svg';
 import updateBasket from './components/utils/updateBasket';
 import getBasket from './components/utils/getBasket';
 
@@ -105,7 +104,6 @@ class App extends Component {
 								navigationItems={cardTypes}
 								handleNavigationFilter={this.handleNavigationFilter}
 								shop
-								classModifier="shop"
 							/>,
 							<div className="shop-page">
 								<Header
@@ -136,12 +134,10 @@ class App extends Component {
 									title='Card'
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<Product
 									{...routeProps}
@@ -163,15 +159,13 @@ class App extends Component {
 							/>,
 							<div className="checkout-page">
 								<Header
-									title='checkout'
+									title='Checkout'
 								/>
-
-								<Link to={{ pathname: "/product" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to product page</p>
-									</div>
-								</Link>
+								
+								<BackButton
+									title="product page"
+									link="/#/product"
+								/>
 
 								<Checkout
 									{...routeProps}
@@ -188,15 +182,13 @@ class App extends Component {
 							/>,
 							<div className="checkout-page">
 								<Header
-									title='pay'
+									title='Pay'
 								/>
 
-								<Link to={{ pathname: "/checkout" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to checkout page</p>
-									</div>
-								</Link>
+								<BackButton
+									title="checkout page"
+									link="/#/checkout"
+								/>
 
 								<Pay
 									{...routeProps}
@@ -215,12 +207,10 @@ class App extends Component {
 									title='Contact'
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<Contact
 									{...routeProps}
@@ -238,12 +228,10 @@ class App extends Component {
 									title='Terms & Conditions'
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<TermsConditions prismicCtx={this.props.prismicCtx} />
 							</div>,
@@ -259,12 +247,10 @@ class App extends Component {
 									title='Trade'
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<Trade prismicCtx={this.props.prismicCtx} />
 							</div>,
@@ -280,12 +266,10 @@ class App extends Component {
 									title='Delivery & Returns'
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<Delivery prismicCtx={this.props.prismicCtx} />
 							</div>,
@@ -301,12 +285,10 @@ class App extends Component {
 									title='About'
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<About prismicCtx={this.props.prismicCtx}/>
 							</div>,
@@ -324,12 +306,10 @@ class App extends Component {
 									basket={basket}
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<Done />
 							</div>,
@@ -345,12 +325,10 @@ class App extends Component {
 									title='Sorry'
 								/>
 
-								<Link to={{ pathname: "/" }}>
-									<div className="back-button">
-										<img src={BackIcon} alt="" />
-										<p className="back-button-text">back to homepage</p>
-									</div>
-								</Link>
+								<BackButton
+									title="homepage"
+									link="/#/"
+								/>
 
 								<Sorry />
 							</div>,

@@ -1,12 +1,10 @@
 import React from 'react';
-import updateBasket from '../components/utils/updateBasket';
 
 const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
-
     return (
         <div>
-            {READONLYBASKET.map((item) =>
-                <div className="selected-item">
+            {READONLYBASKET.map((item, index) =>
+                <div key={index} className="selected-item">
                     <div className="item-image-wrapper desktop">
                         <img src={item.image_1_url} className="item-image" />
                     </div>
@@ -16,9 +14,9 @@ const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
                             <div className="item-quantity">
                                 <select
                                     className="quantity-select"
-                                        onChange={(e) => updateCheckout(e, item, 'quantity')}
-                                    >
-                                    <option value={item.quantity} selected disabled hidden>{item.quantity}</option>
+                                    onChange={(e) => updateCheckout(e, item, 'quantity')}
+                                    defaultValue={item.quantity}
+                                >
                                     <option value={1}>1</option>
                                     <option value={2}>2</option>
                                     <option value={3}>3</option>
@@ -33,7 +31,6 @@ const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                     <div className="item-image-wrapper mobile">
                         <img src={item.image_1_url} className="item-image" />

@@ -1,8 +1,10 @@
 .standard-page {
     margin: 0px 50px;
+    padding-top: 124px;
 
     @media screen and (min-width: 600px) {
         margin: 74px 100px;
+        padding-top: 0;
     }
 
     @media screen and (min-width: 1000px) {
@@ -16,9 +18,11 @@
 
 .checkout-page {
     margin: 0px 20px;
+    padding-top: 124px;
 
     @media screen and (min-width: 600px) {
         margin: 74px 90px;
+        padding-top: 0;
     }
 
     @media screen and (min-width: 768px) {
@@ -56,9 +60,11 @@
 .shop-page {
     max-width: 260px;
     margin: 0 auto;
+    padding-top: 124px;
 
     @media screen and (min-width: 600px) {
         max-width: 490px;
+        padding-top: 0;
     }
 
     @media screen and (min-width: 1000px) {

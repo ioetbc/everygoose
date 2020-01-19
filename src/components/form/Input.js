@@ -13,7 +13,7 @@ const input = ({ name, type, label, onBlur, style }) => {
                     onBlur={(e) => onBlur(e)}
                     style={style}
                 />
-                <label className='text-field--label' for={name}>{label}</label>
+                <label className='text-field--label' htmlFor={name}>{label}</label>
             </div>
         </div>
     )

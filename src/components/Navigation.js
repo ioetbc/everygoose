@@ -34,8 +34,8 @@ class Navigation extends Component {
                             <Link to={{ pathname: "/" }}><h4>shop</h4></Link>
                             {shop &&
                                 <ul>
-                                    {uniq(navigationItems).map(navItem =>
-                                        <li onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
+                                    {uniq(navigationItems).map((navItem, index) =>
+                                        <li key={index} onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
                                     )}
                                 </ul>
                             }

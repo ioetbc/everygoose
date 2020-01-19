@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import ScrollToTop from '../components/utils/ScrollTop';
 import SlideShow from '../components/SlideShow';
@@ -19,20 +19,22 @@ const Product = ({ location, addToBasket, basket }) => {
     if (item) slideshowImages = [item.image_1_url, item.image_2_url, item.image_3_url];
 
     if (item) {
-        return [
-            <ScrollToTop />,
-            <main className="main-content">
-                <div className="slide-show-side-by-side">
-                    <SlideShow
-                        slideshowImages={slideshowImages}
-                    />
-                    <ProductDetails
-                        product={item}
-                        addToBasket={addToBasket}
-                    />
-                </div>
-            </main>,
-        ]
+        return (
+            <Fragment>
+                <ScrollToTop />
+                <main className="main-content">
+                    <div className="slide-show-side-by-side">
+                        <SlideShow
+                            slideshowImages={slideshowImages}
+                        />
+                        <ProductDetails
+                            product={item}
+                            addToBasket={addToBasket}
+                        />
+                    </div>
+                </main>
+            </Fragment>
+        )
     } else {
         return (
             <main className="main-content">

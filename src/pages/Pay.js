@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -42,34 +42,36 @@ class Product extends Component {
         const subTotal = (parseFloat(total) + this.state.deliveryCharge).toFixed(2);
 
         if (basket) {
-            return [
-                <ScrollToTop />,
-                <main className="main-content">
-                    <div className="checkout-not-equal">
-                        <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE}>
-                            <Elements>
-                                <PayForm
-                                    basket={basket}
-                                    handleCountry={this.handleCountry}
-                                    subTotal={subTotal}
-                                    europeanCountries={this.state.europeanCountries}
-                                />
-                            </Elements>
-                        </StripeProvider>
-                        <Overview
-                            basket={basket}
-                            payPage
-                            deliveryCharge={this.state.deliveryCharge.toFixed(2)}
-                            europeanCountries={this.state.europeanCountries}
-                            subTotal={subTotal}
-                        />
-                    </div>
-                </main>,
-            ]; 
+            return (
+                <Fragment>
+                    <ScrollToTop />
+                    <main className="main-content">
+                        <div className="checkout-not-equal">
+                            <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE}>
+                                <Elements>
+                                    <PayForm
+                                        basket={basket}
+                                        handleCountry={this.handleCountry}
+                                        subTotal={subTotal}
+                                        europeanCountries={this.state.europeanCountries}
+                                    />
+                                </Elements>
+                            </StripeProvider>
+                            <Overview
+                                basket={basket}
+                                payPage
+                                deliveryCharge={this.state.deliveryCharge.toFixed(2)}
+                                europeanCountries={this.state.europeanCountries}
+                                subTotal={subTotal}
+                            />
+                        </div>
+                    </main>
+                </Fragment>
+            ); 
         } else {
             return (
                 <main className="main-content">
-                <p>No items selected, <Link to={{ pathname: "/"}}>back to homepage</Link></p>        
+                    <p>No items selected, <Link to={{ pathname: "/"}}>back to homepage</Link></p>        
                 </main>
                 )
             }

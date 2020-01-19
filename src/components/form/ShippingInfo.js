@@ -3,53 +3,56 @@ import Input from '../form/Input';
 import Country from '../form/Country';
 
 const ShippingInfo = ({ onBlur, handleCountry, rednerShippingQuestions }) => {
-    return [
-        rednerShippingQuestions ? 
-            <Fragment>
-                <h3>Shipping address</h3>
-                <Input
-                    name="addressFirstLine"
-                    type="text"
-                    label="Address line one"
-                    onBlur={onBlur}
-                />
-                <Input
-                    name="addressSecondLine"
-                    type="text"
-                    label="Address second one"
-                    onBlur={onBlur}
-                />
-                <Input
-                    name="addressThirdLine"
-                    type="text"
-                    label="Address third one"
-                    onBlur={onBlur}
-                />
-                <Country
-                    onClick={handleCountry}
-                    onBlur={onBlur}
-                />
-                <div class="input-side-by-side">
+    return (
+        <Fragment>
+            {rednerShippingQuestions ? 
+                <Fragment>
+                    <h3>Shipping address</h3>
                     <Input
-                        name="city"
+                        name="addressFirstLine"
                         type="text"
-                        label="City"
+                        label="Address line one"
                         onBlur={onBlur}
                     />
                     <Input
-                        name="postcode"
+                        name="addressSecondLine"
                         type="text"
-                        label="Postcode"
+                        label="Address second one"
                         onBlur={onBlur}
-                        style={{ textTransform: 'uppercase' }}
                     />
+                    <Input
+                        name="addressThirdLine"
+                        type="text"
+                        label="Address third one"
+                        onBlur={onBlur}
+                    />
+                    <Country
+                        onClick={handleCountry}
+                        onBlur={onBlur}
+                    />
+                    <div class="input-side-by-side">
+                        <Input
+                            name="city"
+                            type="text"
+                            label="City"
+                            onBlur={onBlur}
+                        />
+                        <Input
+                            name="postcode"
+                            type="text"
+                            label="Postcode"
+                            onBlur={onBlur}
+                            style={{ textTransform: 'uppercase' }}
+                        />
+                    </div>
+                </Fragment>
+                :
+                <div className="question-lock-up">
+                    <h3>Shipping address</h3>
                 </div>
-            </Fragment>
-            :
-            <div className="question-lock-up">
-                <h3>Shipping address</h3>
-            </div>
-    ];
+            }
+        </Fragment>
+    )
 };
 
 export default ShippingInfo;

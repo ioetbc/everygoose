@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import getBasket from '../components/utils/getBasket';
 import updateBasket from '../components/utils/updateBasket';
@@ -29,22 +29,24 @@ class Checkout extends Component {
         const deliveryCharge = getDeliveryCharge(null, null, basket, total);
         const subTotal = (parseFloat(total) + (parseInt(deliveryCharge, 10) || 0)).toFixed(2);
 
-        return [
-            <ScrollToTop />,
-            <main className="main-content">
-                <div className="checkout-not-equal">
-                    <SelectedItem
-                        updateCheckout={this.updateCheckout}
-                        READONLYBASKET={this.state.READONLYBASKET}
-                    />
-                    <Overview
-                        checkout
-                        deliveryCharge={deliveryCharge}
-                        subTotal={subTotal}
-                    />
-                </div>
-            </main>,
-        ];
+        return (
+            <Fragment>
+                <ScrollToTop />
+                <main className="main-content">
+                    <div className="checkout-not-equal">
+                        <SelectedItem
+                            updateCheckout={this.updateCheckout}
+                            READONLYBASKET={this.state.READONLYBASKET}
+                        />
+                        <Overview
+                            checkout
+                            deliveryCharge={deliveryCharge}
+                            subTotal={subTotal}
+                        />
+                    </div>
+                </main>
+            </Fragment>
+        );
     }
 }
 

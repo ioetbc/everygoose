@@ -33,8 +33,8 @@ class ProductDetails extends Component {
                                 this.setState({
                                     READONLYBASKET: updateBasket(product, { key: 'framed', value: e.target.value })
                                 })}
-                                className="quantity-select"
-                                style={{ marginLeft: 0 }}
+                            className="quantity-select"
+                            style={{ marginLeft: 0 }}
                         >
                             <option value={false}>standard</option>
                             <option value={true} selected={isFramed[0] === 'true'}>framed</option>

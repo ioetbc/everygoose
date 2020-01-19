@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Prismic from 'prismic-javascript';
 import { find, get } from 'lodash';
 import {
@@ -45,11 +45,13 @@ class App extends Component {
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 
 		if (this.props.prismicCtx) {
+			console.log('fetching page in the constructor')
 			this.fetchPage(props);
 		}
 	}
 
 	componentDidUpdate(prevProps) {
+		console.log('callled compeont did update');
 		this.props.prismicCtx.toolbar();
 		if (!prevProps.prismicCtx) {
 			this.fetchPage(this.props);
@@ -94,256 +96,299 @@ class App extends Component {
 	render() {
 		const { cardTypes, doc, products, filteredProducts } = this.state;
 		const basket = getBasket();
+		console.log('getting basket on render', basket);
 
-		return ([
-			<div className="app">	
+		return (
+			<Fragment>
+				<div className="app">	
 				<HashRouter>
 					<Switch>
-						<Route exact path="/" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-								shop
-							/>,
-							<div className="shop-page">
-								<Header
-									title='Shop'
+						<Route exact path="/" render={routeProps => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
 									shop
+								/>
+								<div className="shop-page">
+									<Header
+										title='Shop'
+										shop
+										navigationItems={cardTypes}
+										handleNavigationFilter={this.handleNavigationFilter}
+									/>
+									<Page
+										{...routeProps}
+										prismicCtx={this.props.prismicCtx}
+										getCardType={this.getCardType}
+										doc={doc}
+										products={filteredProducts || products}
+									/>
+								</div>
+								<FloatingButton />
+							</Fragment>
+						)} />
+
+						<Route exact path="/product" render={routeProps => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+									product
+									classModifier="standard"
+								/>
+								<div className="standard-page">
+									<Header
+										title='Card'
+									/>
+
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
+
+									<Product
+										{...routeProps}
+										prismicCtx={this.props.prismicCtx}
+										addToBasket={updateBasket}
+										basket={basket}
+									/>
+									<FloatingButton />
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/checkout" render={routeProps => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+									basket
+									classModifier="wide"
+									basket={basket}
+								/>
+								<div className="checkout-page">
+									<Header
+										title='Checkout'
+									/>
+									<BackButton
+										title="product page"
+										link="/#/product"
+									/>
+									<Checkout
+										{...routeProps}
+										prismicCtx={this.props.prismicCtx}
+									/>
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/pay" render={routeProps => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+									classModifier="wide"
+								/>
+								<div className="checkout-page">
+									<Header
+										title='Pay'
+									/>
+									<BackButton
+										title="checkout page"
+										link="/#/checkout"
+									/>
+									<Pay
+										{...routeProps}
+										prismicCtx={this.props.prismicCtx}
+									/>
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/contact" render={routeProps => (
+							<Fragment>
+								<Navigation
 									navigationItems={cardTypes}
 									handleNavigationFilter={this.handleNavigationFilter}
 								/>
-								<Page
-									{...routeProps}
-									prismicCtx={this.props.prismicCtx}
-									getCardType={this.getCardType}
-									doc={doc}
-									products={filteredProducts || products}
-								/>
-							</div>,
-							<FloatingButton />
-						]} />
+								<div className="checkout-page">
+									<Header
+										title='Contact'
+									/>
 
-						<Route exact path="/product" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-								product
-							/>,
-							<div className="standard-page">
-								<Header
-									title='Card'
-								/>
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
 
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
+									<Contact
+										{...routeProps}
+									/>
+								</div>
+							</Fragment>
+						)} />
 
-								<Product
-									{...routeProps}
-									prismicCtx={this.props.prismicCtx}
-									addToBasket={updateBasket}
+						<Route exact path="/terms" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+								/>
+								<div className="checkout-page">
+									<Header
+										title='Terms & Conditions'
+									/>
+
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
+
+									<TermsConditions prismicCtx={this.props.prismicCtx} />
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/trade" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+								/>
+								<div className="checkout-page">
+									<Header
+										title='Trade'
+									/>
+
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
+
+									<Trade prismicCtx={this.props.prismicCtx} />
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/delivery" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+								/>
+								<div className="checkout-page">
+									<Header
+										title='Delivery & Returns'
+									/>
+
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
+
+									<Delivery prismicCtx={this.props.prismicCtx} />
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/about" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+								/>
+								<div className="checkout-page">
+									<Header
+										title='About'
+									/>
+
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
+
+									<About prismicCtx={this.props.prismicCtx}/>
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/done" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
 									basket={basket}
 								/>
-								<FloatingButton />
-							</div>
-						]} />
+								<div className="checkout-page">
+									<Header
+										title='Thank you'
+										basket={basket}
+									/>
 
-						<Route exact path="/checkout" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-								basket
-								classModifier="wide"
-								basket={basket}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Checkout'
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
+
+									<Done />
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/sorry" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
 								/>
-								
-								<BackButton
-									title="product page"
-									link="/#/product"
+								<div className="checkout-page">
+									<Header
+										title='Sorry'
+									/>
+
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
+
+									<Sorry />
+								</div>
+							</Fragment>
+						)} />
+
+						<Route render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
 								/>
+								<div className="checkout-page">
+									<Header
+										title='Sorry'
+									/>
 
-								<Checkout
-									{...routeProps}
-									prismicCtx={this.props.prismicCtx}
-								/>
-							</div>
-						]} />
+									<BackButton
+										title="homepage"
+										link="/#/"
+									/>
 
-						<Route exact path="/pay" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-								classModifier="wide"
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Pay'
-								/>
+									<NotFound />
+								</div>
+							</Fragment>
+						)} />
 
-								<BackButton
-									title="checkout page"
-									link="/#/checkout"
-								/>
-
-								<Pay
-									{...routeProps}
-									prismicCtx={this.props.prismicCtx}
-								/>
-							</div>,
-						]} />
-
-						<Route exact path="/contact" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Contact'
-								/>
-
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
-
-								<Contact
-									{...routeProps}
-								/>
-							</div>,
-						]} />
-
-						<Route exact path="/terms" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Terms & Conditions'
-								/>
-
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
-
-								<TermsConditions prismicCtx={this.props.prismicCtx} />
-							</div>,
-						]} />
-
-						<Route exact path="/trade" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Trade'
-								/>
-
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
-
-								<Trade prismicCtx={this.props.prismicCtx} />
-							</div>,
-						]} />
-
-						<Route exact path="/delivery" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Delivery & Returns'
-								/>
-
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
-
-								<Delivery prismicCtx={this.props.prismicCtx} />
-							</div>,
-						]} />
-
-						<Route exact path="/about" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='About'
-								/>
-
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
-
-								<About prismicCtx={this.props.prismicCtx}/>
-							</div>,
-						]} />
-
-						<Route exact path="/done" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-								basket={basket}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Thank you'
-									basket={basket}
-								/>
-
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
-
-								<Done />
-							</div>,
-						]} />
-
-						<Route exact path="/sorry" render={routeProps => [
-							<Navigation
-								navigationItems={cardTypes}
-								handleNavigationFilter={this.handleNavigationFilter}
-							/>,
-							<div className="checkout-page">
-								<Header
-									title='Sorry'
-								/>
-
-								<BackButton
-									title="homepage"
-									link="/#/"
-								/>
-
-								<Sorry />
-							</div>,
-						]} />
-
-						<Route component={NotFound} />
+						
 					</Switch>
 				</HashRouter>
 			</div>,
-			<Router history={history}>
+				<Router>
 				<Route>
 					<Footer />			
 				</Route>
 			</Router>,
-		])
+			</Fragment>
+		)
 	}
 };
 

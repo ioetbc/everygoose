@@ -14,8 +14,8 @@ export default function Header({ title, shop, navigationItems, handleNavigationF
             {shop && 
                 <div className="mobile-filter item-quantity">
                     <select className="quantity-select" style={{ marginLeft: 0 }} onChange={(e) => handleNavigationFilter(e.target.value)}>
-                        {uniq(navigationItems).map(navItem => {
-                            return <option value={navItem}>{navItem}</option>
+                        {uniq(navigationItems).map((navItem, index) => {
+                            return <option key={index} value={navItem}>{navItem}</option>
                         })}
                     </select>
                 </div>

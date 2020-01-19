@@ -27,6 +27,16 @@ class Product extends Component {
           const europeanCountries = res.data;
           this.setState({ europeanCountries });
         });
+
+        var loadPaypalScript = function (src) {
+            var tag = document.createElement('script');
+            tag.async = false;
+            tag.src = src;
+            var body = document.getElementsByTagName('body')[0];
+            body.appendChild(tag);
+          }
+      
+          loadPaypalScript(`https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}&currency=GBP&disable-funding=credit,card`);
     }
 
     handleCountry(country) {

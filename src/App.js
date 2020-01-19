@@ -381,12 +381,12 @@ class App extends Component {
 						
 					</Switch>
 				</HashRouter>
-			</div>,
+			</div>
 				<Router>
 				<Route>
 					<Footer />			
 				</Route>
-			</Router>,
+			</Router>
 			</Fragment>
 		)
 	}

@@ -3,12 +3,14 @@
     padding-top: 124px;
 
     @media screen and (min-width: 600px) {
-        margin: 74px 100px;
-        padding-top: 0;
+        max-width: 490px;
+        margin: 0 auto;
     }
 
     @media screen and (min-width: 1000px) {
         margin: 74px 20px;
+        padding-top: 0;
+        max-width: none;
     }
 
     @media screen and (min-width: 1200px) {
@@ -21,20 +23,20 @@
     padding-top: 124px;
 
     @media screen and (min-width: 600px) {
-        margin: 74px 90px;
-        padding-top: 0;
+        margin: 0px 90px;
     }
 
     @media screen and (min-width: 768px) {
-        margin: 74px 120px;
+        margin: 0px 120px;
     }
 
     @media screen and (min-width: 900px) {
-        margin: 74px 200px;
+        margin: 0px 200px;
     }
 
     @media screen and (min-width: 1000px) {
         width: 100%;
+        padding-top: 0;
         max-width: 560px;
         margin: 74px auto;
     }
@@ -64,11 +66,11 @@
 
     @media screen and (min-width: 600px) {
         max-width: 490px;
-        padding-top: 0;
     }
 
     @media screen and (min-width: 1000px) {
         margin: 74px auto;
+        padding-top: 0; 
     }
 
     @media screen and (min-width: 1200px) {

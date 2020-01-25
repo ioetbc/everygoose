@@ -4,7 +4,7 @@ import Input from '../form/Input';
 const PersonalInfo = ({ onBlur }) => {
     return (
         <Fragment>
-            <h3>personal details</h3>
+            <h3>contact details</h3>
             <div className="input-side-by-side">
                 <Input
                     name="firstName"

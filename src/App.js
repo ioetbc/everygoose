@@ -45,13 +45,11 @@ class App extends Component {
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 
 		if (this.props.prismicCtx) {
-			console.log('fetching page in the constructor')
 			this.fetchPage(props);
 		}
 	}
 
 	componentDidUpdate(prevProps) {
-		console.log('callled compeont did update');
 		this.props.prismicCtx.toolbar();
 		if (!prevProps.prismicCtx) {
 			this.fetchPage(this.props);
@@ -73,10 +71,17 @@ class App extends Component {
 			.getByID('XVxFfREAACEAlCKe');
 
 		const cardTypes = [];
-		doc.data.products.forEach(item => {
+
+		const allProducts = doc.data.products.concat(doc.data.prints);
+
+		allProducts.forEach(item => {
 			this.state.products.push({
 				title: item.product_title[0].text,
-				price: item.product_price.toFixed(2),
+				price: get(item, 'product_price', 0).toFixed(2),
+				a4_price: get(item, 'product_price', 0).toFixed(2),
+				a3_price: get(item, 'a3_price', 0).toFixed(2),
+				a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
+				a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
 				image_1_url: item.image_1.url,
 				image_2_url: item.image_2.url,
 				image_3_url: item.image_3.url,
@@ -85,6 +90,8 @@ class App extends Component {
 				type: item.type_of_card,
 				product_type: item.product_type,
 				product_dimensions: item.product_dimensions,
+				size: 'a4',
+				framed: 'false'
 			});
 			
 			cardTypes.push(item.type_of_card);
@@ -96,7 +103,6 @@ class App extends Component {
 	render() {
 		const { cardTypes, doc, products, filteredProducts } = this.state;
 		const basket = getBasket();
-		console.log('getting basket on render', basket);
 
 		return (
 			<Fragment>

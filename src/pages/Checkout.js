@@ -25,6 +25,7 @@ class Checkout extends Component {
 
     render() {
         const basket = getBasket();
+        console.log('checkout basket', basket)
         const total = getPrice(basket);
         const deliveryCharge = getDeliveryCharge(null, null, basket, total);
         const subTotal = (parseFloat(total) + (parseInt(deliveryCharge, 10) || 0)).toFixed(2);

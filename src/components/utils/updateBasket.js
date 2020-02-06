@@ -11,7 +11,9 @@ const updateBasket = (item, update = false, remove = false, blat = false) => {
 
         if (basket.find(o => o.title === get(item, 'title'))) {
             basket.map(element => {
-                if (element.title === item.title) element[key] = value;
+                if (element.title === item.title) {
+                    element[key] = value;
+                }
             });
         }
     }

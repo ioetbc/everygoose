@@ -11,8 +11,9 @@ class SlideShow extends Component {
                     showArrows={false}
                     autoPlay={true}
                 >
-                    {this.props.slideshowImages.map((item, key) => 
+                    {this.props.slideshowImages.map((item, index) => 
                         <img
+                            key={index}
                             className="placeholder-slideshow-item"
                             src={item}
                         />

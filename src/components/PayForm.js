@@ -1,381 +1,213 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import axios from 'axios';
-import uuid from 'uuid/v4';
 
-import estimatedDelivery from './utils/EstimatedDelivery';
-import { generic, postcode, email, phone, genericNotRequired } from '../schema/PaySchema';
+import handleValidationMessage from './utils/handleValidationMessage';
+import capturePaypalPayment from './utils/capturePaypalPayment';
+
+import PersonalInfo from './form/PersonalInfo';
+import ShippingInfo from './form/ShippingInfo';
+import handleOrder from './utils/handleOrder';
+import loadingState from './utils/LoadingState';
 
 class PayForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             stripeComplete: false,
-            firstName: '',
-            lastName: '',
-            email: '',
-            basket: [],
-            addressSecond: '',
-            addressFirst: '',
-            addressSecondError: false,
-            addressThirdError : false,
-            city: '',
-            county: '',
-            postcode: '',
-            phoneNumber: '',
+            firstName: 'wiil',
+            lastName: 'sqsq',
+            email: 'ioetbc@gmail.com',
+            basket: this.props.basket,
+            addressFirstLine: 'grgrgrgrgr',
+            addressSecondLine: '',
+            addressThirdLine: '',
+            city: 'winchester',
+            county: 'fefef',
+            country: ['Spain'],
+            postcode: 'so238ba',
+            phone: '07493774943',     
             isLoading: false,
+            paymentMethod: 'stripe',
+            // stripeComplete: false,
+            // firstName: undefined,
+            // lastName: undefined,
+            // email: undefined,
+            // basket: this.props.basket,
+            // addressFirstLine: undefined,
+            // addressSecondLine: undefined,
+            // addressThirdLine: undefined,
+            // city: undefined,
+            // county: undefined,
+            // country: [],
+            // postcode: undefined,
+            // phone: undefined,     
+            // isLoading: false,
+            // paymentMethod: undefined,
         }
-
-        this.handleInput = this.handleInput.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleStripePayment = this.handleStripePayment.bind(this);
     }
 
-    async handleSubmit(e, allValid) {
-        if (allValid && this.state.stripeComplete) {
-            this.setState({ isLoading: true });
-            const inputs = [...document.getElementsByTagName('input')]
-            inputs.map(i => i.value = '');
-            const { token } = await this.props.stripe.createToken({ name: this.state.email });
-            const cardOrCards = this.props.basket.length > 1 ? 'cards' : 'card';
-            const order = this.props.basket.map(a => {
-                return {
-                    quantity: a.quantity,
-                    title: a.title,
-                }});
-
-            const quantity = parseInt(this.props.basket.map(i => i.quantity)[0], 10);
-    
-            let theyOrIt;
-            if (quantity < 2 && this.props.basket.length === 1) {
-                theyOrIt = 'It'
-            } else {
-                theyOrIt = 'They'; 
+    componentDidUpdate(undefined, prevState) {
+        if (prevState.paymentMethod !== this.state.paymentMethod) {
+            const data = {
+                ...this.state,
+                subTotal: this.props.subTotal,
+                europeanCountries: this.props.europeanCountries,
             }
-            axios({
-                method: 'post',
-                url: process.env.REACT_APP_PAY_ENDPOINT,
-                config: {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                },
-                data: {
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    email: this.state.email,
-                    basket: this.props.basket,
-                    addressFirst: this.state.addressFirst,
-                    addressSecond: this.state.addressSecond,
-                    addressThird: this.state.addressThird,
-                    city: this.state.city,
-                    county: this.state.county,
-                    postcode: this.state.postcode,
-                    phoneNumber: this.state.phone,
-                    stripeToken: token.id,
-                    idempotencyKey: uuid(),
-                    estimatedDelivery: estimatedDelivery(),
-                    cardOrCards,
-                    theyOrIt,
-                    order,
-                },
-            })
-            .then((res) => {
-                this.setState({ isLoading: false });
-               return  window.location=`${res.data}`
-            })
-            .catch((error) => {
-                this.setState({ isLoading: false });
-                return window.location=`${error.data}`
-            });
+            capturePaypalPayment(data);
+        }
+    };
+
+    componentWillUnmount() {
+        const loadingState = document.getElementsByClassName('is-loading')[0];
+        const loadingSpinner = document.getElementsByClassName('loading-spinner')[0];
+    
+        if (loadingState && loadingSpinner) {
+            loadingState.remove();
+            loadingSpinner.remove();
         }
     }
 
-    handleInput(e) {
-        e.preventDefault();
-
-        switch(e.target.name) {
-            case 'firstName':
-                if (generic.validate({ generic: e.target.value }).error) {
-                    this.setState({ firstNameError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ firstName: e.target.value, firstNameError: false });
-                }
-            break;
-            case 'lastName':
-                if (generic.validate({ generic: e.target.value }).error) {
-                    this.setState({ lastNameError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ lastName: e.target.value, lastNameError: false });
-                }
-            break;
-            case 'addressFirstLine':
-                if (generic.validate({ generic: e.target.value }).error) {
-                    this.setState({ addressFirstError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ addressFirst: e.target.value, addressFirstError: false });
-                }
-            break
-            case 'addressSecondLine':
-                if (genericNotRequired.validate({ genericNotRequired: e.target.value }).error) {
-                    this.setState({ addressSecondError: 'Whoops, please check your answer.' })
-                } else {
-                    this.setState({ addressSecond: e.target.value });
-                }
-            break
-            case 'addressThirdLine':
-                if (genericNotRequired.validate({ genericNotRequired: e.target.value }).error) {
-                    this.setState({ addressThirdError: 'Whoops, please check your answer.' })
-                } else {
-                    this.setState({ addressThird: e.target.value });
-                }
-            break;
-            case 'city':
-                if (generic.validate({ generic: e.target.value }).error) {
-                    this.setState({ cityError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ city: e.target.value, cityError: false });
-                }
-            break;
-            case 'county':
-                if (generic.validate({ generic: e.target.value }).error) {
-                    this.setState({ countyError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ county: e.target.value, countyError: false });
-                }
-            break;
-            case 'postcode':
-                if (postcode.validate({ postcode: e.target.value }).error) {
-                    this.setState({ postcodeError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ postcode: e.target.value, postcodeError: false });
-                }
-            break;
-            case 'email':
-                if (email.validate({ email: e.target.value }).error) {
-                    this.setState({ emailError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ email: e.target.value, emailError: false });
-                }
-            break;
-            case 'phone':
-                if (phone.validate({ phone: e.target.value }).error) {
-                    this.setState({ phoneError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ phone: e.target.value, phoneError: false });
-                }
-            break;
+    async handleStripePayment() {
+        if (this.state.stripeComplete) {
+            loadingState();
+            const { token } = await this.props.stripe.createToken({ name: this.state.email });
+            const payload = {
+                ...this.state,
+                subTotal: this.props.subTotal,
+                stripeToken: token.id,
+                europeanCountries: this.props.europeanCountries,
+            }
+            const approveOrder = await handleOrder(payload, 'stripe');
+            if (approveOrder.status === 200) {
+                window.location='/#/done';
+            } else {
+				window.location='/#/sorry';
+			}
         }
     };
 
     render() {
-        const {
-            firstNameError,
-            lastNameError,
-            addressFirstError,
-            addressSecondError,
-            addressThirdError,
-            cityError,
-            countyError,
-            postcodeError,
-            emailError,
-            phoneError,
-            stripeComplete,
-            isLoading,
-        } = this.state;
-
+        const { stripeComplete } = this.state;
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
-        let allValid = false;
+        let formFilledIn = false;
+
         if (
-            firstNameError === false &&
-            lastNameError === false &&
-            addressFirstError === false &&
-            addressSecondError === false &&
-            addressThirdError === false &&
-            cityError === false &&
-            countyError === false &&
-            postcodeError === false &&
-            emailError === false &&
-            phoneError === false &&
-            !hasErrors
-        ) {
-            allValid = true;
+            this.state.firstName !== undefined &&
+            this.state.lastName !== undefined &&
+            this.state.email !== undefined &&
+            this.state.basket.length > 0 &&
+            this.state.addressFirstLine !== undefined &&
+            this.state.city !== undefined &&
+            this.state.county !== undefined &&
+            this.state.country.length > 0 &&
+            this.state.postcode !== undefined &&
+            this.state.phone !== undefined
+        ) formFilledIn = true;
+
+		const showBuyNowButton = this.state.paymentMethod === 'stripe' && formFilledIn && !hasErrors && stripeComplete;
+
+		const rednerShippingQuestions =
+			this.state.firstName !== undefined &&
+			this.state.firstName !== undefined &&
+			this.state.lastName !== undefined &&
+			this.state.lastName !== undefined &&
+			this.state.email !== undefined &&
+			this.state.email !== undefined &&
+            this.state.phone !== undefined
+
+		const renderPaymentQuestions = formFilledIn && !hasErrors;
+		let showFakeButton = true;
+	
+		if (this.state.paymentMethod === 'paypal' || this.state.stripeComplete) {
+			showFakeButton = false;
         }
 
-        const disableButton = (allValid && stripeComplete);
-
-        return [
-            isLoading && <div className="is-loading"><div /></div>,
+        return (
             <form onSubmit={(e) => {
                 e.preventDefault()
-                this.handleSubmit(e, allValid)
+                this.handleStripePayment()
                 document.getElementById('submitButton').setAttribute('disabled', 'disabled');
             }}>
-                <div class="input-side-by-side">
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="firstName"
-                                id="firstName"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                            />
-                            <label className='text-field--label' for='firstName'>First name</label>
-                        </div>
-                        {firstNameError && <p className="error-message">{firstNameError}</p>}
-                    </div>
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="lastName"
-                                id="lastName"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                            />
-                            <label className='text-field--label' for='lastName'>Last name</label>
-                        </div>
-                        {lastNameError && <p className="error-message">{lastNameError}</p>}
-                    </div>
-                </div>
-                <div class="input-side-by-side">
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="email"
-                                id="email"
-                                placeholder=' '
-                                type='email'
-                                onBlur={(e) => this.handleInput(e)}
-                                style={{ textTransform: 'none' }}
-                            />
-                            <label className='text-field--label' for='email'>Email</label>
-                        </div>
-                        {emailError && <p className="error-message">{emailError}</p>}
-                    </div>
-                    <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="phone"
-                            id="phone"
-                            placeholder=' '
-                            type='number'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='phone'>Phone number</label>
-                    </div>
-                    {phoneError && <p className="error-message">{phoneError}</p>}
-                </div>
-                </div>
 
-                <h3>Shipping address</h3>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="addressFirstLine"
-                            id="addressFirstLine"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='address'>Address first line</label>
-                    </div>
-                    {addressFirstError && <p className="error-message">{addressFirstError}</p>}
-                </div>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="addressSecondLine"
-                            id="addressSecondLine"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='address'>Address second line</label>
-                    </div>
-                    {addressSecondError && <p className="error-message">{addressSecondError}</p>}
-                </div>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="addressThirdLine"
-                            id="addressThirdLine"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='address'>Address third line</label>
-                    </div>
-                    {addressThirdError && <p className="error-message">{addressThirdError}</p>}
-                </div>
-                <div className='text-field--container'>
-                    <div className='text-field'>
-                        <input
-                            className='text-field--input'
-                            name="city"
-                            id="city"
-                            placeholder=' '
-                            type='text'
-                            onBlur={(e) => this.handleInput(e)}
-                        />
-                        <label className='text-field--label' for='city'>City</label>
-                    </div>
-                    {cityError && <p className="error-message">{cityError}</p>}
-                </div>
-                <div class="input-side-by-side">
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="county"
-                                id="county"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                            />
-                            <label className='text-field--label' for='county'>County</label>
-                        </div>
-                        {countyError && <p className="error-message">{countyError}</p>}
-                    </div>
-                    <div className='text-field--container'>
-                        <div className='text-field'>
-                            <input
-                                className='text-field--input'
-                                name="postcode"
-                                id="postcode"
-                                placeholder=' '
-                                type='text'
-                                onBlur={(e) => this.handleInput(e)}
-                                style={{ textTransform: 'uppercase' }}
-                            />
-                            <label className='text-field--label' for='postcode'>Postcode</label>
-                        </div>
-                        {postcodeError && <p className="error-message">{postcodeError}</p>}
-                    </div>
-                </div>
-
-                <h3 style={{ marginTop: '12px' }}>Payment details</h3>
-                <CardElement
-                    hidePostalCode
-                    onChange={(e) => this.setState({ stripeComplete: e.complete })}
+                <PersonalInfo
+                    onBlur={(e) => {
+                        const value = handleValidationMessage(e)
+                        const key = e.target.name;
+                        this.setState({ [key]: value })
+					}}
                 />
 
-                <button
-                    type="submit"
-                    className={`button ${!disableButton && 'disabled'}`}
-                    id='submitButton'
-                >
-                    pay now
-                </button>
-            </form>,
-        ];
+                <ShippingInfo
+                    onBlur={(e) => {
+                        const value = handleValidationMessage(e)
+                        const key = e.target.name;
+                        this.setState({ [key]: value });
+                    }}
+                    rednerShippingQuestions={rednerShippingQuestions}
+                    handleCountry={this.props.handleCountry}
+                />
+
+                {renderPaymentQuestions ?
+					<Fragment>
+						<h3 style={{ marginTop: '12px' }}>Payment details</h3>
+
+						<div className="payment-method-container">
+							<div
+								onClick={() => {
+									this.setState({ paymentMethod: 'stripe' })
+								}}
+								className="payment-method"
+								style={{ background: this.state.paymentMethod === 'stripe' && 'white' }}
+							>
+								<p>credit / debit card</p>
+							</div>
+							<div
+								onClick={() => {
+									formFilledIn = false
+									this.setState({
+										paymentMethod: 'paypal',
+									})}
+								}
+								className="payment-method"
+								style={{ background: this.state.paymentMethod === 'paypal' && 'white' }}
+							>
+								<p>paypal</p>
+							</div>
+						</div>
+
+						{this.state.paymentMethod === 'stripe' &&
+							<Fragment>
+								<CardElement
+									hidePostalCode
+									onChange={(e) => this.setState({ stripeComplete: e.complete})}
+								/>
+								{showBuyNowButton &&
+									<button
+										type="submit"
+										className={`button`}
+										id='submitButton'
+									>
+										pay now
+									</button>
+								}
+							</Fragment>
+						}
+
+						{this.state.paymentMethod === 'paypal' && 
+							<div id="paypal-button-container"></div>
+						}
+					</Fragment>
+					:
+					<div className="question-lock-up" style={{ marginTop: '24px' }}>
+						<h3>Payment details</h3>
+					</div>
+				}
+				{showFakeButton &&
+					<button className="button fake">pay now</button>
+				} 
+            </form>
+        );
     }
 }
 

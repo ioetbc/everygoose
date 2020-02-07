@@ -1,23 +1,45 @@
 .navigation {
     background: white;
-    margin-bottom: 40px;
-    padding: 40px 50px;
+    padding: 20px 0;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 2px 4px rgba(30, 13, 45, 0.05), 0 4px 48px rgba(30, 13, 45, 0.04);
 
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 1000px) {
+        width: auto;
         padding: 40px 100px;
+        margin-bottom: 40px;
+        position: relative;
+        box-shadow: none;
     }
 
     &.wide {
-        padding: 40px 20px;
-
-        @media screen and (min-width: 600px) {
-            padding: 40px 90px;
-        }
-
+        padding: 20px 0px;
+        width: 100%;
         @media screen and (min-width: 1000px) {
-            padding: 24px 0 0 0;
+            // padding: 40px 90px;
+            width: auto;
         }
+
+        // @media screen and (min-width: 1000px) {
+        //     padding: 24px 0 0 0;
+        // }
+
+        // .sticky {
+        //     position: relative;
+        //     margin: 0px 20px;
+        //     width: auto;
+        // }
     }
+    
+    // &.standard {
+    //     .sticky {
+    //         width: auto;
+    //         margin: 0px 50px;
+    //     }
+    // }
 
     &.shop {
         padding: 40px 20px;
@@ -26,7 +48,6 @@
             padding: 25px 0;
         }
     }
-
     @media screen and (min-width: 1000px) {
         margin: 0;
         padding: 25px 0;
@@ -35,10 +56,21 @@
 
     .sticky {
         position: relative;
+        width: 260px;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        @media screen and (min-width: 600px) {
+            width: 490px;
+            margin: 0 auto;
+        }
+
         @media screen and (min-width: 1000px) {
             position: sticky;
+            right: 0;
             top: 0;
             padding: 0;
+            width: auto;
         }
 
         .menu {
@@ -56,12 +88,9 @@
 
         .navigation-logo {
             margin: 0 auto;
-            width: 210px;
+            width: 180px;
             margin-left: -10px;
-
-            @media screen and (min-width: 768px) {
-                top: -3px;
-            }
+            margin-top: 4px;
         
             @media screen and (min-width: 1000px) {
                 position: relative;
@@ -86,7 +115,7 @@
                 display: none;
             }
 
-            &.hello {
+            &.show-mobile-menu {
                 display: block;
                 background: white;
                 border: 1px solid red;

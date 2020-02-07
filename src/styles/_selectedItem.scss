@@ -2,16 +2,18 @@
     width: 100%;
     background: white;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     border: $color-red solid 1px;
     border-radius: 8px;
     margin-bottom: 24px;
-    height: 130px;
-    padding: 0 10px;
     box-sizing: border-box;
     color: $color-red;
+    @media screen and (min-width: 600px) {
+        grid-template-columns: 3fr 1fr;
+    }
 
     @media screen and (min-width: 600px) {
+        height: 130px;
         grid-template-columns: 1.2fr 3fr 2fr;
         height: none;
         padding: 0;
@@ -20,18 +22,34 @@
     .item-image-wrapper {
         height: 100%;
         width: 110px;
-        overflow: hidden;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
-        display: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-right: 16px;
+
+        &.desktop {
+            display: none;
+        }
+
         @media screen and (min-width: 600px) {
-            display: block;
+            overflow: hidden;
+            &.mobile {
+                display: none;
+            }
+            &.desktop {
+                display: block;
+            }
         }
 
         .item-image {
+            height: 115px;
+            width: 155px;
             @media screen and (min-width: 600px) {
-                display: block; 
                 height: 100%;
+                width: auto;
                 position: relative;
                 left: -35px;
             }
@@ -40,15 +58,29 @@
 
     .item-content {
         display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: column;
+        margin-left: 16px;
         height: 100%;
 
+        @media screen and (min-width: 600px) {
+            justify-content: center;
+        }
+
         .item {
-            margin-left: 20px;
             .item-title {
                 margin-bottom: 8px;
-                max-width: 220px;
+                max-width: 90%;
+                font-size: 0.9rem;
+                line-height: 1.3rem;
+                margin: 16px 0;
+            }
+
+            @media screen and (min-width: 600px) {
+                margin-left: 20px;
+                .item-title {
+                    margin-bottom: 8px;
+                    max-width: 220px;
+                }
             }
         }
     }
@@ -56,18 +88,35 @@
     .item-remove {
         display: flex;
         align-items: center;
-        justify-content: center;
-        height: 100%;
+        @media screen and (min-width: 600px) {
+            justify-content: center;
+            height: 100%;
+        }
         .item-price {
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            margin: 0 20px;
+            margin-bottom: 16px;
+
+            @media screen and (min-width: 600px) {
+                align-items: center;
+                margin: 0 20px;
+            }
 
             .price {
                 font-size: 1.5rem;
+            }
+        }
+        &.desktop {
+            display: none;
+        }
+        @media screen and (min-width: 600px) {
+            &.desktop {
+                display: block;
+            }
+            &.mobile {
+                display: none;
             }
         }
     }

@@ -32,6 +32,13 @@ h4 {
 	line-height: 14px;
 }
 
+#error-county {
+	position: relative;
+    top: -40px;
+    margin-bottom: -16px;
+    grid-area: 2 / 2;
+}
+
 .header-title {
 	font-size: 3rem;
 	display: block;
@@ -82,7 +89,15 @@ h4 {
 }
 
 .text-small {
-	font-size: .8rem;
+	font-size: .6rem;
+	cursor: pointer;
+    line-height: 0;
+    padding: 8px 0 8px 14px;
+    border: $color-red 1px solid;
+    border-radius: 4px;
+	margin-top: 12px;
+	user-select: none;
+	width: 53px;
 }
 
 .product-title, .product-price {
@@ -104,4 +119,12 @@ h4 {
 
 .link {
 	text-decoration: none;
+}
+
+.title-option {
+	font-size: 10px;
+    font-weight: bolder;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: -8px;
 }

@@ -18,30 +18,9 @@
     <title>Every Goose</title>
   </head>
   <body>
+
     <div id="root"></div>
-    
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="/__/firebase/6.3.5/firebase-app.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-        https://firebase.google.com/docs/web/setup#reserved-urls -->
-
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        try {
-          let app = firebase.app();
-          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
     <script src="https://js.stripe.com/v3/"></script>
   </body>
 </html>

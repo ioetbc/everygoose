@@ -47,7 +47,7 @@ $text-field-width: 300px;
     position: absolute;
     width: calc(100% - 24px);
     line-height: 15px;
-    padding-top: 8px;
+    padding-top: 12px;
 
     &:hover {
       background: darken($color-input-background, 3%);
@@ -100,4 +100,32 @@ $text-field-width: 300px;
   .text-field--input:focus ~ .text-field--line--color {
     transform: scaleX(1);
   }
+}
+
+.select {
+  background: transparent;
+  border: none;
+  color: black;
+  padding: 6px 12px;
+  font-size: 12px;
+  height: 45px;
+  width: 100px;
+  border: 1px $color-red solid;
+  margin-bottom: 24px;
+}
+
+.question-lock-up {
+	width: 100%;
+	border: $color-dull-as-fuck 1px solid;
+	height: 70px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+
+	h3 {
+		margin: 0;
+		padding-left: 24px;
+		color: $color-dull-as-fuck;
+		user-select: none;
+	}
 }

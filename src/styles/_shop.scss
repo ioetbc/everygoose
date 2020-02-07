@@ -31,6 +31,12 @@
                 background: #FCE4D4;
             }
 
+            &.placeholder {
+                &:hover {
+                    background: none;
+                }
+            }
+
             .shop-images {
                 margin-bottom: 14px;
                 width: 440px;

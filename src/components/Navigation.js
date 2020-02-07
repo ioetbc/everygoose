@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { uniq } from 'lodash';
 import { Link } from 'react-router-dom';
 
-import Logo from '../images/misc/logo-animated.gif';
+import Logo from '../images/misc/logo.svg';
 import Hamburger from '../images/misc/hamburger.svg';
 import getBasket from './utils/getBasket';
 

@@ -2,9 +2,15 @@ const createCustomer = async (data, db) => {
     const timeStamp = Date(Date.now()); 
     const formatTimeStamp = timeStamp.toString();
     const items = data.basket.map(a => {
-        return `${a.quantity} x ${a.product_type} ${a.title}`;
+        const productObject = {
+            title: a.title,
+            product_type: a.product_type,
+            quantity: a.quantity
+
+        }
+        return productObject;
     });
-    
+
     console.log('the data i the create customer function', data)
 
     const payload = {

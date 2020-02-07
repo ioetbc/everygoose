@@ -82,7 +82,7 @@ class ProductDetails extends Component {
                         <select
                             onChange={(e) => this.updatePrint({ key: 'framed', value: e.target.value })}
                             className="quantity-select"
-                            style={{ marginLeft: 0 }}
+                            style={{ marginLeft: 0, marginBottom: '16px'  }}
                         >
                             <option value={false}>standard</option>
                             <option value={true} selected={updatedPrint.framed === 'true'}>framed</option>

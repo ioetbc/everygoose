@@ -72,7 +72,7 @@ class App extends Component {
 
 		const cardTypes = [];
 
-		const allProducts = doc.data.products.concat(doc.data.prints);
+		const allProducts = doc.data.products.concat(doc.data.prints).reverse();
 
 		allProducts.forEach(item => {
 			this.state.products.push({

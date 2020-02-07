@@ -19,9 +19,15 @@ class ProductDetails extends Component {
 
         if (key === 'framed') {
             product.framed = value
-
-        } else if (key === 'size') {
+        } 
+        
+        if (key === 'size') {
             product.size = value
+            if (value === 'a3') {
+                product.product_dimensions = product.product_dimensions_a3
+            } else if (value === 'a4') {
+                product.product_dimensions = product.product_dimensions_a4
+            }
         }
 
         if (product.size === 'a4' && product.framed === 'false') {
@@ -53,25 +59,13 @@ class ProductDetails extends Component {
             }
         });
 
-        console.log('the updated basket haha', basket);
-
         localStorage.setItem('session', JSON.stringify(basket));
-
-        console.log('after updating the product', product)
     }
 
     render() {
         const { product, addToBasket } = this.props;
         const { updatedPrint } = this.state;
-
-        const basket = getBasket();
-
-        // console.log(11111, basket)
-
-        let updatedProduct = product;
-
         console.log(222, this.state.updatedPrint);
-
 
         return (
             <div className="product-details-container">
@@ -82,7 +76,7 @@ class ProductDetails extends Component {
                         <select
                             onChange={(e) => this.updatePrint({ key: 'framed', value: e.target.value })}
                             className="quantity-select"
-                            style={{ marginLeft: 0, marginBottom: '16px'  }}
+                            style={{ marginLeft: 0, marginBottom: '12px'  }}
                         >
                             <option value={false}>standard</option>
                             <option value={true} selected={updatedPrint.framed === 'true'}>framed</option>

@@ -90,6 +90,10 @@ class App extends Component {
 				type: item.type_of_card,
 				product_type: item.product_type,
 				product_dimensions: item.product_dimensions,
+				product_dimensions_a3: item.product_dimensions_a3,
+				product_dimensions_a4: item.product_dimensions,
+				a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
+				a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
 				size: 'a4',
 				framed: 'false'
 			});

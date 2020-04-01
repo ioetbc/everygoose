@@ -45,24 +45,27 @@ class Navigation extends Component {
                         <div className="hide-shop-mobile">
                             <Link to={{ pathname: "/" }}><h4>shop</h4></Link>
                             {shop &&
-                                <div className="category-wrapper" style={{ maxHeight: !!showMoreCategories ? categoryWrapperHeight : '220px' }}>
-                                    <ul>
-                                        {uniqueCategories.map((navItem, index) =>
-                                            <li key={index} onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
-                                        )}
-                                    </ul>
-                                </div>
+                                <React.Fragment>
+                                    <div className="category-wrapper" style={{ maxHeight: !!showMoreCategories ? categoryWrapperHeight : '220px' }}>
+                                        <ul>
+                                            {uniqueCategories.map((navItem, index) =>
+                                                <li key={index} onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                    <button
+                                        onClick={() => this.setState({ showMoreCategories: !this.state.showMoreCategories })}                 className="show-more-categories"
+                                    >
+                                        <p>{showMoreCategories ? 'SHOW LESS' : 'SHOW MORE'}</p>
+                                        <img
+                                            className="chevron"
+                                            src={Chevron}
+                                            style={{ transform: showMoreCategories ? '' : 'scale(-1)', marginTop: showMoreCategories ? '' : '-5px' }}
+                                        />
+                                    </button>
+                                </React.Fragment>
+
                             }
-                            <button
-                                onClick={() => this.setState({ showMoreCategories: !this.state.showMoreCategories })}                 className="show-more-categories"
-                            >
-                                <p>{showMoreCategories ? 'SHOW LESS' : 'SHOW MORE'}</p>
-                                <img
-                                    className="chevron"
-                                    src={Chevron}
-                                    style={{ transform: showMoreCategories ? '' : 'scale(-1)', marginTop: showMoreCategories ? '' : '-5px' }}
-                                />
-                            </button>
                         </div>
                         <Link to={{ pathname: "/about" }}><h4>about</h4></Link>
                         <Link to={{ pathname: "/trade" }}><h4>trade</h4></Link>

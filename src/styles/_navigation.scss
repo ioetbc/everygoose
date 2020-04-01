@@ -115,6 +115,24 @@
                 display: none;
             }
 
+            .category-wrapper {
+                overflow: hidden;
+            }
+
+            .show-more-categories {
+                display: flex;
+                align-items: center;
+                margin: 12px 0 24px 0px;
+                padding: 0;
+                cursor: pointer;
+                padding-bottom: 4px;
+
+                .chevron {
+                    width: 12px;
+                    margin-left: 12px;
+                }
+            }
+
             &.show-mobile-menu {
                 display: block;
                 background: white;

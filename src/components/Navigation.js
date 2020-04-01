@@ -4,18 +4,30 @@ import { Link } from 'react-router-dom';
 
 import Logo from '../images/misc/logo.svg';
 import Hamburger from '../images/misc/hamburger.svg';
+import Chevron from '../images/misc/chevron.svg'
+
 import getBasket from './utils/getBasket';
 
 class Navigation extends Component {
-    constructor() {
-        super()
-        this.state = { showMobileMenu: false }
+    constructor(props) {
+        super(props);
+        this.state = { showMobileMenu: false, showMoreCategories: false }
     }
 
     render() {
         const { navigationItems, handleNavigationFilter, shop, classModifier } = this.props;
+        const { showMoreCategories } = this.state;
         navigationItems.unshift('all');
         const basket = getBasket();
+        const uniqueCategories = uniq(navigationItems);
+
+        const flipChevron = showMoreCategories ? '' : `transform: scale(-1), marginTop: '-5px;'`
+
+        console.log('uniqueCategories.lenght', uniqueCategories.length);
+
+        const categoryWrapperHeight = uniqueCategories.length * 45;
+
+        console.log('categoryWrapperHeight', categoryWrapperHeight)
 
         return (
             <div className={`navigation ${classModifier}`}>
@@ -33,12 +45,24 @@ class Navigation extends Component {
                         <div className="hide-shop-mobile">
                             <Link to={{ pathname: "/" }}><h4>shop</h4></Link>
                             {shop &&
-                                <ul>
-                                    {uniq(navigationItems).map((navItem, index) =>
-                                        <li key={index} onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
-                                    )}
-                                </ul>
+                                <div className="category-wrapper" style={{ maxHeight: !!showMoreCategories ? categoryWrapperHeight : '220px' }}>
+                                    <ul>
+                                        {uniqueCategories.map((navItem, index) =>
+                                            <li key={index} onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
+                                        )}
+                                    </ul>
+                                </div>
                             }
+                            <button
+                                onClick={() => this.setState({ showMoreCategories: !this.state.showMoreCategories })}                 className="show-more-categories"
+                            >
+                                <p>{showMoreCategories ? 'SHOW LESS' : 'SHOW MORE'}</p>
+                                <img
+                                    className="chevron"
+                                    src={Chevron}
+                                    style={{ transform: showMoreCategories ? '' : 'scale(-1)', marginTop: showMoreCategories ? '' : '-5px' }}
+                                />
+                            </button>
                         </div>
                         <Link to={{ pathname: "/about" }}><h4>about</h4></Link>
                         <Link to={{ pathname: "/trade" }}><h4>trade</h4></Link>

@@ -65,7 +65,6 @@ class ProductDetails extends Component {
     render() {
         const { product, addToBasket } = this.props;
         const { updatedPrint } = this.state;
-        console.log(222, this.state.updatedPrint);
 
         return (
             <div className="product-details-container">

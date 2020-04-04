@@ -17,17 +17,8 @@ class Navigation extends Component {
     render() {
         const { navigationItems, handleNavigationFilter, shop, classModifier } = this.props;
         const { showMoreCategories } = this.state;
-        navigationItems.unshift('all');
         const basket = getBasket();
-        const uniqueCategories = uniq(navigationItems);
-
-        const flipChevron = showMoreCategories ? '' : `transform: scale(-1), marginTop: '-5px;'`
-
-        console.log('uniqueCategories.lenght', uniqueCategories.length);
-
-        const categoryWrapperHeight = uniqueCategories.length * 45;
-
-        console.log('categoryWrapperHeight', categoryWrapperHeight)
+        const categoryWrapperHeight = navigationItems.length * 45;
 
         return (
             <div className={`navigation ${classModifier}`}>
@@ -48,7 +39,7 @@ class Navigation extends Component {
                                 <React.Fragment>
                                     <div className="category-wrapper" style={{ maxHeight: !!showMoreCategories ? categoryWrapperHeight : '220px' }}>
                                         <ul>
-                                            {uniqueCategories.map((navItem, index) =>
+                                            {navigationItems.map((navItem, index) =>
                                                 <li key={index} onClick={() => handleNavigationFilter(navItem)}>{navItem}</li>
                                             )}
                                         </ul>
@@ -64,7 +55,6 @@ class Navigation extends Component {
                                         />
                                     </button>
                                 </React.Fragment>
-
                             }
                         </div>
                         <Link to={{ pathname: "/about" }}><h4>about</h4></Link>

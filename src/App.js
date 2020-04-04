@@ -1,15 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import Prismic from 'prismic-javascript';
-import { find, get } from 'lodash';
+import { uniq, get } from 'lodash';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Link,
   HashRouter
 } from 'react-router-dom';
 
-import history from './components/utils/history';
+import updateBasket from './components/utils/updateBasket';
+import getBasket from './components/utils/getBasket';
+import fadeInSections from './components/utils/fadeInSections';
+import chunkProducts from './components/utils/chunkProducts';
+
 import Page from './pages/Page';
 import Product from './pages/Product';
 import Checkout from './pages/Checkout'
@@ -24,13 +27,11 @@ import Delivery from './pages/Delivery';
 import NotFound from './pages/NotFound';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer'
-import './App.scss';
 import Header from './components/Header';
 import FloatingButton from './components/utils/floatingBasket';
 import BackButton from './components/utils/BackButton'
 
-import updateBasket from './components/utils/updateBasket';
-import getBasket from './components/utils/getBasket';
+import './App.scss';
 
 class App extends Component {
 	constructor(props) {
@@ -41,12 +42,18 @@ class App extends Component {
 			products: [],
 			doc: null,
 			filtered: false,
+			page: 0,
 		}
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
+		this.fetchPage = this.fetchPage.bind(this);
 
 		if (this.props.prismicCtx) {
 			this.fetchPage(props);
 		}
+	}
+
+	componentDidMount() {
+		fadeInSections(this.fetchPage);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -67,41 +74,45 @@ class App extends Component {
 	}
 
 	async fetchPage() {
+		const { cardTypes, page } = this.state;
+
+		this.setState({ page: page + 1 })
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XVxFfREAACEAlCKe');
 
-		const cardTypes = [];
-
 		const allProducts = doc.data.products.concat(doc.data.prints).reverse();
+		const pages = chunkProducts(allProducts, 20);
 
-		allProducts.forEach(item => {
-			this.state.products.push({
-				title: item.product_title[0].text,
-				price: get(item, 'product_price', 0).toFixed(2),
-				a4_price: get(item, 'product_price', 0).toFixed(2),
-				a3_price: get(item, 'a3_price', 0).toFixed(2),
-				a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
-				a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
-				image_1_url: item.image_1.url,
-				image_2_url: item.image_2.url,
-				image_3_url: item.image_3.url,
-				quantity: 1,
-				description: item.product_description[0].text,
-				type: item.type_of_card,
-				product_type: item.product_type,
-				product_dimensions: item.product_dimensions,
-				product_dimensions_a3: item.product_dimensions_a3,
-				product_dimensions_a4: item.product_dimensions,
-				a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
-				a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
-				size: 'a4',
-				framed: 'false'
-			});
-			
-			cardTypes.push(item.type_of_card);
+		this.state.page < pages.length &&
+			pages[this.state.page].forEach(item => {
+				this.state.products.push({
+					title: item.product_title[0].text,
+					price: get(item, 'product_price', 0).toFixed(2),
+					a4_price: get(item, 'product_price', 0).toFixed(2),
+					a3_price: get(item, 'a3_price', 0).toFixed(2),
+					a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
+					a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
+					image_1_url: item.image_1.url,
+					image_2_url: item.image_2.url,
+					image_3_url: item.image_3.url,
+					quantity: 1,
+					description: item.product_description[0].text,
+					type: item.type_of_card,
+					product_type: item.product_type,
+					product_dimensions: item.product_dimensions,
+					product_dimensions_a3: item.product_dimensions_a3,
+					product_dimensions_a4: item.product_dimensions,
+					size: 'a4',
+					framed: 'false'
+				});
 		});
 
-		this.setState({ cardTypes, doc });
+		allProducts.forEach(item => {
+			cardTypes.push(item.type_of_card);
+			cardTypes.unshift('all');
+		});
+
+		this.setState({ cardTypes: uniq(cardTypes), doc });
 	}
 	
 	render() {
@@ -392,7 +403,7 @@ class App extends Component {
 					</Switch>
 				</HashRouter>
 			</div>
-				<Router>
+			<Router>
 				<Route>
 					<Footer />			
 				</Route>

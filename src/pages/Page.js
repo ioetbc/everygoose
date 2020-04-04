@@ -11,27 +11,20 @@ const Page = ({ doc, products }) => {
 				<div className="shop">
 					<div className="shop-gallery">
 						{doc ? 
-							products.map((item, index) => {
-								return (		
-									<div key={index} className="shop-items" >
-										<Link className="link" to={{ pathname: "/product", state: { item } }}>
-											<img src={item.image_1_url} className="shop-images"></img>
-											<p className="product-title">{item.title}</p>
-											<p className="product-price">£{item.price}</p>
-										</Link>
-									</div>
-								);
-							}) :
-							[1,2,3,4,5,6].map(index => {
-								return (
-									<div key={index} className="shop-items placeholder" >
-										<div className="palceholder-shop-image"></div>
-										<div className="placeholder-shop-title"></div>
-										<div className="placeholder-shop-price"></div>
-									</div>
-								);
-							})
-						}
+							products.map((item, index) => <div key={index} className="shop-items" >
+									<Link className="link" to={{ pathname: "/product", state: { item } }}>
+										<img src={item.image_1_url} className="shop-images"></img>
+										<p className="product-title">{item.title}</p>
+										<p className="product-price">£{item.price}</p>
+									</Link>
+								</div>
+							)
+ 						: [1,2,3,4,5,6].map(() => <div className="shop-items placeholder">
+							<div className="palceholder-shop-image"></div>
+							<div className="placeholder-shop-title"></div>
+							<div className="placeholder-shop-price"></div>
+						</div>
+						)}
 					</div>
 				</div>
 			</main>

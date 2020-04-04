@@ -1,11 +1,9 @@
 import React from 'react';
-import { uniq } from 'lodash';
 import { Link } from 'react-router-dom';
 import Basket from '../images/icons/icon-basket.svg';
 import getBasket from './utils/getBasket';
 
 export default function Header({ title, shop, navigationItems, handleNavigationFilter }) {
-    navigationItems && navigationItems.unshift('all');
     const basket = getBasket();
 
     return (
@@ -14,7 +12,7 @@ export default function Header({ title, shop, navigationItems, handleNavigationF
             {shop && 
                 <div className="mobile-filter item-quantity">
                     <select className="quantity-select" style={{ marginLeft: 0 }} onChange={(e) => handleNavigationFilter(e.target.value)}>
-                        {uniq(navigationItems).map((navItem, index) => {
+                        {navigationItems.map((navItem, index) => {
                             return <option key={index} value={navItem}>{navItem}</option>
                         })}
                     </select>

@@ -109,8 +109,9 @@ class App extends Component {
 
 		allProducts.forEach(item => {
 			cardTypes.push(item.type_of_card);
-			cardTypes.unshift('all');
 		});
+
+		cardTypes.unshift('all');
 
 		this.setState({ cardTypes: uniq(cardTypes), doc });
 	}

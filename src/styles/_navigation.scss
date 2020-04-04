@@ -9,8 +9,9 @@
 
     @media screen and (min-width: 1000px) {
         width: auto;
-        padding: 40px 100px;
-        margin-bottom: 40px;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 0;
         position: relative;
         box-shadow: none;
     }
@@ -19,27 +20,9 @@
         padding: 20px 0px;
         width: 100%;
         @media screen and (min-width: 1000px) {
-            // padding: 40px 90px;
             width: auto;
         }
-
-        // @media screen and (min-width: 1000px) {
-        //     padding: 24px 0 0 0;
-        // }
-
-        // .sticky {
-        //     position: relative;
-        //     margin: 0px 20px;
-        //     width: auto;
-        // }
     }
-    
-    // &.standard {
-    //     .sticky {
-    //         width: auto;
-    //         margin: 0px 50px;
-    //     }
-    // }
 
     &.shop {
         padding: 40px 20px;
@@ -47,11 +30,6 @@
         @media screen and (min-width: 1000px) {
             padding: 25px 0;
         }
-    }
-    @media screen and (min-width: 1000px) {
-        margin: 0;
-        padding: 25px 0;
-        margin-bottom: 0;
     }
 
     .sticky {
@@ -71,6 +49,7 @@
             top: 0;
             padding: 0;
             width: auto;
+            height: 100vh;
         }
 
         .menu {
@@ -228,9 +207,8 @@
     @media screen and (min-width: 1000px) {
         .social-items {
             display: flex;
-            position: sticky;
-            top: 710px; 
-            justify-content: end;
+            position: absolute;
+            bottom: 24px;
             padding-left: 30px;
 
             .social-link {

@@ -64,8 +64,7 @@ class Navigation extends Component {
                             <h4 className="hide-desktop">basket ({basket.length > 0 && basket.length})</h4>
                         </Link>
                     </nav>
-                </div>
-                <div className="social-items">
+                    <div className="social-items">
                     <div
                         onClick={() => window.open('http://www.instagram.com/everygoose/', '_blank')}
                         className="social-link"
@@ -84,6 +83,7 @@ class Navigation extends Component {
                     >
                     </div>
 
+                </div>
                 </div>
             </div>
         )

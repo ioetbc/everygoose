@@ -1,9 +1,10 @@
 import React from 'react';
 
-const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
+const SelectedItem = ({ basket, updateQuantity, removeItem }) => {
+    console.log('basket in selectrd item', basket)
     return (
         <div>
-            {READONLYBASKET.map((item, index) =>
+            {basket.map((item, index) =>
                 <div key={index} className="selected-item">
                     <div className="item-image-wrapper desktop">
                         <img src={item.image_1_url} className="item-image" />
@@ -14,7 +15,7 @@ const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
                             <div className="item-quantity">
                                 <select
                                     className="quantity-select"
-                                    onChange={(e) => updateCheckout(e, item, 'quantity')}
+                                    onChange={(e) => updateQuantity(e, item, basket)}
                                     defaultValue={item.quantity}
                                 >
                                     <option value={1}>1</option>
@@ -27,7 +28,13 @@ const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
                             <div className="item-remove mobile">
                                 <div className="item-price">
                                     <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
-                                    <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={(e) => updateCheckout(e, item, 'remove')}>Remove</p>
+                                    <p
+                                        className="remove text-small"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => removeItem({ item, basket })}
+                                    >
+                                        Remove
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +45,13 @@ const SelectedItem = ({ READONLYBASKET, updateCheckout }) => {
                     <div className="item-remove desktop">
                             <div className="item-price">
                                 <p className="price">£{(item.price * item.quantity).toFixed(2)}</p>
-                                <p className="remove text-small" style={{ cursor: 'pointer' }} onClick={(e) => updateCheckout(e, item, 'remove')}>Remove</p>
+                                <p
+                                    className="remove text-small"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => removeItem({ item, basket })}
+                                >
+                                    Remove
+                                </p>
                             </div>
                         </div>
                 </div>

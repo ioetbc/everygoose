@@ -3,7 +3,7 @@ const sendgrid = require('@sendgrid/mail');
 const sendgridSecret = functions.config().sendgrid.secret_key;
 sendgrid.setApiKey(sendgridSecret);
 
-const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4, customerId) => {
+const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4, customerId, productCodes) => {
     const {
         firstName,
         lastName,
@@ -20,11 +20,13 @@ const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4, cu
         theyOrIt,
         phoneNumber,
         basket,
-        paymentMethod
+        paymentMethod,
     } = data;
 
+    console.log(';productCodes', productCodes)
+
     const quantity = basket.reduce((a, item) => parseInt(item.quantity, 10) + a, 0);
-    const breakdownMapped = breakdown.map(u => `${u.quantity} x ${u.title}`)
+    const breakdownMapped = breakdown.map(u => `${u.quantity} x ${u.title}`);
     let communication;
 
     if (event === 'customer') {
@@ -71,6 +73,7 @@ const sendEmail = async (event, data, subtotal, total, deliveryCharge, last4, cu
                 phone: phoneNumber,
                 cardTitle: breakdownMapped,
                 paymentMethod,
+                productCodes,
             }
         }
     }

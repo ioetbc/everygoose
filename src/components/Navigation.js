@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { uniq } from 'lodash';
 import { Link } from 'react-router-dom';
 
-import Logo from '../images/misc/logo.svg';
+import Logo from '../images/misc/logo-animated.gif';
 import Hamburger from '../images/misc/hamburger.svg';
 import Chevron from '../images/misc/chevron.svg'
 
@@ -45,7 +44,8 @@ class Navigation extends Component {
                                         </ul>
                                     </div>
                                     <button
-                                        onClick={() => this.setState({ showMoreCategories: !this.state.showMoreCategories })}                 className="show-more-categories"
+                                        onClick={() => this.setState({ showMoreCategories: !this.state.showMoreCategories })}
+                                        className="show-more-categories"
                                     >
                                         <p>{showMoreCategories ? 'SHOW LESS' : 'SHOW MORE'}</p>
                                         <img

@@ -1,9 +1,4 @@
 .header {
-    @media screen and (min-width: 1000px) {
-        display: flex;
-        justify-content: space-between;
-    }
-
     .mobile-filter {
         margin-top: 30px;
         @media screen and (min-width: 1000px) {
@@ -13,12 +8,12 @@
 }
 .basket-wrapper {
     display: none;
-    color: $color-charcoal;
-    width: 44px;
-    position: relative;
     @media screen and (min-width: 1000px) {
-        display: inline-block;
+        display: block;
+        color: $color-charcoal;
+        width: 44px;
         position: relative;
+        float: right;
     }
 
     &.mobile {

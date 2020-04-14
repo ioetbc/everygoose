@@ -42,27 +42,16 @@ exports.payment = functions.https.onRequest(async (req, res) => {
     if (quotaExceeded) return res.send('Too many requests', 500);
 
     cors(req, res, async () => {
-        console.log('req', req);
-        console.log('ip maybe', req.headers["x-forwarded-for"]);
-        console.log('before fun', req.body)
         const validationSuccess = validateForm(req.body);
-        console.log('validationSuccess', validationSuccess);
-        console.log('req.body.basket.length', req.body.basket.length);
-        console.log('req.body.basket.length > 0', req.body.basket.length > 0);
 
 
         if (validationSuccess && req.body.basket.length > 0 ) {
             try {
-                const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID } = req.body;
+                const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID, productCodes } = req.body;
 
                 const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
                 const deliveryCharge = getDeliveryCharge(country, europeanCountries, basket, total);
                 const customerId = uuid();
-                console.log('country', country)
-                console.log('europeanCountries', europeanCountries)
-                console.log('basket', basket)
-                console.log('total', total)
-                console.log('delivery charge backend', deliveryCharge);
 
                 const subtotal = (total + deliveryCharge).toFixed(2);
 
@@ -99,9 +88,9 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
                 await updateCustomer(db, customerId);
 
-                await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4, customerId);
+                await sendEmail('imogen', req.body, subtotal, total, deliveryCharge, customerId, null, productCodes);
 
-                await sendEmail('imogen', req.body, subtotal, total, deliveryCharge, customerId);
+                await sendEmail('customer', req.body, subtotal, total, deliveryCharge, last4, customerId, productCodes);
 
                 return res.send(200);
 

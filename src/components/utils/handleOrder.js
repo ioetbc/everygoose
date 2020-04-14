@@ -1,6 +1,6 @@
 import axios from 'axios';
 import estimatedDelivery from './EstimatedDelivery';
-import updateBasket from './updateBasket';
+import { BasketHandler } from './updateBasketV2';
 import uuid from 'uuid/v4';
 
 const handleOrder = async (payload, paymentMethod) => {
@@ -47,6 +47,7 @@ const handleOrder = async (payload, paymentMethod) => {
         theyOrIt,
         breakdown: emailQuantityAndTitle,
         estimatedDelivery: estimatedDelivery(),
+        productCodes: basket.map(i => i.product_code),
     }
 
     if (paymentMethod === 'paypal') {
@@ -72,7 +73,9 @@ const handleOrder = async (payload, paymentMethod) => {
         data,
     })
     .then((res) => {
-        updateBasket(null, false, false, true)
+        const basketHandler = new BasketHandler({});
+        basketHandler.blat();
+
         console.log('the ritzy', res);
         return res;
     })

@@ -13,48 +13,49 @@ class PayForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // stripeComplete: false,
-            // firstName: 'wiil',
-            // lastName: 'sqsq',
-            // email: 'ioetbc@gmail.com',
-            // basket: this.props.basket,
-            // addressFirstLine: 'grgrgrgrgr',
-            // addressSecondLine: '',
-            // addressThirdLine: '',
-            // city: 'winchester',
-            // county: 'fefef',
-            // country: ['Spain'],
-            // postcode: 'so238ba',
-            // phone: '07493774943',     
-            // isLoading: false,
-            // paymentMethod: 'stripe',
             stripeComplete: false,
-            firstName: undefined,
-            lastName: undefined,
-            email: undefined,
+            firstName: 'wiil',
+            lastName: 'sqsq',
+            email: 'ioetbc@gmail.com',
             basket: this.props.basket,
-            addressFirstLine: undefined,
-            addressSecondLine: undefined,
-            addressThirdLine: undefined,
-            city: undefined,
-            county: undefined,
-            country: [],
-            postcode: undefined,
-            phone: undefined,     
+            addressFirstLine: 'grgrgrgrgr',
+            addressSecondLine: '',
+            addressThirdLine: '',
+            city: 'winchester',
+            county: 'fefef',
+            country: ['Spain'],
+            postcode: 'so238ba',
+            phone: '07493774943',     
             isLoading: false,
-            paymentMethod: undefined,
+            paymentMethod: 'stripe',
+            // stripeComplete: false,
+            // firstName: undefined,
+            // lastName: undefined,
+            // email: undefined,
+            // basket: this.props.basket,
+            // addressFirstLine: undefined,
+            // addressSecondLine: undefined,
+            // addressThirdLine: undefined,
+            // city: undefined,
+            // county: undefined,
+            // country: [],
+            // postcode: undefined,
+            // phone: undefined,     
+            // isLoading: false,
+            // paymentMethod: undefined,
+            // product_code: ''
         }
 		this.handleStripePayment = this.handleStripePayment.bind(this);
     }
 
     componentDidUpdate(undefined, prevState) {
         if (prevState.paymentMethod !== this.state.paymentMethod) {
-            const data = {
+            const payload = {
                 ...this.state,
                 subTotal: this.props.subTotal,
                 europeanCountries: this.props.europeanCountries,
             }
-            capturePaypalPayment(data);
+            capturePaypalPayment(payload);
         }
     };
 
@@ -78,6 +79,7 @@ class PayForm extends Component {
                 stripeToken: token.id,
                 europeanCountries: this.props.europeanCountries,
             }
+
             const approveOrder = await handleOrder(payload, 'stripe');
             if (approveOrder.status === 200) {
                 window.location='/#/done';

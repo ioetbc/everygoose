@@ -6,10 +6,10 @@ class SlideShow extends Component {
         return (
             <div className="slide-container">
                 <Carousel
-                    showIndicators={false}
-                    showStatus={false}
-                    showArrows={false}
-                    autoPlay={true}
+                    // showIndicators={false}
+                    // showStatus={false}
+                    // showArrows={false}
+                    // autoPlay={true}
                 >
                     {this.props.slideshowImages.map((item, index) => 
                         <img

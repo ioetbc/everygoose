@@ -1,6 +1,7 @@
 
 import { get, includes } from 'lodash';
 
+//  UPDATE FROM PRODUCT PAGE
 const updateBasket = (item, update = false, remove = false, blat = false) => {
     let basket = JSON.parse(localStorage.getItem('session')) || [];
 

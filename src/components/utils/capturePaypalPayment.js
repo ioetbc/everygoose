@@ -1,9 +1,8 @@
-import React from 'react';
 import handleOrder from './handleOrder';
 import loadingState from './LoadingState';
 
-const capturePaypalPayment = (details) => {
-    console.log('details m8', details)
+const capturePaypalPayment = (payload) => {
+    console.log('payload m8', payload)
     window.paypal.Buttons({
         createOrder: (data, actions) => {
             return actions.order.create({
@@ -11,7 +10,7 @@ const capturePaypalPayment = (details) => {
 					{
 						amount: {
 							currency_code: 'GBP',
-							value: details.subTotal,
+							value: payload.subTotal,
 						},
 					},
 				],
@@ -19,21 +18,22 @@ const capturePaypalPayment = (details) => {
         },
         onApprove: async (data, actions) => {
             const payload = {
-                firstName: details.firstName,
-                lastName: details.lastName,
-                email: details.email,
-                addressFirstLine: details.addressFirstLine,
-                addressSecondLine: details.addressSecondLine,
-                addressThirdLine: details.addressThirdLine,
-                city: details.city,
-                county: details.county,
-                country: details.country,
-                postcode: details.postcode,
-                phone: details.phone,
+                firstName: payload.firstName,
+                lastName: payload.lastName,
+                email: payload.email,
+                addressFirstLine: payload.addressFirstLine,
+                addressSecondLine: payload.addressSecondLine,
+                addressThirdLine: payload.addressThirdLine,
+                city: payload.city,
+                county: payload.county,
+                country: payload.country,
+                postcode: payload.postcode,
+                phone: payload.phone,
                 paymentMethod: 'stripe',
-                subTotal: details.subTotal,
+                subTotal: payload.subTotal,
                 orderID: data.orderID,
-                europeanCountries: details.europeanCountries,
+                europeanCountries: payload.europeanCountries,
+                product_code: payload.product_code
             }
 
             loadingState();

@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 
 import updateBasket from './components/utils/updateBasket';
+import { BasketHandler } from './components/utils/updateBasketV2';
 import getBasket from './components/utils/getBasket';
 import fadeInSections from './components/utils/fadeInSections';
 import chunkProducts from './components/utils/chunkProducts';
@@ -43,6 +44,7 @@ class App extends Component {
 			doc: null,
 			filtered: false,
 			page: 0,
+			pages: []
 		}
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 		this.fetchPage = this.fetchPage.bind(this);
@@ -80,7 +82,8 @@ class App extends Component {
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XVxFfREAACEAlCKe');
 
-		const allProducts = doc.data.products.concat(doc.data.prints).reverse();
+		const omitedData = doc.data.products.filter(p => !p.hide_product);
+		const allProducts = omitedData.concat(doc.data.prints).reverse();
 		const pages = chunkProducts(allProducts, 20);
 
 		this.state.page < pages.length &&
@@ -93,8 +96,6 @@ class App extends Component {
 					a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
 					a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
 					image_1_url: item.image_1.url,
-					image_2_url: item.image_2.url,
-					image_3_url: item.image_3.url,
 					quantity: 1,
 					description: item.product_description[0].text,
 					type: item.type_of_card,
@@ -102,8 +103,13 @@ class App extends Component {
 					product_dimensions: item.product_dimensions,
 					product_dimensions_a3: item.product_dimensions_a3,
 					product_dimensions_a4: item.product_dimensions,
+					card_dimensions: {
+						width: item.product_width,
+						height: item.product_height
+					},
 					size: 'a4',
-					framed: 'false'
+					framed: 'false',
+					product_code: item.product_code,
 				});
 		});
 
@@ -119,6 +125,8 @@ class App extends Component {
 	render() {
 		const { cardTypes, doc, products, filteredProducts } = this.state;
 		const basket = getBasket();
+
+		console.log({products})
 
 		return (
 			<Fragment>
@@ -165,15 +173,13 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
 									<Product
 										{...routeProps}
 										prismicCtx={this.props.prismicCtx}
-										addToBasket={updateBasket}
-										basket={basket}
 									/>
 									<FloatingButton />
 								</div>
@@ -194,7 +200,7 @@ class App extends Component {
 										title='Checkout'
 									/>
 									<BackButton
-										title="product page"
+										title="continue shopping"
 										link="/#/product"
 									/>
 									<Checkout
@@ -240,7 +246,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
@@ -263,7 +269,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
@@ -284,7 +290,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
@@ -305,7 +311,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
@@ -326,7 +332,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
@@ -349,7 +355,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
@@ -370,7 +376,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 
@@ -391,7 +397,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="homepage"
+										title="shop"
 										link="/#/"
 									/>
 

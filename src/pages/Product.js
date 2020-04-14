@@ -4,8 +4,14 @@ import ScrollToTop from '../components/utils/ScrollTop';
 import SlideShow from '../components/SlideShow';
 import ProductDetails from '../components/ProductDetails';
 import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 
-const Product = ({ location, addToBasket, basket }) => {
+import PortraitInside from '../images/portrait-inside.jpg';
+import PortraitEnvelope from '../images/evnvelope.jpg';
+import SquareInside from '../images/square-inside.jpg';
+import ImageBackLandscape from '../images/envelope-square.jpg';
+
+const Product = ({ location }) => {
     const lastItemAddedToBasket = !location.state && JSON.parse(localStorage.getItem('session')).slice(-1).pop();
     const prevItem = {
         item: {
@@ -16,7 +22,16 @@ const Product = ({ location, addToBasket, basket }) => {
     const { item } = location.state || prevItem;
 
     let slideshowImages;
-    if (item) slideshowImages = [item.image_1_url, item.image_2_url, item.image_3_url];
+    if (item) {
+        slideshowImages = [item.image_1_url];
+
+        const cardWidth = get(item, 'card_dimensions.width', 10.5)
+        const cardHeight = get(item, 'card_dimensions.height', 14.8);
+
+        console.log('cardWidth', cardWidth);
+
+        if (cardWidth === 10.5 && cardHeight === 14.8) slideshowImages.push(PortraitInside, PortraitEnvelope);
+    }
 
     if (item) {
         return (
@@ -29,7 +44,6 @@ const Product = ({ location, addToBasket, basket }) => {
                         />
                         <ProductDetails
                             product={item}
-                            addToBasket={addToBasket}
                         />
                     </div>
                 </main>

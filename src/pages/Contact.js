@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { generic, email, phone, message } from '../schema/PaySchema';
+import { generic, email, message } from '../schema/PaySchema';
+import profileImage from '../images/profile-image.jpg';
 import ScrollToTop from '../components/utils/ScrollTop';
 import Button from '../components/Shared/Button';
 import { Link } from 'react-router-dom';
@@ -12,7 +13,6 @@ class Contact extends Component {
         this.state = {
             name: '',
             email: '',
-            phoen: '',
             message: '',
             emailSentSuccess: true,
             emailSent: false,
@@ -21,6 +21,7 @@ class Contact extends Component {
         this.handleInput = this.handleInput.bind(this);
     }
 
+    // TODO this probs doesnt work
     handleSubmit = async (e) => {
         e.preventDefault();
         this.setState({ emailSent: true });
@@ -35,7 +36,6 @@ class Contact extends Component {
             data: {
                 name: this.state.name,
                 email: this.state.email,
-                phone: this.state.phone,
                 message: this.state.message,
             },
         })
@@ -62,13 +62,6 @@ class Contact extends Component {
                     this.setState({ email: e.target.value, emailError: false });
                 }
             break;
-            case 'phone':
-                if (phone.validate({ phone: e.target.value }).error) {
-                    this.setState({ phoneError: 'Whoops, please check your answer to continue.' })
-                } else {
-                    this.setState({ phone: e.target.value, phoneError: false });
-                }
-            break
             case 'message':
                 if (message.validate({ message: e.target.value }).error) {
                     this.setState({ messageError: 'Whoops, please check your answer to continue.' })
@@ -83,7 +76,6 @@ class Contact extends Component {
         const {
             nameError,
             emailError,
-            phoneError,
             messageError,
             emailSentSuccess,
             emailSent,
@@ -95,7 +87,6 @@ class Contact extends Component {
         if (
             nameError === false &&
             emailError === false &&
-            phoneError === false &&
             messageError === false &&
             !hasErrors
         ) {
@@ -106,12 +97,13 @@ class Contact extends Component {
 
         return [
             <ScrollToTop />,
-            <main className="main-content">
+            <main className="content-side-by-side" style={{ marginTop: '60px' }}>
+                <img style={{ width: '100%', maxWidth: '400px' }} src={profileImage} />
                 {!emailSent ?
                     <form className="content-center" onSubmit={(e) => {
-                    e.preventDefault()
-                    this.handleSubmit(e, allValid)
-                    document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+                        e.preventDefault()
+                        this.handleSubmit(e, allValid)
+                        document.getElementById('submitButton').setAttribute('disabled', 'disabled');
                     }}>
 
                         <div className='text-field--container'>
@@ -143,22 +135,6 @@ class Contact extends Component {
                                 <label className='text-field--label' for='email'>Email address</label>
                             </div>
                             {emailError && <p className="error-message">{emailError}</p>}
-                        </div>
-
-                        <div className='text-field--container'>
-                            <div className='text-field'>
-                                <input
-                                    className='text-field--input'
-                                    name="phone"
-                                    id="phone"
-                                    placeholder=' '
-                                    type='phone'
-                                    onBlur={(e) => this.handleInput(e)}
-                                    style={{ textTransform: 'none' }}
-                                />
-                                <label className='text-field--label' for='phone'>Phone</label>
-                            </div>
-                            {phoneError && <p className="error-message">{phoneError}</p>}
                         </div>
 
                         <div className='text-field--container'>

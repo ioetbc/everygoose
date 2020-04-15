@@ -31,6 +31,10 @@
     display: grid;
     grid-gap: 3em;
     grid-template-columns: repeat(auto-fill, minmax(400px, 2fr));
+    padding-bottom: 120px;
+    @media screen and (min-width: 1000px) {
+        margin-bottom: 0;
+    }
 }
 
 .content-more-right-less-left {

@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 
 import { generic, email, message } from '../schema/PaySchema';
-import profileImage from '../images/profile-image.jpg';
 import ScrollToTop from '../components/utils/ScrollTop';
 import Button from '../components/Shared/Button';
 import { Link } from 'react-router-dom';
@@ -98,10 +97,8 @@ class Contact extends Component {
         return [
             <ScrollToTop />,
             <main className="content-side-by-side" style={{ marginTop: '60px' }}>
-                <img style={{ width: '100%', maxWidth: '400px' }} src={profileImage} />
                 {!emailSent ?
                     <div>
-                        <h3 className="heading">Hello!</h3>
                         <p>If you have any questions please get in touch via social media. Or use the contact form below and I will be happy to help.</p>
                         <div className="social-items" style={{ position: 'relative', paddingLeft: '0px', bottom: '0px', marginTop: '14px',
                         marginLeft: '-2px' }}>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Prismic from 'prismic-javascript';
 
 import ScrollToTop from '../components/utils/ScrollTop';
+import profileImage from '../images/profile-image.jpg';
 
 class About extends Component {
     constructor(props) {
@@ -32,11 +33,10 @@ class About extends Component {
     render() {
         return [
             <ScrollToTop />,
-            <main className="main-content">
-                <div className="content-more-right-less-left">
-                    <p>{this.state.aboutContent}</p>
-                </div>
-            </main>,
+            <main className="content-side-by-side" style={{ marginTop: '60px' }}>
+                <img style={{ width: '100%', maxWidth: '400px' }} src={profileImage} />
+                <p>{this.state.aboutContent}</p>
+            </main>
         ];
     }
 }

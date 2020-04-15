@@ -199,37 +199,37 @@
             }
         }
     }
-    
+}
+
+.social-items {
+    display: none;
+}
+
+@media screen and (min-width: 1000px) {
     .social-items {
-        display: none;
-    }
+        display: flex;
+        position: absolute;
+        bottom: 24px;
+        padding-left: 30px;
 
-    @media screen and (min-width: 1000px) {
-        .social-items {
-            display: flex;
-            position: absolute;
-            bottom: 24px;
-            padding-left: 30px;
-
-            .social-link {
-                margin-right: 8px;
-                width: 35px;
-                height: 35px;
+        .social-link {
+            margin-right: 8px;
+            width: 35px;
+            height: 35px;
+            background-repeat: no-repeat;
+            background: url('./images/icons/icon-insta.svg');
+            border-radius: 50%;
+            cursor: pointer;
+            &:nth-child(2) {
                 background-repeat: no-repeat;
-                background: url('./images/icons/icon-insta.svg');
-                border-radius: 50%;
-                cursor: pointer;
-                &:nth-child(2) {
-                    background-repeat: no-repeat;
-                    background: url('./images/icons/icon-facebook.svg');
-                }
-
-                &:nth-child(3) {
-                    background-repeat: no-repeat;
-                    background: url('./images/icons/icon-etsy.svg');
-                }
+                background: url('./images/icons/icon-facebook.svg');
             }
 
+            &:nth-child(3) {
+                background-repeat: no-repeat;
+                background: url('./images/icons/icon-etsy.svg');
+            }
         }
+
     }
 }

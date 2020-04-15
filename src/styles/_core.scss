@@ -28,11 +28,9 @@
 }
 
 .content-side-by-side {
-    @media screen and (min-width: 768px) {
-        display: grid;
-        grid-gap: 3em;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 2fr));
-    }
+    display: grid;
+    grid-gap: 3em;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 2fr));
 }
 
 .content-more-right-less-left {

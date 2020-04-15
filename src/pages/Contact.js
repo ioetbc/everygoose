@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 
 import { generic, email, message } from '../schema/PaySchema';
@@ -100,66 +100,90 @@ class Contact extends Component {
             <main className="content-side-by-side" style={{ marginTop: '60px' }}>
                 <img style={{ width: '100%', maxWidth: '400px' }} src={profileImage} />
                 {!emailSent ?
-                    <form className="content-center" onSubmit={(e) => {
-                        e.preventDefault()
-                        this.handleSubmit(e, allValid)
-                        document.getElementById('submitButton').setAttribute('disabled', 'disabled');
-                    }}>
-
-                        <div className='text-field--container'>
-                            <div className='text-field'>
-                                <input
-                                    className='text-field--input'
-                                    name="name"
-                                    id="name"
-                                    placeholder=' '
-                                    type='text'
-                                    onBlur={(e) => this.handleInput(e)}
-                                />
-                                <label className='text-field--label' for='name'>Name</label>
+                    <div>
+                        <h3 className="heading">Hello!</h3>
+                        <p>If you have any questions please get in touch via social media. Or use the contact form below and I will be happy to help.</p>
+                        <div className="social-items" style={{ position: 'relative', paddingLeft: '0px', bottom: '0px', marginTop: '14px',
+                        marginLeft: '-2px' }}>
+                            <div
+                                onClick={() => window.open('http://www.instagram.com/everygoose/', '_blank')}
+                                className="social-link"
+                            >
                             </div>
-                            {nameError && <p className="error-message">{nameError}</p>}
-                        </div>
 
-                        <div className='text-field--container'>
-                            <div className='text-field'>
-                                <input
-                                    className='text-field--input'
-                                    name="email"
-                                    id="email"
-                                    placeholder=' '
-                                    type='text'
-                                    onBlur={(e) => this.handleInput(e)}
-                                    style={{ textTransform: 'none' }}
-                                />
-                                <label className='text-field--label' for='email'>Email address</label>
+                            <div
+                                onClick={() => window.open('http://www.facebook.com/Every-Goose-368589263977587/', '_blank')}
+                                className="social-link"
+                            >
                             </div>
-                            {emailError && <p className="error-message">{emailError}</p>}
-                        </div>
 
-                        <div className='text-field--container'>
-                            <div className='text-field large'>
-                                <textarea
-                                    className='text-field--input'
-                                    name="message"
-                                    id="message"
-                                    placeholder=' '
-                                    onBlur={(e) => this.handleInput(e)}
-                                    style={{ textTransform: 'none' }}
-                                />
-                                <label style={{ textTransform: 'none' }} className='text-field--label' for='message'>Let us know what you need</label>
+                            <div
+                                onClick={() => window.open('https://www.etsy.com/uk/shop/EveryGoose', '_blank')}
+                                className="social-link"
+                            >
                             </div>
-                            {messageError && <p className="error-message">{messageError}</p>}
                         </div>
+                        <form className="content-center" style={{ marginTop: '32px' }} onSubmit={(e) => {
+                            e.preventDefault()
+                            this.handleSubmit(e, allValid)
+                            document.getElementById('submitButton').setAttribute('disabled', 'disabled');
+                        }}>
 
-                        <button
-                        type="submit"
-                        className={`button ${!disableButton && 'disabled'}`}
-                        id='submitButton'
-                    >
-                        pay now
-                    </button>
-                    </form>
+                            <div className='text-field--container'>
+                                <div className='text-field'>
+                                    <input
+                                        className='text-field--input'
+                                        name="name"
+                                        id="name"
+                                        placeholder=' '
+                                        type='text'
+                                        onBlur={(e) => this.handleInput(e)}
+                                    />
+                                    <label className='text-field--label' for='name'>Name</label>
+                                </div>
+                                {nameError && <p className="error-message">{nameError}</p>}
+                            </div>
+
+                            <div className='text-field--container'>
+                                <div className='text-field'>
+                                    <input
+                                        className='text-field--input'
+                                        name="email"
+                                        id="email"
+                                        placeholder=' '
+                                        type='text'
+                                        onBlur={(e) => this.handleInput(e)}
+                                        style={{ textTransform: 'none' }}
+                                    />
+                                    <label className='text-field--label' for='email'>Email address</label>
+                                </div>
+                                {emailError && <p className="error-message">{emailError}</p>}
+                            </div>
+
+                            <div className='text-field--container'>
+                                <div className='text-field large' style={{ height: '200px' }}>
+                                    <textarea
+                                        className='text-field--input'
+                                        name="message"
+                                        id="message"
+                                        placeholder=' '
+                                        onBlur={(e) => this.handleInput(e)}
+                                        style={{ textTransform: 'none' }}
+                                    />
+                                    <label style={{ textTransform: 'none' }} className='text-field--label' for='message'>Let us know what you need</label>
+                                </div>
+                                {messageError && <p className="error-message">{messageError}</p>}
+                            </div>
+
+                            <button
+                            type="submit"
+                            className={`button ${!disableButton && 'disabled'}`}
+                            id='submitButton'
+                        >
+                            Submit
+                        </button>
+                        </form>
+                    </div>
                 :
                 <div>
                     {emailSentSuccess ? 

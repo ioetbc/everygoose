@@ -252,6 +252,7 @@ class App extends Component {
 
 									<Contact
 										{...routeProps}
+										prismicCtx={this.props.prismicCtx}
 									/>
 								</div>
 							</Fragment>

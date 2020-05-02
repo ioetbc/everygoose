@@ -64,7 +64,8 @@ const handleOrder = async (payload, paymentMethod) => {
 
     return axios({
         method: 'post',
-        url: process.env.REACT_APP_PAY_ENDPOINT,
+        // url: process.env.REACT_APP_PAY_ENDPOINT,
+        url: 'http://localhost:5000/everygoose/us-central1/payment',
         config: {
             headers: {
                 'Content-Type': 'application/json'

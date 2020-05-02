@@ -3,7 +3,7 @@ import { includes } from 'lodash';
 export default function deliveryCharge(country, europeanCountries, basket, total) {
     let charge = [];
 
-    // console.log('basket', basket)
+    console.log('wtf', country)
 
     if (!country && !europeanCountries) return '2.00';
 
@@ -29,6 +29,7 @@ export default function deliveryCharge(country, europeanCountries, basket, total
 
     console.log('country', country)
     console.log('europeanCountries', europeanCountries)
+    console.log('productType', basket.map(i => i.product_type))
 
     if (europeanCountries) {
         const productType = basket.map(i => i.product_type);

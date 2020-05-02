@@ -82,12 +82,23 @@ class App extends Component {
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XVxFfREAACEAlCKe');
 
-		const omitedData = doc.data.products.filter(p => !p.hide_product);
-		const allProducts = omitedData.concat(doc.data.prints).reverse();
+		// why did prismic delete the hide product switch
+		const omitedProductData = doc.data.products.filter(p => !p.hide_product);
+		const omitedPrintData = doc.data.prints.filter(p => !p.hide_product);
+		console.log('omitedPrintData', omitedPrintData)
+		const allProducts = omitedProductData.concat(omitedPrintData).reverse();
+
+		// console.log('allProducts', JSON.stringify(allProducts, null, 4))
+		console.log('allProducts/lengh', allProducts.length)
+
+		// this is not working properylu dont think its picking up the last few prints
 		const pages = chunkProducts(allProducts, 20);
+
+		console.log('pages', pages)
 
 		this.state.page < pages.length &&
 			pages[this.state.page].forEach(item => {
+			// allProducts.forEach(item => {
 				this.state.products.push({
 					title: item.product_title[0].text,
 					price: get(item, 'product_price', 0).toFixed(2),
@@ -100,9 +111,6 @@ class App extends Component {
 					description: item.product_description[0].text,
 					type: item.type_of_card,
 					product_type: item.product_type,
-					product_dimensions: item.product_dimensions,
-					product_dimensions_a3: item.product_dimensions_a3,
-					product_dimensions_a4: item.product_dimensions,
 					card_dimensions: {
 						width: item.product_width,
 						height: item.product_height
@@ -173,7 +181,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -223,7 +231,7 @@ class App extends Component {
 										title='Pay'
 									/>
 									<BackButton
-										title="checkout page"
+										title="back to checkout page"
 										link="/#/checkout"
 									/>
 									<Pay
@@ -246,7 +254,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -270,7 +278,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -291,7 +299,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -312,7 +320,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -333,7 +341,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -356,7 +364,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -377,7 +385,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 
@@ -398,7 +406,7 @@ class App extends Component {
 									/>
 
 									<BackButton
-										title="shop"
+										title="back to shop"
 										link="/#/"
 									/>
 

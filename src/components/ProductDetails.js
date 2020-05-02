@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 
 import getBasket from '../components/utils/getBasket';
 import getDeliveryCharge from '../components/utils/deliveryCharge';
@@ -25,7 +26,6 @@ class ProductDetails extends Component {
     render() {
         const { product } = this.props;
         const { productClone } = this.state;
-        
         const basket = getBasket();
         const total = getPrice(basket);
 
@@ -33,6 +33,17 @@ class ProductDetails extends Component {
             item: product,
             basket,
         });
+
+        console.log('basket', basket)
+
+        const cardHeight = get(productClone, 'card_dimensions.height');
+        const cardWidth = get(productClone, 'card_dimensions.width');
+
+        let cardSize = '';
+
+        if (cardHeight === 14.8 && cardWidth === 10.5 || cardHeight === 10.5 && cardWidth === 14.8) {
+            cardSize = 'A6'
+        };
 
         return (
             <div className="product-details-container">
@@ -80,8 +91,8 @@ class ProductDetails extends Component {
 
                 <ul className="key-features">
                     <li>£{productClone.price * parseInt(productClone.quantity, 10)}</li>
-                    <li>{productClone.product_dimensions}</li>
-                    <li>Delivery from £{getDeliveryCharge('United Kingdom', ['United Kingdom'], basket, total).toFixed(2)}</li>
+                    <li>{`H${cardHeight}cm x W${cardWidth}cm ${cardSize} folded card`}</li>
+                    <li>Delivery from £{getDeliveryCharge('United Kingdom', [{name: 'United Kingdom'}], [{product_type: productClone.product_type}], total).toFixed(2)}</li>
                 </ul>
                 <Link to={{ pathname: "/checkout", state: { productClone } }}>
                     <Button

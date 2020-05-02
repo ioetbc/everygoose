@@ -9,7 +9,7 @@ const BackButton = ({ title, link }) => {
             onClick={() => window.location=`${link}`}
         >
             <img src={BackIcon} alt="" />
-            <p className="back-button-text">{`back to ${title}`}</p>
+            <p className="back-button-text">{`${title}`}</p>
         </div>
     );
 };

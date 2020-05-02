@@ -27,15 +27,9 @@ const deliveryCharge = (country, europeanCountries, basket, total) => {
         const productType = basket.map(i => i.product_type);
         const europenCountry = europeanCountries.map(c => c.name);
 
-        console.log('europenCountry', europenCountry)
-
         if (includes(productType, 'card')) {
             // row
-            console.log('row', includes(europenCountry, country))
-            console.log('uk true?', !includes(country, 'United Kingdom'))
-
             if (!includes(europenCountry, country) && !includes(country, 'United Kingdom')) charge.push(2.50);
-
             // uk
             if (includes(country, 'United Kingdom')) charge.push(1);
             // europe
@@ -49,9 +43,6 @@ const deliveryCharge = (country, europeanCountries, basket, total) => {
     }
 
     const deliveryCharge = includes(charge, 'freeDelivery') ? 0 : Math.max(...charge);
-
-    console.log('the massive charge', charge);
-    console.log('deliveryCharge', deliveryCharge);
 
     return deliveryCharge;
 }

@@ -1,6 +1,5 @@
 const Joi = require('@hapi/joi');
 const validateForm = (data) => {
-    console.log(1)
         const {
             firstName,
             lastName,
@@ -14,7 +13,6 @@ const validateForm = (data) => {
             phoneNumber,
         } = data;
 
-        console.log('data', data)
         const schema = Joi.object({
             firstName: Joi.string().required().min(2).max(50),
             lastName: Joi.string().required().min(2).max(50),
@@ -44,8 +42,6 @@ const validateForm = (data) => {
             postcode,
             phoneNumber,
         }).error;
-
-        console.log('wtf', validationSuccess);
 
     return validationSuccess;
 }

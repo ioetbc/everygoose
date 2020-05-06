@@ -61,10 +61,7 @@ const sendEmail = async (payload) => {
         }
     }
 
-    await sendgrid.send(orderReciept)
-    .catch((error) => {
-        throw new Error(`email error. customer_id: ${customerId} `, error);
-    });
+    return sendgrid.send(orderReciept)
 
     const customerConfirmation = {
         to: email,
@@ -83,10 +80,7 @@ const sendEmail = async (payload) => {
         }
     }
 
-    await sendgrid.send(customerConfirmation)
-    .catch((error) => {
-        throw new Error(`email error. customer_id: ${customerId} `, error);
-    });
+    return sendgrid.send(customerConfirmation)
 }
 
 module.exports = sendEmail;

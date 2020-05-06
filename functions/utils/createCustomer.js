@@ -1,4 +1,4 @@
-const createCustomer = async (customer, db) => {
+async function createCustomer (customer, db) {
     const timeStamp = Date(Date.now()); 
     const formatTimeStamp = timeStamp.toString();
 
@@ -34,10 +34,7 @@ const createCustomer = async (customer, db) => {
         }
     }
 
-    return db.collection('customers').doc(customer.customerId).set(payload)
-    .catch((error) => {
-        throw new Error(error);
-    });
+    return db.collection('customers').doc(customer.customerId).set(payload);
 }
 
 module.exports = createCustomer;

@@ -13,3 +13,8 @@ node_modules/
 .DS_Store
 .env.development
 .env.production
+
+
+# ADD SERVICE ACCOUT HERE!!!!!!!!!!!!!!!!!!!!!!!!!
+dev-service-account.json
+firebase-debug.log

@@ -2,24 +2,22 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const cors = require('cors')({ origin: true });
 const { FirebaseFunctionsRateLimiter } = require("firebase-functions-rate-limiter");
-const stripeLoader = require('stripe');
-const stripe = new stripeLoader(functions.config().stripe.secret_key);
+const stripe = require('stripe')(functions.config().stripe.secret_key)
 const uuid = require('uuidv4').default;
 const axios = require('axios');
 
 const validateForm = require('./utils/validateForm');
 const getDeliveryCharge = require('./utils/deliveryCharge');
 const createCustomer = require('./utils/createCustomer');
-const updateCustomer = require('./utils/updateCustomer');
-const preAuthPayment = require('./utils/preAuthPayment');
-const preAuthPaypalPayment = require('./utils/preAuthPaypalPayment');
-const capturePayment = require('./utils/capturePayment');
+// const preAuthStripeCharge = require('./utils/preAuthStripeCharge');
+const capturePaypalPayment = require('./utils/capturePaypalPayment');
 const sendCommunications = require('./utils/sendCommunications');
-const serviceAccount = require("/Users/williamcole/Documents/Free/everygoose-64c129114754.json");
+
+const serviceAccount = require(functions.config().google.service_account);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://everygoose.firebaseio.com"
+  databaseURL: functions.config().db.url
 });
 
 // admin.initializeApp({
@@ -31,6 +29,8 @@ admin.initializeApp({
 //     appId: functions.config().db.app_id,
 //     storageBucket: functions.config().db.storage_bucket,
 // });
+
+const slackUrl = functions.config().slack.api_url;
 
 const db = admin.firestore();
 
@@ -50,68 +50,99 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
     cors(req, res, async () => {
         const validationSuccess = validateForm(req.body);
+        const customerId = uuid();
 
-        if (validationSuccess && req.body.basket.length > 0 ) {
-            const customerId = uuid();
-            try {
-                const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID, productCodes } = req.body;
-                const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
-                const deliveryCharge = getDeliveryCharge(country, europeanCountries, basket, total);
-                const subtotal = (total + deliveryCharge).toFixed(2);
+        try {
+            if (!validationSuccess) throw new Error('validation error')
+    
+            const { basket, stripeToken, idempotencyKey, country, europeanCountries, orderID, productCodes, email } = req.body;
+            const total = basket.reduce((a, item) =>  item.price * item.quantity + a, 0);
+            const deliveryCharge = getDeliveryCharge(country, europeanCountries, basket, total);
+            const subtotal = (total + deliveryCharge).toFixed(2);
 
-                if (req.body.paymentMethod === 'stripe') {
-                    const { chargeId, last4 } = await preAuthPayment(11, stripeToken, idempotencyKey)
-                        .then((data) => {
-                            return { chargeId: data.id, last4: data.payment_method_details.card.last4 } ;
-                        })
-                        .catch(error => { 
-                            throw new Error(error)
-                        });
+            if (req.body.paymentMethod === 'stripe') {
+                console.log('calling pre aut');
+                const { chargeId, last4 } = await stripe.charges.create({
+                    amount: 11 * 100,
+                    currency: 'GBP',
+                    source: stripeToken,
+                    description: 'Card',
+                    capture: false,
+                }, { idempotency_key: idempotencyKey })
+                    .then((data) => {
+                        return { chargeId: data.id, last4: data.payment_method_details.card.last4 } ;
+                    })
+                    .catch(error => { 
+                        console.log('in the catch')
+                        throw new Error(error)
+                    });
 
-                    await createCustomer({...req.body, subtotal, deliveryCharge, customerId }, db)
-                        .catch((error) => {
-                            throw new Error(error);
-                        });
-
-                    await stripe.charges.capture(chargeId)
-                        .catch((error) => {
-                            throw new Error(error);
-                        });
-
-                    await db.collection('customers').doc(customerId).update({'customer.isPaid': true})
-                        .catch(async (error) => {
-                            await axios.post(functions.config().slack.api_url, { text: `customer: *${customerId} ${error}*` });
-                        });
-
-                    await sendCommunications({...req.body, subtotal, total, deliveryCharge, last4, customerId, productCodes })
-                        .catch(async (error) => {
-                            await axios.post(functions.config().slack.api_url, { text: `error sending communications for customer: *${customerId} ${error}*` });
-                        });
-
-                } else {
-                    await preAuthPaypalPayment(orderID, deliveryCharge, subtotal);
+                const body = req.body;
+                const customer = {
+                    subtotal,
+                    deliveryCharge,
+                    customerId
                 }
 
-                return res.sendStatus(200);
+                Object.assign(body, customer)
+
+                await createCustomer(body, db)
+                    .catch((error) => {
+                        throw new Error(error);
+                    });
+
+                await stripe.charges.capture(chargeId)
+                    .catch((error) => {
+                        throw new Error(error);
+                    });
+
+                await db.collection('customers').doc(customerId).update({'customer.isPaid': true})
+                    .catch(async (error) => {
+                        await axios.post(slackUrl, { text: `customer: *${email} ${error}*` });
+                    });
+
+                // await sendCommunications({...req.body, subtotal, total, deliveryCharge, last4, customerId, productCodes })
+                //     .catch(async (error) => {
+                //         await axios.post(slackUrl, { text: `error sending communications for customer: *${customerId} ${error}*` });
+                //     });
+
+            } else {
+                // await createCustomer({...req.body, subtotal, deliveryCharge, customerId }, db)
+                // .catch((error) => {
+                //     throw new Error(error);
+                // });
+
+                await capturePaypalPayment(orderID, subtotal)
+                    .catch(async (error) => {
+                        await axios.post(slackUrl, { text: `error capturing paypal payment: *${email} ${error}*` });
+                    });
+
+                await db.collection('customers').doc(customerId).update({'customer.isPaid': true})
+                    .catch(async (error) => {
+                        await axios.post(slackUrl, { text: `customer: *${email} ${error}*` });
+                    });
+
+                // await sendCommunications({...req.body, subtotal, total, deliveryCharge, customerId, productCodes })
+                //     .catch(async (error) => {
+                //         await axios.post(slackUrl, { text: `error sending communications for customer: *${customerId} ${error}*` });
+                //     });
+            }
+
+            return res.sendStatus(200);
+
+        } catch (error) {
+            console.log('in the catch', error);
+
+            try {
+                await axios.post(slackUrl, { text: `customer: *${customerId} ${error}*` });
 
             } catch (error) {
-                console.log('in the catch', error);
-
-                try {
-                    await axios.post(functions.config().slack.api_url, { text: `customer: *${customerId} ${error}*` });
-
-                } catch (error) {
-                    console.log('error calling slack', error);
-                }
-
-                return res.send(500);
+                console.log('error calling slack', error);
             }
-        }
 
-        await axios.post(functions.config().slack.api_url, { text: 'Validation error' });
-        
-        return res.send(500)
-    });
+            return res.send(500, { error: error.toString() });
+        }
+    })
 });
 
 exports.contact = functions.https.onRequest(async (req, res) => {

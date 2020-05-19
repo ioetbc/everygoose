@@ -2,7 +2,6 @@ import handleOrder from './handleOrder';
 import loadingState from './LoadingState';
 
 const capturePaypalPayment = (payload) => {
-    console.log('payload m8', payload)
     window.paypal.Buttons({
         createOrder: (data, actions) => {
             return actions.order.create({
@@ -17,7 +16,8 @@ const capturePaypalPayment = (payload) => {
 			});
         },
         onApprove: async (data, actions) => {
-            const payload = {
+            console.log('payload m8', payload)
+            const lads = {
                 firstName: payload.firstName,
                 lastName: payload.lastName,
                 email: payload.email,
@@ -37,7 +37,7 @@ const capturePaypalPayment = (payload) => {
             }
 
             loadingState();
-            const approveOrder = await handleOrder(payload, 'paypal');
+            const approveOrder = await handleOrder(lads, 'paypal');
 
             if (approveOrder.status === 200) {
 				actions.order.capture()

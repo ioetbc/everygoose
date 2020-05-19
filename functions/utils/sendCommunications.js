@@ -61,7 +61,7 @@ const sendEmail = async (payload) => {
         }
     }
 
-    return sendgrid.send(orderReciept)
+    await sendgrid.send(orderReciept)
 
     const customerConfirmation = {
         to: email,

@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "@hapi/joi": "^16.1.4",
+    "@paypal/checkout-server-sdk": "^1.0.2",
     "@sendgrid/mail": "^6.5.2",
+    "assert": "^2.0.0",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "firebase-admin": "^8.0.0",
@@ -23,14 +25,17 @@
     "firebase-functions-rate-limiter": "^3.6.1",
     "lodash": "^4.17.15",
     "request-promise": "^4.2.5",
+    "sinon": "^9.0.2",
     "stripe": "^7.9.1",
     "uuidv4": "^5.0.1"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "eslint": "^5.12.0",
     "eslint-plugin-promise": "^4.0.1",
     "firebase-functions-test": "^0.1.6",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
   },
   "private": true
 }

@@ -36,7 +36,7 @@ class Product extends Component {
             body.appendChild(tag);
           }
       
-          loadPaypalScript(`https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}&currency=GBP&disable-funding=credit,card`);
+          loadPaypalScript(process.env.REACT_APP_PAYPAL_CLIENT_URL);
     }
 
     handleCountry(country) {

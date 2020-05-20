@@ -17,6 +17,7 @@
     "@hapi/joi": "^16.1.4",
     "@paypal/checkout-server-sdk": "^1.0.2",
     "@sendgrid/mail": "^6.5.2",
+    "@slack/webhook": "^5.0.3",
     "assert": "^2.0.0",
     "axios": "^0.19.2",
     "cors": "^2.8.5",

@@ -9,28 +9,26 @@ const axios = require('axios');
 const validateForm = require('./utils/validateForm');
 const getDeliveryCharge = require('./utils/deliveryCharge');
 const createCustomer = require('./utils/createCustomer');
-// const preAuthStripeCharge = require('./utils/preAuthStripeCharge');
 const capturePaypalPayment = require('./utils/capturePaypalPayment');
 const sendCommunications = require('./utils/sendCommunications');
 
-const serviceAccount = require(functions.config().google.service_account);
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: functions.config().db.url
-});
+// const serviceAccount = require(functions.config().google.service_account);
+const slackUrl = functions.config().slack.api_url;
 
 // admin.initializeApp({
-//     apiKey: functions.config().db.api_key,
-//     authDomain: functions.config().db.auth_domain,
-//     databaseURL: functions.config().db.url,
-//     projectId: functions.config().db.project_id,
-//     messagingSenderId: functions.config().db.message_sender_id,
-//     appId: functions.config().db.app_id,
-//     storageBucket: functions.config().db.storage_bucket,
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: functions.config().db.url
 // });
 
-const slackUrl = functions.config().slack.api_url;
+admin.initializeApp({
+    apiKey: functions.config().db.api_key,
+    authDomain: functions.config().db.auth_domain,
+    databaseURL: functions.config().db.url,
+    projectId: functions.config().db.project_id,
+    messagingSenderId: functions.config().db.message_sender_id,
+    appId: functions.config().db.app_id,
+    storageBucket: functions.config().db.storage_bucket,
+});
 
 const db = admin.firestore();
 
@@ -63,7 +61,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             if (req.body.paymentMethod === 'stripe') {
                 console.log('calling pre aut');
                 const { chargeId, last4 } = await stripe.charges.create({
-                    amount: 11 * 100,
+                    amount: subtotal * 100,
                     currency: 'GBP',
                     source: stripeToken,
                     description: 'Card',
@@ -77,16 +75,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                         throw new Error(error)
                     });
 
-                const body = req.body;
-                const customer = {
-                    subtotal,
-                    deliveryCharge,
-                    customerId
-                }
-
-                Object.assign(body, customer)
-
-                await createCustomer(body, db)
+                await createCustomer({...req.body, subtotal, deliveryCharge, customerId }, db)
                     .catch((error) => {
                         throw new Error(error);
                     });
@@ -101,20 +90,20 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                         await axios.post(slackUrl, { text: `customer: *${email} ${error}*` });
                     });
 
-                // await sendCommunications({...req.body, subtotal, total, deliveryCharge, last4, customerId, productCodes })
-                //     .catch(async (error) => {
-                //         await axios.post(slackUrl, { text: `error sending communications for customer: *${customerId} ${error}*` });
-                //     });
+                await sendCommunications({...req.body, subtotal, total, deliveryCharge, last4, customerId, productCodes })
+                    .catch(async (error) => {
+                        await axios.post(slackUrl, { text: `error sending communications for customer: *${customerId} ${error}*` });
+                    });
 
             } else {
-                // await createCustomer({...req.body, subtotal, deliveryCharge, customerId }, db)
-                // .catch((error) => {
-                //     throw new Error(error);
-                // });
+                await createCustomer({...req.body, subtotal, deliveryCharge, customerId }, db)
+                .catch((error) => {
+                    throw new Error(error);
+                });
 
                 await capturePaypalPayment(orderID, subtotal)
                     .catch(async (error) => {
-                        await axios.post(slackUrl, { text: `error capturing paypal payment: *${email} ${error}*` });
+                        throw new Error(error);
                     });
 
                 await db.collection('customers').doc(customerId).update({'customer.isPaid': true})
@@ -122,10 +111,17 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                         await axios.post(slackUrl, { text: `customer: *${email} ${error}*` });
                     });
 
-                // await sendCommunications({...req.body, subtotal, total, deliveryCharge, customerId, productCodes })
-                //     .catch(async (error) => {
-                //         await axios.post(slackUrl, { text: `error sending communications for customer: *${customerId} ${error}*` });
-                //     });
+                await sendCommunications({...req.body, subtotal, total, deliveryCharge, customerId, productCodes })
+                    .catch(async (error) => {
+                        await axios.post(slackUrl, { text: `error sending communications. for customer: *${customerId} ${error}*` });
+                    });
+            }
+
+            try {
+                await axios.post(slackUrl, { text: 'Successful purchase', });
+
+            } catch (error) {
+                console.log('error calling slack on success', error);
             }
 
             return res.sendStatus(200);
@@ -134,6 +130,7 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             console.log('in the catch', error);
 
             try {
+                const slackUrl = functions.config().slack.api_url;
                 await axios.post(slackUrl, { text: `customer: *${customerId} ${error}*` });
 
             } catch (error) {

@@ -17,17 +17,29 @@ class ProductDetails extends Component {
         this.state = { productClone: this.props.product };
     }
 
-    hello(e, basket, product) {
+    updateBasket(e, basket, product) {
         const amendedItem = amendItem(e, basket, product);
-
         this.setState({ productClone: amendedItem });
+    }
+
+    deliveryLine(product, basket, subTotal) {
+        const { productClone } = this.state;
+        const total = getPrice(basket);
+
+        if (product.product_type === 'print') {
+            return "Free delivery for prints within the UK"
+        }
+
+        if (subTotal > 35) {
+            return 'Free delivery on UK orders over £35.00'
+        }
+        return `Delivery from £${getDeliveryCharge('United Kingdom', [{name: 'United Kingdom'}], [{product_type: productClone.product_type}], total).toFixed(2)}`;
     }
 
     render() {
         const { product } = this.props;
         const { productClone } = this.state;
         const basket = getBasket();
-        const total = getPrice(basket);
 
         let basketHandler = new BasketHandler({
             item: product,
@@ -45,39 +57,47 @@ class ProductDetails extends Component {
             cardSize = 'A6'
         };
 
+        const subTotal = (productClone.price * parseInt(productClone.quantity, 10)).toFixed(2);
+
         return (
             <div className="product-details-container">
                 <h3>{product.title}</h3>
-                <p>{product.description}</p>
+                <p style={{ marginBottom: '20px' }}>{product.description}</p>
 
-                <div className="item-quantity" style={{ display: 'inline-block', marginTop: '20px' }}>
-                    <select
-                        onChange={(e) => this.hello(e, basket, product)}
-                        className="quantity-select"
-                        style={{ marginLeft: 0, marginBottom: '12px'  }}
-                        name="framed"
-                        defaultValue={product.framed}
-                    >
-                        <option value={false}>standard</option>
-                        <option value={true}>framed</option>
-                    </select>
+                {product.product_type === 'print' &&
+                    <div className="item-quantity">
+                        <select
+                            onChange={(e) => this.updateBasket(e, basket, product)}
+                            className="quantity-select"
+                            style={{ marginLeft: 0 }}
+                            name="framed"
+                            defaultValue={product.framed}
+                        >
+                            <option value={false}>standard</option>
+                            <option value={true}>framed</option>
+                        </select>
+                    </div>
+                }
 
-                    <select
-                        onChange={(e) => this.hello(e, basket, product)}
-                        className="quantity-select"
-                        style={{ marginLeft: 0 }}
-                        name="size"
-                        defaultValue={product.size}
-                    >
-                        <option value={'a4'}>A4</option>
-                        <option value={'a3'}>A3</option>
-                    </select>
-                </div>
+                {product.product_type === 'print' &&
+                    <div className="item-quantity" style={{ marginTop: '20px' }}>
+                        <select
+                            onChange={(e) => this.updateBasket(e, basket, product)}
+                            className="quantity-select"
+                            style={{ marginLeft: 0 }}
+                            name="size"
+                            defaultValue={product.size}
+                        >
+                            <option value={'a4'}>A4</option>
+                            <option value={'a3'}>A3</option>
+                        </select>
+                    </div>
+                }
 
                 <div className="item-quantity">
                     <select
                         className="quantity-select"
-                        onChange={(e) => this.hello(e, basket, product)}
+                        onChange={(e) => this.updateBasket(e, basket, product)}
                         defaultValue={product.quantity}
                         name="quantity"
                     >
@@ -90,9 +110,9 @@ class ProductDetails extends Component {
                 </div>
 
                 <ul className="key-features">
-                    <li>£{productClone.price * parseInt(productClone.quantity, 10)}</li>
+                    <li>£{subTotal}</li>
                     <li>{`H${cardHeight}cm x W${cardWidth}cm ${cardSize} folded card`}</li>
-                    <li>Delivery from £{getDeliveryCharge('United Kingdom', [{name: 'United Kingdom'}], [{product_type: productClone.product_type}], total).toFixed(2)}</li>
+                    <li>{this.deliveryLine(product, basket, subTotal)}</li>
                 </ul>
                 <Link to={{ pathname: "/checkout", state: { productClone } }}>
                     <Button

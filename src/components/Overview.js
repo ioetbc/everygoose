@@ -39,7 +39,10 @@ const Overview = ({ payPage, deliveryCharge, subTotal, checkout }) => {
                             >
                                 <li>
                                     <p className="overview-delivery-cost">Delivery Cost</p>
-                                    <p>{'£' + deliveryCharge}</p>
+                                    {deliveryCharge > 0 ? 
+                                        <p>£{deliveryCharge}</p> :
+                                        <p className="free-delivery-tag">Free Delivery</p>
+                                    }
                                 </li>
                             </ul>
                         <ul

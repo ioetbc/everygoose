@@ -8,6 +8,7 @@ const Sorry = () => {
     return [
         <ScrollToTop />,
         <main className="main-content">
+            <h1 className="header-title" style={{ marginBottom: '24px' }}>Sorry</h1>
             <p style={{ marginBottom: '24px' }}>Sorry there was an error processing your order. Please try again later.</p>
             <Link to={{ pathname: "/"}}>
                 <Button

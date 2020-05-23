@@ -15,7 +15,7 @@ class Product extends Component {
     constructor(props) {
         const basket = getBasket();
         const total = getPrice(basket);
-        const defaultDeliveryCharge = getDeliveryCharge(null, null, basket, total);
+        const defaultDeliveryCharge = getDeliveryCharge('United Kingdom', [{name: 'United Kingdom'}], basket, total);
         super(props);
         this.state = { europeanCountries: [], deliveryCharge: parseInt(defaultDeliveryCharge, 10)}
         this.handleCountry = this.handleCountry.bind(this);

@@ -8,7 +8,9 @@ export default function Header({ title, shop, navigationItems, handleNavigationF
 
     return (
         <div className={`header ${shop && 'shop'}`}>
-            {/* <h1 className="header-title">{title}</h1> */}
+            {title && 
+                <h1 className="header-title">{title}</h1>            
+            }
             {shop && 
                 <div className="mobile-filter item-quantity">
                     <select className="quantity-select" style={{ marginLeft: 0 }} onChange={(e) => handleNavigationFilter(e.target.value)}>

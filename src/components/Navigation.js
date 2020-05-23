@@ -58,6 +58,7 @@ class Navigation extends Component {
                             }
                         </div>
                         <Link to={{ pathname: "/about" }}><h4>about</h4></Link>
+                        <Link to={{ pathname: "/weddings" }}><h4>weddings</h4></Link>
                         <Link to={{ pathname: "/trade" }}><h4>trade</h4></Link>
                         <Link to={{ pathname: "/contact" }}><h4>contact</h4></Link>
                         <Link to={{ pathname: "/checkout" }}>

@@ -46,7 +46,7 @@ class Checkout extends Component {
         const { amendedBasket } = this.state;
         const basket = getBasket();
         const total = getPrice(basket);
-        const deliveryCharge = getDeliveryCharge(null, null, basket, total);
+        const deliveryCharge = getDeliveryCharge('United Kingdom', [{name: 'United Kingdom'}], basket, total);
         const subTotal = (parseFloat(total) + (parseInt(deliveryCharge, 10) || 0)).toFixed(2);
 
         return (

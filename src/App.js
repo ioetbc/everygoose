@@ -22,6 +22,7 @@ import Contact from './pages/Contact';
 import TermsConditions from './pages/Terms';
 import Trade from './pages/Trade';
 import About from './pages/About';
+import Weddings from './pages/Weddings';
 import Done from './pages/Done';
 import Sorry from './pages/Sorry';
 import Delivery from './pages/Delivery';
@@ -43,7 +44,6 @@ class App extends Component {
 			products: [],
 			doc: null,
 			filtered: false,
-			page: 0,
 			pages: []
 		}
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
@@ -76,49 +76,35 @@ class App extends Component {
 	}
 
 	async fetchPage() {
-		const { cardTypes, page } = this.state;
-
-		this.setState({ page: page + 1 })
+		const { cardTypes } = this.state;
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XVxFfREAACEAlCKe');
 
-		// why did prismic delete the hide product switch
 		const omitedProductData = doc.data.products.filter(p => !p.hide_product);
 		const omitedPrintData = doc.data.prints.filter(p => !p.hide_product);
-		console.log('omitedPrintData', omitedPrintData)
 		const allProducts = omitedProductData.concat(omitedPrintData).reverse();
 
-		// console.log('allProducts', JSON.stringify(allProducts, null, 4))
-		console.log('allProducts/lengh', allProducts.length)
-
-		// this is not working properylu dont think its picking up the last few prints
-		const pages = chunkProducts(allProducts, 20);
-
-		console.log('pages', pages)
-
-		this.state.page < pages.length &&
-			pages[this.state.page].forEach(item => {
-			// allProducts.forEach(item => {
-				this.state.products.push({
-					title: item.product_title[0].text,
-					price: get(item, 'product_price', 0).toFixed(2),
-					a4_price: get(item, 'product_price', 0).toFixed(2),
-					a3_price: get(item, 'a3_price', 0).toFixed(2),
-					a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
-					a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
-					image_1_url: item.image_1.url,
-					quantity: 1,
-					description: item.product_description[0].text,
-					type: item.type_of_card,
-					product_type: item.product_type,
-					card_dimensions: {
-						width: item.product_width,
-						height: item.product_height
-					},
-					size: 'a4',
-					framed: 'false',
-					product_code: item.product_code,
-				});
+		allProducts.forEach(item => {
+			this.state.products.push({
+				title: item.product_title[0].text,
+				price: get(item, 'product_price', 0).toFixed(2),
+				a4_price: get(item, 'product_price', 0).toFixed(2),
+				a3_price: get(item, 'a3_price', 0).toFixed(2),
+				a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
+				a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
+				image_1_url: item.image_1.url,
+				quantity: 1,
+				description: item.product_description[0].text,
+				type: item.type_of_card,
+				product_type: item.product_type,
+				card_dimensions: {
+					width: item.product_width,
+					height: item.product_height
+				},
+				size: 'a4',
+				framed: 'false',
+				product_code: item.product_code,
+			});
 		});
 
 		allProducts.forEach(item => {
@@ -150,7 +136,6 @@ class App extends Component {
 								/>
 								<div className="shop-page">
 									<Header
-										title='Shop'
 										shop
 										navigationItems={cardTypes}
 										handleNavigationFilter={this.handleNavigationFilter}
@@ -176,9 +161,7 @@ class App extends Component {
 									classModifier="standard"
 								/>
 								<div className="standard-page">
-									<Header
-										title='Card'
-									/>
+									<Header />
 
 									<BackButton
 										title="back to shop"
@@ -200,7 +183,6 @@ class App extends Component {
 									navigationItems={cardTypes}
 									handleNavigationFilter={this.handleNavigationFilter}
 									basket
-									classModifier="wide"
 									basket={basket}
 								/>
 								<div className="checkout-page">
@@ -224,7 +206,6 @@ class App extends Component {
 								<Navigation
 									navigationItems={cardTypes}
 									handleNavigationFilter={this.handleNavigationFilter}
-									classModifier="wide"
 								/>
 								<div className="checkout-page">
 									<Header
@@ -350,6 +331,27 @@ class App extends Component {
 							</Fragment>
 						)} />
 
+						<Route exact path="/weddings" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+								/>
+								<div className="checkout-page">
+									<Header
+										title='Weddings'
+									/>
+
+									<BackButton
+										title="back to shop"
+										link="/#/"
+									/>
+
+									<Weddings prismicCtx={this.props.prismicCtx}/>
+								</div>
+							</Fragment>
+						)} />
+
 						<Route exact path="/done" render={() => (
 							<Fragment>
 								<Navigation
@@ -358,15 +360,17 @@ class App extends Component {
 									basket={basket}
 								/>
 								<div className="checkout-page">
+
+								
+
 									<Header
-										title='Thank you'
 										basket={basket}
 									/>
 
-									<BackButton
-										title="back to shop"
-										link="/#/"
-									/>
+								<BackButton
+									title="back to shop"
+									link="/#/"
+								/>
 
 									<Done />
 								</div>
@@ -380,9 +384,7 @@ class App extends Component {
 									handleNavigationFilter={this.handleNavigationFilter}
 								/>
 								<div className="checkout-page">
-									<Header
-										title='Sorry'
-									/>
+									<Header />
 
 									<BackButton
 										title="back to shop"

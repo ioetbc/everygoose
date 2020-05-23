@@ -104,9 +104,16 @@ h4 {
 	color: $color-red;
 	font-weight: bolder;
 	text-transform: capitalize;
+	font-size: 0.9rem;
 
 	@media screen and (min-width: 1000px) {
 		padding-left: 24px;
+	}
+}
+
+.product-title {
+	@media screen and (min-width: 1000px) {
+		padding-right: 12px;
 	}
 }
 

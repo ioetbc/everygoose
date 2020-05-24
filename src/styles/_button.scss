@@ -163,6 +163,7 @@ button {
   margin-left: auto;
   padding-bottom: 24px;
   display: block;
+  width: 50px;
   filter: drop-shadow(5px 3px 12px rgba(0, 0, 0, 0.4));
   @media screen and (min-width: 1000px) {
     display: none;

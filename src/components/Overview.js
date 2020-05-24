@@ -66,7 +66,7 @@ const Overview = ({ payPage, deliveryCharge, subTotal, checkout }) => {
                 <p style={{ marginBottom: '24px' }}>There are no items in your basket.</p>
                 <Link to={{ pathname: "/" }}>
                     <Button
-                        text="back to homepage"
+                        text="back to shop"
                     />
                 </Link>
             </div>

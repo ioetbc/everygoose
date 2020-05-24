@@ -25,8 +25,6 @@ const Product = ({ location, history }) => {
             const cardWidth = get(item, 'card_dimensions.width', 10.5)
             const cardHeight = get(item, 'card_dimensions.height', 14.8);
     
-            console.log('cardWidth', cardWidth);
-    
             if (cardWidth === 10.5 && cardHeight === 14.8) slideshowImages.push(PortraitInside, PortraitEnvelope);
         }
     
@@ -49,7 +47,7 @@ const Product = ({ location, history }) => {
         } else {
             return (
                 <main className="main-content">
-                    <p>No items selected, <Link to={{ pathname: "/"}}>back to homepage</Link></p>
+                    <p>No items selected, <Link to={{ pathname: "/"}}>back to shop</Link></p>
                 </main>
             )
         }

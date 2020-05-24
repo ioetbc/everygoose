@@ -12,7 +12,7 @@ const Sorry = () => {
             <p style={{ marginBottom: '24px' }}>Sorry there was an error processing your order. Please try again later.</p>
             <Link to={{ pathname: "/"}}>
                 <Button
-                    text="back to home"
+                    text="back to shop"
                 />
             </Link> 
         </main>,

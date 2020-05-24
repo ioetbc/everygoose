@@ -204,7 +204,7 @@ class Contact extends Component {
                     }
                         <Link to={{ pathname: "/"}}>
                             <Button
-                                text="back to home"
+                                text="back to shop"
                             />
                         </Link> 
                     </div>

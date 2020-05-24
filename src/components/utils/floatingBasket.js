@@ -8,15 +8,14 @@ const floatingBasket = () => {
     if (basket.length < 1) return null
 
     return (
-        null
-        // <div
-        //     onClick={() => window.location='/#/checkout'} className="basket-wrapper floating-basket"
-        // >
-        //     <img className="basket-icon" src={BasketIcon}></img>
-        //     {basket.length > 0 &&
-        //         <div className="basket-amount">{basket && basket.length}</div>
-        //     }
-        // </div>
+        <div
+            onClick={() => window.location='/#/checkout'} className="basket-wrapper floating-basket"
+        >
+            <img className="basket-icon" src={BasketIcon}></img>
+            {basket.length > 0 &&
+                <div className="basket-amount">{basket && basket.length}</div>
+            }
+        </div>
     )
 }
 

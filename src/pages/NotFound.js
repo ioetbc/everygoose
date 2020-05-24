@@ -12,7 +12,7 @@ const NotFound = () => {
                 <p style={{ marginBottom: '24px' }}>Sorry this page could not be found.</p>
                 <Link to={{ pathname: "/"}}>
                     <Button
-                        text="back to home"
+                        text="back to shop"
                     />
                 </Link> 
             </main>

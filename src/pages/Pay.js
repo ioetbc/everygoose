@@ -83,7 +83,7 @@ class Product extends Component {
         } else {
             return (
                 <main className="main-content">
-                    <p>No items selected, <Link to={{ pathname: "/"}}>back to homepage</Link></p>        
+                    <p>No items selected, <Link to={{ pathname: "/"}}>back to shop</Link></p>        
                 </main>
                 )
             }

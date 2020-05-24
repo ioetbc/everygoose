@@ -12,7 +12,7 @@ const About = () => {
             <p style={{ marginBottom: '24px' }}>Your order has been recieved and is being processed.</p>
             <Link to={{ pathname: "/"}}>
                 <Button
-                    text="back to home"
+                    text="back to shop"
                 />
             </Link> 
         </main>,

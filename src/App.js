@@ -84,6 +84,8 @@ class App extends Component {
 		const omitedPrintData = doc.data.prints.filter(p => !p.hide_product);
 		const allProducts = omitedProductData.concat(omitedPrintData).reverse();
 
+		const chunked = chunkProducts(allProducts)
+
 		allProducts.forEach(item => {
 			this.state.products.push({
 				title: item.product_title[0].text,

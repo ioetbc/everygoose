@@ -2,33 +2,37 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const cors = require('cors')({ origin: true });
 const { FirebaseFunctionsRateLimiter } = require("firebase-functions-rate-limiter");
-const stripe = require('stripe')(functions.config().stripe.secret_key)
+const stripe = require('stripe')(functions.config().stripe.secret_key);
+const sendgrid = require('@sendgrid/mail');
+const sendgridSecret = functions.config().sendgrid.secret_key;
+sendgrid.setApiKey(sendgridSecret);
 const uuid = require('uuidv4').default;
 const axios = require('axios');
 
 const validateForm = require('./utils/validateForm');
+const validateContactForm = require('./utils/validateContactForm')
 const getDeliveryCharge = require('./utils/deliveryCharge');
 const createCustomer = require('./utils/createCustomer');
 const capturePaypalPayment = require('./utils/capturePaypalPayment');
 const sendCommunications = require('./utils/sendCommunications');
 
-// const serviceAccount = require(functions.config().google.service_account);
+const serviceAccount = require(functions.config().google.service_account);
 const slackUrl = functions.config().slack.api_url;
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: functions.config().db.url
-// });
-
 admin.initializeApp({
-    apiKey: functions.config().db.api_key,
-    authDomain: functions.config().db.auth_domain,
-    databaseURL: functions.config().db.url,
-    projectId: functions.config().db.project_id,
-    messagingSenderId: functions.config().db.message_sender_id,
-    appId: functions.config().db.app_id,
-    storageBucket: functions.config().db.storage_bucket,
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: functions.config().db.url
 });
+
+// admin.initializeApp({
+//     apiKey: functions.config().db.api_key,
+//     authDomain: functions.config().db.auth_domain,
+//     databaseURL: functions.config().db.url,
+//     projectId: functions.config().db.project_id,
+//     messagingSenderId: functions.config().db.message_sender_id,
+//     appId: functions.config().db.app_id,
+//     storageBucket: functions.config().db.storage_bucket,
+// });
 
 const db = admin.firestore();
 
@@ -144,20 +148,20 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
 exports.contact = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
-        console.log('calling contact schema')
-        const validationError = contactSchema.validate({
-            name: name,
-            email: email,
-            phone: phone,
-            message: message,
+        console.log('calling contact schema',)
+        const {
+            email,
+            name,
+            message
+        } = req.body;
 
-        }).error;
+        const validationSuccess = validateContactForm({ email, name, message });
 
         try {
-            if (validationError) throw new Error(`form validation error: ${validationError}`);
+            if (!validationSuccess) throw new Error('Contact form validation error')
 
             const contactEmail = {
-                to: 'hello@everygoose.com',
+                to: 'ioetbc@gmail.com',
                 from: {
                     email: 'hello@everygoose.com',
                     name: 'contact',
@@ -166,7 +170,6 @@ exports.contact = functions.https.onRequest(async (req, res) => {
                 dynamic_template_data: {
                     name: name,
                     email: email,
-                    phone: phone,
                     message: message,
                 }
             }
@@ -177,10 +180,12 @@ exports.contact = functions.https.onRequest(async (req, res) => {
             .catch((error) => {
                 throw new Error('email error.', error);
             })
-            res.send('success');
+            res.send(200);
         } catch (error) {
             console.log('contact email error', error);
-            res.send('error');
+            const slackUrl = functions.config().slack.api_url;
+            await axios.post(slackUrl, { text: `enquiry error, email not sent *${error}*` });
+            res.send(500);
         }
     })
 });

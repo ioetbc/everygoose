@@ -30,9 +30,10 @@ class ProductDetails extends Component {
             return "Free delivery for prints within the UK"
         }
 
-        if (subTotal > 35) {
-            return 'Free delivery on UK orders over £35.00'
+        if (subTotal > 35 || total > 35) {
+            return 'Free delivery'
         }
+
         return `Delivery from £${getDeliveryCharge('United Kingdom', [{name: 'United Kingdom'}], [{product_type: productClone.product_type}], total).toFixed(2)}`;
     }
 

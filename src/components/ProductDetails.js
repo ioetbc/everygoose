@@ -66,7 +66,7 @@ class ProductDetails extends Component {
                 <p style={{ marginBottom: '20px' }}>{product.description}</p>
 
                 {product.product_type === 'print' &&
-                    <div className="item-quantity">
+                    <div className="item-quantity product-details">
                         <select
                             onChange={(e) => this.updateBasket(e, basket, product)}
                             className="quantity-select"
@@ -81,7 +81,7 @@ class ProductDetails extends Component {
                 }
 
                 {product.product_type === 'print' &&
-                    <div className="item-quantity" style={{ marginTop: '20px' }}>
+                    <div className="item-quantity product-details" style={{ marginTop: '20px' }}>
                         <select
                             onChange={(e) => this.updateBasket(e, basket, product)}
                             className="quantity-select"
@@ -95,7 +95,7 @@ class ProductDetails extends Component {
                     </div>
                 }
 
-                <div className="item-quantity">
+                <div className="item-quantity product-details">
                     <select
                         className="quantity-select"
                         onChange={(e) => this.updateBasket(e, basket, product)}

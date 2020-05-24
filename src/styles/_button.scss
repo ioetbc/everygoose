@@ -67,6 +67,10 @@ button {
   display: inline-block;
   margin-bottom: 16px;
   width: 110px;
+
+  &.product-details {
+    display: block;
+  }
   
   .text-small {
     display: none;
@@ -90,7 +94,7 @@ button {
         border-radius: 3px;
         background: transparent; 
         padding: 0.3rem .5rem;
-        min-width: 110px;
+        width: 110px;
         font-size: 0.8rem;
         text-transform: capitalize;
     }

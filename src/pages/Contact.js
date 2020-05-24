@@ -28,8 +28,8 @@ class Contact extends Component {
         const loadingSpinnerActive = document.getElementsByClassName('loading-spinner')[0];
         axios({
             method: 'post',
-            // url: process.env.REACT_APP_CONTACT_ENDPOINT,
-            url: process.env.REACT_APP_CONTACT_ENDPOINT_DEV,
+            url: process.env.REACT_APP_CONTACT_ENDPOINT,
+            // url: process.env.REACT_APP_CONTACT_ENDPOINT_DEV,
             config: {
                 headers: {
                     'Content-Type': 'application/json'

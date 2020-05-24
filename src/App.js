@@ -191,7 +191,7 @@ class App extends Component {
 									/>
 									<BackButton
 										title="continue shopping"
-										link="/#/product"
+										link="/#/"
 									/>
 									<Checkout
 										{...routeProps}

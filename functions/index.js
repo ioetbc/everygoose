@@ -16,23 +16,23 @@ const createCustomer = require('./utils/createCustomer');
 const capturePaypalPayment = require('./utils/capturePaypalPayment');
 const sendCommunications = require('./utils/sendCommunications');
 
-const serviceAccount = require(functions.config().google.service_account);
+// const serviceAccount = require(functions.config().google.service_account);
 const slackUrl = functions.config().slack.api_url;
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: functions.config().db.url
-});
-
 // admin.initializeApp({
-//     apiKey: functions.config().db.api_key,
-//     authDomain: functions.config().db.auth_domain,
-//     databaseURL: functions.config().db.url,
-//     projectId: functions.config().db.project_id,
-//     messagingSenderId: functions.config().db.message_sender_id,
-//     appId: functions.config().db.app_id,
-//     storageBucket: functions.config().db.storage_bucket,
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: functions.config().db.url
 // });
+
+admin.initializeApp({
+    apiKey: functions.config().db.api_key,
+    authDomain: functions.config().db.auth_domain,
+    databaseURL: functions.config().db.url,
+    projectId: functions.config().db.project_id,
+    messagingSenderId: functions.config().db.message_sender_id,
+    appId: functions.config().db.app_id,
+    storageBucket: functions.config().db.storage_bucket,
+});
 
 const db = admin.firestore();
 

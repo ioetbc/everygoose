@@ -1,21 +1,16 @@
-const chunkProducts = (products) => {
-    // how many chunks
-    const chunks = Math.ceil(products.length / 20);
-    console.log('chunks', chunks);
+const chunkProducts = (array) => {
+    const chunked_arr = [];
+    const size = 12;
 
-    const pages = [{}, {}, {}, {}, {}];
-    const hmm = Math.ceil(products.length / chunks);
-    console.log('hmm', hmm)
-    products.map((p, index) => {
-        if (index % 20 === 0) { 
-            pages.splice(0, p);
-        } else {
-
-        }
-    })
-    console.log('pages', pages)
-
-
+    for (let i = 0; i < array.length; i++) {
+      const last = chunked_arr[chunked_arr.length - 1];
+      if (!last || last.length === size) {
+        chunked_arr.push([array[i]]);
+      } else {
+        last.push(array[i]);
+      }
+    }
+    return chunked_arr;
 };
 
 export default chunkProducts;

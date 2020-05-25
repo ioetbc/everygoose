@@ -12,8 +12,6 @@ const fadeInSections = fetchProducts => {
     }, options);
 
     observer.observe(sections);
-
-    // unobserve the footer once all have been loaded
 }
 
 export default fadeInSections;

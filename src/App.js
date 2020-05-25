@@ -44,7 +44,8 @@ class App extends Component {
 			products: [],
 			doc: null,
 			filtered: false,
-			pages: []
+			pages: [],
+			pageNo: 1,
 		}
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 		this.fetchPage = this.fetchPage.bind(this);
@@ -55,7 +56,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		fadeInSections(this.fetchPage);
+		fadeInSections(this.fetchPage, false);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -76,17 +77,18 @@ class App extends Component {
 	}
 
 	async fetchPage() {
-		const { cardTypes } = this.state;
+		const { cardTypes, pageNo } = this.state;
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XVxFfREAACEAlCKe');
 
 		const omitedProductData = doc.data.products.filter(p => !p.hide_product);
 		const omitedPrintData = doc.data.prints.filter(p => !p.hide_product);
 		const allProducts = omitedProductData.concat(omitedPrintData).reverse();
+		const chunked = chunkProducts(allProducts);
+		this.setState({ pageNo: pageNo + 1 });
+		const pages = chunked[pageNo] || []
 
-		const chunked = chunkProducts(allProducts)
-
-		allProducts.forEach(item => {
+		pages.forEach(item => {
 			this.state.products.push({
 				title: item.product_title[0].text,
 				price: get(item, 'product_price', 0).toFixed(2),
@@ -121,8 +123,6 @@ class App extends Component {
 	render() {
 		const { cardTypes, doc, products, filteredProducts } = this.state;
 		const basket = getBasket();
-
-		console.log({products})
 
 		return (
 			<Fragment>

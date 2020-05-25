@@ -29,7 +29,6 @@ export default function deliveryCharge(country, europeanCountries, basket, total
     if (europeanCountries) {
         const productType = basket.map(i => i.product_type);
 
-
         if (includes(productType, 'card')) {
             if (includes(europeanCountry, country)) {
                 if (includes(country, 'United Kingdom')) {

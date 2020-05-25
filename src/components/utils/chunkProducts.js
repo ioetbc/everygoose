@@ -7,7 +7,7 @@ const chunkProducts = (products) => {
     const hmm = Math.ceil(products.length / chunks);
     console.log('hmm', hmm)
     products.map((p, index) => {
-        if (index % 20 === 0) {
+        if (index % 20 === 0) { 
             pages.splice(0, p);
         } else {
 

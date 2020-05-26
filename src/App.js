@@ -31,6 +31,7 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer'
 import Header from './components/Header';
 import FloatingButton from './components/utils/floatingBasket';
+import CookieBanner from './components/utils/CookieBanner';
 import BackButton from './components/utils/BackButton'
 
 import './App.scss';
@@ -40,6 +41,8 @@ class App extends Component {
 		super(props);
 		this.state = {
 			basket: JSON.parse(localStorage.getItem('session')) || [],
+			customer: JSON.parse(localStorage.getItem('customer')) || localStorage.setItem('customer', JSON.stringify({ cookieConsent: false })),
+			enableCookieBanner: true,
 			cardTypes: [],
 			products: [],
 			doc: null,
@@ -49,6 +52,7 @@ class App extends Component {
 		}
 		this.handleNavigationFilter = this.handleNavigationFilter.bind(this);
 		this.fetchPage = this.fetchPage.bind(this);
+		this.cookieConsent = this.cookieConsent.bind(this);
 
 		if (this.props.prismicCtx) {
 			this.fetchPage(props);
@@ -119,10 +123,16 @@ class App extends Component {
 
 		this.setState({ cardTypes: uniq(cardTypes), doc });
 	}
+
+	cookieConsent() {
+		this.setState({ enableCookieBanner: false });
+		localStorage.setItem('customer', JSON.stringify({ cookieConsent: true }));
+	}
 	
 	render() {
-		const { cardTypes, doc, products, filteredProducts } = this.state;
+		const { cardTypes, doc, products, filteredProducts, enableCookieBanner } = this.state;
 		const basket = getBasket();
+		const customer = JSON.parse(localStorage.getItem('customer'))
 
 		return (
 			<Fragment>
@@ -418,10 +428,15 @@ class App extends Component {
 								</div>
 							</Fragment>
 						)} />
-
-						
 					</Switch>
+
 				</HashRouter>
+
+				{(enableCookieBanner && !customer.cookieConsent) &&
+					<CookieBanner
+						handleConsent={this.cookieConsent}
+					/>
+				}
 			</div>
 			<Router>
 				<Route>

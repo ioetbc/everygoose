@@ -9,7 +9,8 @@ const Footer = () => {
             <div className="footer-items">
                 <ul>
                     <li onClick={() => window.location='/#/contact'}>Contact</li>
-                    <li onClick={() => window.location='/#/delivery'}>Delivery & returns</li>
+                    <li onClick={() => window.location='/#/weddings'}>Weddings</li>
+                    <li onClick={() => window.location='/#/trade'}>Trade</li>
                     <li onClick={() => window.location='/#/terms'}>Terms and conditions</li>
                 </ul>
             </div>

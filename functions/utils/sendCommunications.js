@@ -34,9 +34,9 @@ const sendEmail = async (payload) => {
     const breakdownMapped = breakdown.map(u => `${u.quantity} x ${u.title}`);
 
     const orderReciept = {
-        to: 'ioetbc@gmail.com',
+        to: 'hello@everygoose.com',
         from: {
-            email: 'hello@everygoose.com',
+            email: 'hello+shop@everygoose.com',
         },
         templateId: 'd-31290132706a4eaaa0fa6c85b34a8ec3',
         dynamic_template_data: {

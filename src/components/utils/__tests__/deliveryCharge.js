@@ -55,7 +55,6 @@ it('UK bundle charge', () => {
     }];
     const country = 'United Kingdom';
     const charge = deliveryCharge(country, europeanCountries, basket, total);
-    console.log('charge bindle', charge)
     expect(charge).toEqual(1.50);
 });
 

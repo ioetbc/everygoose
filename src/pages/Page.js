@@ -15,8 +15,7 @@ const Page = ({ doc, products }) => {
 						{doc ? 
 							products.map((item, index) => <div key={index} className="shop-items">
 									<Link className="link" to={{ pathname: "/product", state: { item } }}>
-										{/*<img src={item.image_1_url} className="shop-images"></img>*/}
-										<img src={index%2 === 0 ? TestImage : TestImageLandscape} className="shop-images"></img>
+										<img src={item.thumbnail} className="shop-images"></img>
 										<p className="product-title">{item.title}</p>
 										<p className="product-price">£{item.price}</p>
 									</Link>

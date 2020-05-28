@@ -5,6 +5,17 @@
             display: none;
         }
     }
+
+    &.shop {
+        .header-title {
+            margin-bottom: 0;
+        }
+        @media screen and (min-width: 1000px) {
+            .header-title {
+                display: none;
+            }
+        }
+    }
 }
 .basket-wrapper {
     display: none;

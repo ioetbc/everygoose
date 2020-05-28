@@ -36,7 +36,8 @@ class Weddings extends Component {
         });
         
         this.setState({
-            aboutContent: res.results[0].data.main_content[0].text,
+            // aboutContent: res.results[0].data.main_content[0].text,
+            aboutContent: res.results[0].data.main_content.map(p => <p style={{ marginBottom: '24px' }}>{p.text}</p>),
             slideshowImages: [res.results[0].data.image_1.url, res.results[0].data.image_2.url, res.results[0].data.image_3.url, res.results[0].data.image_4.url, res.results[0].data.image_5.url]
         });
     }

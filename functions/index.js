@@ -63,7 +63,6 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             const subtotal = (total + deliveryCharge).toFixed(2);
 
             if (req.body.paymentMethod === 'stripe') {
-                console.log('calling pre aut');
                 const { chargeId, last4 } = await stripe.charges.create({
                     amount: subtotal * 100,
                     currency: 'GBP',
@@ -75,7 +74,6 @@ exports.payment = functions.https.onRequest(async (req, res) => {
                         return { chargeId: data.id, last4: data.payment_method_details.card.last4 } ;
                     })
                     .catch(error => { 
-                        console.log('in the catch')
                         throw new Error(error)
                     });
 
@@ -131,8 +129,6 @@ exports.payment = functions.https.onRequest(async (req, res) => {
             return res.sendStatus(200);
 
         } catch (error) {
-            console.log('in the catch', error);
-
             try {
                 const slackUrl = functions.config().slack.api_url;
                 await axios.post(slackUrl, { text: `customer: *${customerId} ${error}*` });
@@ -148,7 +144,6 @@ exports.payment = functions.https.onRequest(async (req, res) => {
 
 exports.contact = functions.https.onRequest(async (req, res) => {
     cors(req, res, async () => {
-        console.log('calling contact schema',)
         const {
             email,
             name,
@@ -174,15 +169,13 @@ exports.contact = functions.https.onRequest(async (req, res) => {
                 }
             }
 
-            console.log('sending contact email');
             await sendgrid.send(contactEmail)
 
             .catch((error) => {
                 throw new Error('email error.', error);
             })
             res.send(200);
-        } catch (error) {
-            console.log('contact email error', error);
+        } catch (error) {   
             const slackUrl = functions.config().slack.api_url;
             await axios.post(slackUrl, { text: `enquiry error, email not sent *${error}*` });
             res.send(500);

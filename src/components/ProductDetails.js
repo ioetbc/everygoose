@@ -65,7 +65,7 @@ class ProductDetails extends Component {
                 <h3>{product.title}</h3>
                 <p style={{ marginBottom: '20px' }}>{product.description}</p>
 
-                {product.product_type === 'print' &&
+                {/*{product.product_type === 'print' &&
                     <div className="item-quantity product-details">
                         <select
                             onChange={(e) => this.updateBasket(e, basket, product)}
@@ -93,7 +93,7 @@ class ProductDetails extends Component {
                             <option value={'a3'}>A3</option>
                         </select>
                     </div>
-                }
+                }*/}
 
                 <div className="item-quantity product-details">
                     <select

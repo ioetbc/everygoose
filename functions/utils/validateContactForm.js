@@ -1,9 +1,5 @@
 const Joi = require('@hapi/joi');
 const validateContactForm = ({ name, email, message }) => {
-    console.log('name', name)
-    console.log('email', email);
-    console.log('message', message)
-
     const schema = Joi.object({
         name: Joi.string().required().min(2).max(100),
         //eslint-disable-next-line

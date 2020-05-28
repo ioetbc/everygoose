@@ -51,8 +51,6 @@ class Product extends Component {
         const total = getPrice(basket);
         const subTotal = (parseFloat(total) + this.state.deliveryCharge).toFixed(2);
 
-        console.log('basket', basket)
-
         if (basket) {
             return (
                 <Fragment>

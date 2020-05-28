@@ -74,9 +74,31 @@ class App extends Component {
 		if (item === 'all') {
 			return this.setState({ filteredProducts: false });
 		}
+		const chunked = chunkProducts(this.state.allProducts, this.state.allProducts.length);
+		const all = [];
+		chunked[0].forEach(item => {
+			all.push({
+				title: item.product_title[0].text,
+				price: get(item, 'product_price', 0).toFixed(2),
+				a4_price: get(item, 'product_price', 0).toFixed(2),
+				image_1_url: item.image_1.url,
+				thumbnail: item.thumbnail.url,
+				quantity: 1,
+				description: item.product_description[0].text,
+				type: item.type_of_card,
+				product_type: item.product_type,
+				card_dimensions: {
+					width: item.product_width,
+					height: item.product_height
+				},
+				size: 'a4',
+				framed: 'false',
+				product_code: item.product_code,
+			});
+		});
 
 		this.setState({
-			filteredProducts: this.state.products.filter(product => product.type === item),
+			filteredProducts: all.filter(product => product.type === item),
 		});
 	}
 
@@ -85,22 +107,18 @@ class App extends Component {
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XVxFfREAACEAlCKe');
 
-		const omitedProductData = doc.data.products.filter(p => !p.hide_product);
-		const omitedPrintData = doc.data.prints.filter(p => !p.hide_product);
-		const allProducts = omitedProductData.concat(omitedPrintData).reverse();
-		const chunked = chunkProducts(allProducts);
+		const allProducts = doc.data.products.filter(p => !p.hide_product).reverse();
+		const chunked = chunkProducts(allProducts, 12);
 		this.setState({ pageNo: pageNo + 1 });
 		const pages = chunked[pageNo] || []
 
-		pages.forEach(item => {
+		allProducts.forEach(item => {
 			this.state.products.push({
 				title: item.product_title[0].text,
 				price: get(item, 'product_price', 0).toFixed(2),
 				a4_price: get(item, 'product_price', 0).toFixed(2),
-				a3_price: get(item, 'a3_price', 0).toFixed(2),
-				a4_framed_price: get(item, 'a4_framed_price', 0).toFixed(2),
-				a3_framed_price: get(item, 'a3_framed_price', 0).toFixed(2),
 				image_1_url: item.image_1.url,
+				thumbnail: item.thumbnail.url,
 				quantity: 1,
 				description: item.product_description[0].text,
 				type: item.type_of_card,
@@ -121,7 +139,7 @@ class App extends Component {
 
 		cardTypes.unshift('all');
 
-		this.setState({ cardTypes: uniq(cardTypes), doc });
+		this.setState({ cardTypes: uniq(cardTypes), doc, allProducts });
 	}
 
 	cookieConsent() {
@@ -151,6 +169,7 @@ class App extends Component {
 										shop
 										navigationItems={cardTypes}
 										handleNavigationFilter={this.handleNavigationFilter}
+										title='Shop'
 									/>
 									<Page
 										{...routeProps}

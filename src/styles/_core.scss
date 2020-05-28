@@ -123,22 +123,37 @@
     position: fixed;
     top: 90vh;
     background: white;
+    width: 100%;
     border: 1px solid $color-red;
-    width: 80%;
-    max-width: 500px;
-    height: 55px;
+    top: calc(100vh - 75px);
+    height: 75px;
     left: 0;
     right: 0;
     margin: 0 auto;
-    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: space-around;
+    box-shadow: 0 2px 25px 0 rgba(30, 13, 45, 0.1), 0 2px 15px 0 rgba(46, 25, 70, 0.3);
+    z-index: 5;
+
+
+    @media screen and (min-width: 600px) {
+        height: 55px;
+        top: 90vh;
+        border-radius: 4px;
+        width: 80%;
+        max-width: 520px;
+    }
+
 
     p {
-        max-width: 300px;
+        max-width: 190px;
         font-size: 12px;
         line-height: 17px;
+
+        @media screen and (min-width: 600px) {
+            max-width: none;
+        }
 
         a {
             line-height: 17px;
@@ -160,6 +175,7 @@
         font-weight: bolder;
         cursor: pointer;
         padding: 7px 19px;
+
 
         &:hover {
             background: darken($color-red, 5)

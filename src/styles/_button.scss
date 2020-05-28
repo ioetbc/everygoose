@@ -40,13 +40,17 @@ button {
 }
 
 .back-button {
-    display: inline-flex;
+    display: flex;
     margin-top: 16px;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    height: 40px;
+    @media screen and (min-width: 1000px) {
+      margin-top: -10px;
+    }
 
     img {
         width: 32px;

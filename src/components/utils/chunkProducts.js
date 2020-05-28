@@ -1,6 +1,6 @@
-const chunkProducts = (array) => {
+const chunkProducts = (array, chunkSize) => {
     const chunked_arr = [];
-    const size = 12;
+    const size = chunkSize;
 
     for (let i = 0; i < array.length; i++) {
       const last = chunked_arr[chunked_arr.length - 1];

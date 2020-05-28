@@ -16,7 +16,6 @@ const capturePaypalPayment = (payload) => {
 			});
         },
         onApprove: async (data, actions) => {
-            console.log('payload m8', payload)
             const lads = {
                 firstName: payload.firstName,
                 lastName: payload.lastName,

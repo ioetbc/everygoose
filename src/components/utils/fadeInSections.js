@@ -1,3 +1,5 @@
+import IntersectionObserver from 'intersection-observer-polyfill';
+
 const fadeInSections = fetchProducts => {
     const sections = document.querySelector('.footer');
     const options = {

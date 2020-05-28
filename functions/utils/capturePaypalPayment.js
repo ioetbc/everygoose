@@ -6,11 +6,10 @@ const preAuthPaypalPayment = async (orderID, subtotal) => {
     const paypalClient = functions.config().paypal.paypal_client;
     const paypalSecret = functions.config().paypal.paypal_secret;
 
-    const environment = new paypal.core.SandboxEnvironment(paypalClient, paypalSecret);
+    console.log('paypalClient', paypalClient)
+
+    const environment = new paypal.core.LiveEnvironment(paypalClient, paypalSecret);
     const client = new paypal.core.PayPalHttpClient(environment);
-    
-    console.log('subtotal', subtotal)
-    console.log('orderID', orderID)
 
     const request = new paypal.orders.OrdersCaptureRequest(orderID);
     request.requestBody({});

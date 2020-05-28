@@ -76,12 +76,9 @@ const handleOrder = async (payload, paymentMethod) => {
     .then((res) => {
         const basketHandler = new BasketHandler({});
         basketHandler.blat();
-
-        console.log('the ritzy', res);
         return res;
     })
     .catch((error) => {
-        console.log('errror erorrro ritzy', error)
         return error;
     });
 };

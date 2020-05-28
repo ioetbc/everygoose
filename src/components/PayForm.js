@@ -94,8 +94,6 @@ class PayForm extends Component {
         const hasErrors = [...document.getElementsByClassName('error-message')].length > 0;
         let formFilledIn = false;
 
-        console.log('basketoifhiewfigeirfjeijg',this.props.basket)
-
         if (
             this.state.firstName !== undefined &&
             this.state.lastName !== undefined &&

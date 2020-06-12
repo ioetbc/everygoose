@@ -23,6 +23,7 @@ import TermsConditions from './pages/Terms';
 import Trade from './pages/Trade';
 import About from './pages/About';
 import Weddings from './pages/Weddings';
+import Murals from './pages/Murals';
 import Done from './pages/Done';
 import Sorry from './pages/Sorry';
 import Delivery from './pages/Delivery';
@@ -150,7 +151,7 @@ class App extends Component {
 	render() {
 		const { cardTypes, doc, products, filteredProducts, enableCookieBanner } = this.state;
 		const basket = getBasket();
-		const customer = JSON.parse(localStorage.getItem('customer'))
+		const customer = JSON.parse(localStorage.getItem('customer'));
 
 		return (
 			<Fragment>
@@ -163,6 +164,7 @@ class App extends Component {
 									navigationItems={cardTypes}
 									handleNavigationFilter={this.handleNavigationFilter}
 									shop
+									classModifier="banner"
 								/>
 								<div className="shop-page">
 									<Header
@@ -379,6 +381,27 @@ class App extends Component {
 									/>
 
 									<Weddings prismicCtx={this.props.prismicCtx}/>
+								</div>
+							</Fragment>
+						)} />
+
+						<Route exact path="/murals" render={() => (
+							<Fragment>
+								<Navigation
+									navigationItems={cardTypes}
+									handleNavigationFilter={this.handleNavigationFilter}
+								/>
+								<div className="checkout-page">
+									<Header
+										title='Murals'
+									/>
+
+									<BackButton
+										title="back to shop"
+										link="/#/"
+									/>
+
+									<Murals prismicCtx={this.props.prismicCtx}/>
 								</div>
 							</Fragment>
 						)} />

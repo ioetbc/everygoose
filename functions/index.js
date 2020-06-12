@@ -155,10 +155,11 @@ exports.contact = functions.https.onRequest(async (req, res) => {
         try {
             if (!validationSuccess) throw new Error('Contact form validation error')
 
+            const toEmail = 'hello@everygoose.com';
             const contactEmail = {
-                to: 'ioetbc@gmail.com',
+                to: toEmail,
                 from: {
-                    email: 'hello@everygoose.com',
+                    email: 'hello+contact@everygoose.com',
                     name: 'contact',
                 },
                 templateId: 'd-2608b42e516e427e82685d3fb18f4e73',

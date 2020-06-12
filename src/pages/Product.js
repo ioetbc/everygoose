@@ -34,17 +34,10 @@ const Product = ({ location, history }) => {
         if (item) {
             return (
                 <Fragment>
-                    <ScrollToTop />
-                    <main className="main-content">
-                        <div className="slide-show-side-by-side">
+                    
                             <SlideShow
                                 slideshowImages={slideshowImages}
                             />
-                            <ProductDetails
-                                product={item}
-                            />
-                        </div>
-                    </main>
                 </Fragment>
             )
         } else {

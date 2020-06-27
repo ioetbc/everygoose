@@ -33,12 +33,10 @@ const Product = ({ location, history }) => {
     
         if (item) {
             return (
-                <Fragment>
-                    
+
                             <SlideShow
                                 slideshowImages={slideshowImages}
                             />
-                </Fragment>
             )
         } else {
             return (

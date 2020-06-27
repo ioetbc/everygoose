@@ -152,7 +152,10 @@
       margin: 0;
       position: relative;
       text-align: center;
-      background: #000; }
+      background: white;
+      height: 100%;
+      line-height: 0;
+    }
       .carousel .slide img {
         width: 100%;
         vertical-align: top;
@@ -213,3 +216,28 @@
     .carousel:hover .slide .legend {
       opacity: 1; }
   
+
+
+
+
+
+
+
+
+
+
+
+
+      .frame {        
+        &__zoom {
+          display: none;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 10;
+          transform-origin: 0 0;
+          cursor: none;
+        }
+      }

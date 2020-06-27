@@ -10,6 +10,7 @@ const Footer = () => {
                 <ul>
                     <li onClick={() => window.location='/#/contact'}>Contact</li>
                     <li onClick={() => window.location='/#/weddings'}>Weddings</li>
+                    <li onClick={() => window.location='/#/murals'}>Windows & Murals</li>
                     <li onClick={() => window.location='/#/trade'}>Trade</li>
                     <li onClick={() => window.location='/#/terms'}>Terms and conditions</li>
                 </ul>

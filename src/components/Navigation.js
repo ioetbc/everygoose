@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import Headroom from 'headroom.js'
 
 import Logo from '../images/misc/logo-animated.gif';
 import Hamburger from '../images/misc/hamburger.svg';
@@ -13,6 +14,16 @@ class Navigation extends Component {
         this.state = { showMobileMenu: false, showMoreCategories: false }
     }
 
+    componentDidUpdate() {
+        if (this.props.shop) {
+            const banner = document.getElementById("headroom");
+            if (banner) {
+                const headroom  = new Headroom(banner);
+                headroom.init();
+            }
+        }
+    }
+
     render() {
         const { navigationItems, handleNavigationFilter, shop, classModifier } = this.props;
         const { showMoreCategories } = this.state;
@@ -20,7 +31,13 @@ class Navigation extends Component {
         const categoryWrapperHeight = navigationItems.length * 45;
 
         return (
-            <div className={`navigation ${classModifier}`}>
+            <Fragment>
+                {shop &&
+                    <div className="free-delivery-banner mobile" id="headroom">
+                        <p>free delivery on UK orders over £35</p>
+                    </div>
+                }
+                <div className={`navigation ${classModifier}`}>
                 <div className="sticky">
                     <Link to={{ pathname: "/" }}>
                         <img className="navigation-logo" src={Logo} alt="EveryGoose logo" />                
@@ -59,6 +76,7 @@ class Navigation extends Component {
                         </div>
                         <Link to={{ pathname: "/about" }}><h4>about</h4></Link>
                         <Link to={{ pathname: "/weddings" }}><h4>weddings</h4></Link>
+                        <Link to={{ pathname: "/murals" }}><h4>Windows & Murals</h4></Link>
                         <Link to={{ pathname: "/trade" }}><h4>trade</h4></Link>
                         <Link to={{ pathname: "/contact" }}><h4>contact</h4></Link>
                         <Link to={{ pathname: "/checkout" }}>
@@ -86,6 +104,7 @@ class Navigation extends Component {
                     </div>
                 </div>
             </div>
+            </Fragment>
         )
     }
 };

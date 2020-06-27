@@ -80,7 +80,7 @@ class SlideShow extends Component {
                     )}
                 </Carousel>
             </div>
-        );
+        )
     }
 }
 

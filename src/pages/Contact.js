@@ -114,7 +114,7 @@ class Contact extends Component {
                 {!emailSent ?
                     <div>
                     <p>If you have any questions please get in touch via social media. Or use the contact form below and I will be happy to help.</p>
-                    <div className="social-items" style={{ position: 'relative', paddingLeft: '0px', bottom: '0px', marginTop: '14px',
+                    <div className="social-items contact" style={{ position: 'relative', paddingLeft: '0px', bottom: '0px', marginTop: '14px',
                     marginLeft: '-2px' }}>
                         <div
                             onClick={() => window.open('http://www.instagram.com/everygoose/', '_blank')}

@@ -37,6 +37,7 @@ const Product = ({ location, history }) => {
                     <ScrollToTop />
                     <main className="main-content">
                         <div className="slide-show-side-by-side">
+
                             <SlideShow
                                 slideshowImages={slideshowImages}
                             />

@@ -1,61 +1,87 @@
-import React, { Component, Fragment } from 'react';
-import Event from './utils/Event';
-import Magnifier from './utils/Magnifier';
-import Gallery from './utils/Gallery';
+import React, { Component } from 'react';
+import { Carousel } from 'react-responsive-carousel';
+// import blowUp from './utils/Blowup.js'
 
-export default class ReactSlickExample extends Component {
+class SlideShow extends Component {
     componentDidMount() {
-        const evt = new Event({});
-        const m = new Magnifier(evt, {
-            largeWrapper: document.getElementById('gallery-preview')
-        });
-
-        console.log('slideshowImages', this.props.slideshowImages)
-
-        const imageData = [
-            {
-                title: 'Downy Woodpecker',
-                thumb: 'https://images.prismic.io/everygoose/59973431-0d31-4d9c-84f2-570f36d9614e_P-019-S.jpg?auto=compress,format',
-                large: 'https://images.prismic.io/everygoose/59973431-0d31-4d9c-84f2-570f36d9614e_P-019-S.jpg?auto=compress,format',
-                url: 'http://commons.wikimedia.org/wiki/File:112_Downy_Woodpecker.jpg',
-                height: '540px'
-            },
-            {
-                title: 'Hooded Warbler',
-                thumb: 'https://images.prismic.io/everygoose/c06ff919-1874-40c7-893f-ad87ca7a5551_P-018.jpg?auto=compress,format',
-                large: 'https://images.prismic.io/everygoose/c06ff919-1874-40c7-893f-ad87ca7a5551_P-018.jpg?auto=compress,format',
-                url: 'http://commons.wikimedia.org/wiki/File:110_Hooded_Warbler.jpg',
-                height: '617px'
-            },
-            {
-                title: 'Pileated Woodpecker',
-                thumb: '/static/media/card-portrait-inside.45aa4c03.jpg',
-                large: '/static/media/card-portrait-inside.45aa4c03.jpg',
-                url: 'http://commons.wikimedia.org/wiki/File:111_Pileated_Woodpecker.jpg',
-                height: '300px'
-            },
-        ];
-
-       new Gallery(evt, m, {
-            gallery: document.getElementById('gallery'),
-            images: imageData,
-            prev: document.getElementById('gallery-prev'),
-            next: document.getElementById('gallery-next'),
-            previewText: document.getElementById('gallery-preview-title')
-        });
+        (() => {
+            // ========= SETTINGS ==========
+            const SIZE = 100;
+            const ZOOM = 2;
+            const TOUCH_OFFSET = -100;
+            
+            // ========== VARS =============
+            const frameElement = document.querySelector('.frame');
+            const frameZoomElement = document.querySelector('.frame__zoom');
+            
+            // ========== FUNCS ============
+            const attachMultipleEvents = (element, evs, handler) => {
+              (Array.isArray(evs) ? evs : [evs]).forEach(
+                ev => element.addEventListener(ev, handler));
+            }
+            
+            const moveHandler = (x, y) => {
+              frameZoomElement.style.clipPath = `circle(${SIZE / ZOOM}px at ${x}px ${y}px)`;
+              frameZoomElement.style.transform = `translate(-${x * (ZOOM - 1)}px, -${y * (ZOOM - 1)}px) scale(${ZOOM})`;
+            }
+            
+            const eventObjectToPosition = (e, relElement) => {
+              return e.touches && e.touches.length > 0 ? {
+                x: e.touches[0].clientX - relElement.offsetLeft + TOUCH_OFFSET,
+                y: e.touches[0].clientY - relElement.offsetTop + TOUCH_OFFSET
+              } : {
+                x: e.offsetX,
+                y: e.offsetY
+              }
+            }
+            
+            // ======= EVENT HANDLERS ======
+            attachMultipleEvents(frameElement, ['mousemove', 'touchmove'], ev => {
+              ev.preventDefault();
+              
+              const { x, y} = eventObjectToPosition(ev, frameElement);
+              moveHandler(x, y);
+            });
+            
+            attachMultipleEvents(frameElement, [ 'mouseenter', 'touchstart' ], ev => {
+              ev.preventDefault();
+              
+              frameZoomElement.style.display = 'initial';
+              
+              const { x, y} = eventObjectToPosition(ev, frameElement);
+              moveHandler(x, y);
+            });
+            
+            attachMultipleEvents(frameElement, [ 'mouseleave', 'touchend' ], ev => {
+              frameZoomElement.style.display = 'none';
+            });
+          })();
     }
-
     render() {
         return (
-            <div class="gallery">
-                <div class="slider">
-                    <ul id="gallery"></ul>
-                </div>
-                <div class="btn-wrapper">
-                    <button class="prev" id="gallery-prev">&lt;</button>
-                    <button class="next" id="gallery-next">&gt;</button>
-                </div>
+            <div className="slide-container">
+                <Carousel
+                    showIndicators={false}
+                    showStatus={false}
+                    showArrows={false}
+                    autoPlay={true}
+                >
+                    {this.props.slideshowImages.map((item, index) =>        
+                        <div class="frame">
+                            <img
+                                className="frame__pic placeholder-slideshow-item"
+                                src={item}
+                            />,
+                            <img
+                                className="frame__zoom"
+                                src={item}
+                            />
+                        </div>
+                    )}
+                </Carousel>
             </div>
         )
     }
 }
+
+export default SlideShow;

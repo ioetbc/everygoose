@@ -134,6 +134,12 @@ class ProductDetails extends Component {
                         onClick={() => basketHandler.add()}
                     />
                 </Link>
+
+
+            <div class="magnifier-preview" id="gallery-preview">
+                <div class="title" id="gallery-preview-title">&nbsp;</div>
+            </div>
+
             </div>
         );
     }   

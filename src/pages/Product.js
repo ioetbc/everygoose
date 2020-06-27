@@ -40,6 +40,7 @@ const Product = ({ location, history }) => {
 
                             <SlideShow
                                 slideshowImages={slideshowImages}
+                                zoom
                             />
                             <ProductDetails
                                 product={item}

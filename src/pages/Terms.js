@@ -25,7 +25,9 @@ class Terms extends Component {
 		const doc = await Prismic.client('https://everygoose.prismic.io/api/v2')
 			.getByID('XXq3vBAAACUAHSd9');
         if (doc) {
-            this.setState({ termsContent: doc.data.main[0].text })
+            this.setState({
+                termsContent: doc.data.main.map(p => <p style={{ marginBottom: '24px' }}>{p.text}</p>),
+            })
         }
 	}
     

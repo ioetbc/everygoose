@@ -74,6 +74,7 @@ class Navigation extends Component {
                                 </React.Fragment>
                             }
                         </div>
+                        <Link className="mobile-only" to={{ pathname: "/" }}><h4>home</h4></Link>
                         <Link to={{ pathname: "/about" }}><h4>about</h4></Link>
                         <Link to={{ pathname: "/weddings" }}><h4>weddings</h4></Link>
                         <Link to={{ pathname: "/murals" }}><h4>Windows & Murals</h4></Link>

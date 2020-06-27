@@ -187,3 +187,9 @@
         }
     }
 }
+
+.mobile-only {
+    @media (min-width: 1000px) {
+        display: none!important;
+    }
+}

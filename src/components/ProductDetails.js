@@ -125,7 +125,7 @@ class ProductDetails extends Component {
 
                 <ul className="key-features">
                     <li>£{subTotal}</li>
-                    <li>{`H${cardHeight}cm x W${cardWidth}cm ${cardSize} folded card`}</li>
+                    <li>{`H${cardHeight}cm x W${cardWidth}cm ${cardSize}`}</li>
                     <li>{this.deliveryLine(product, basket, subTotal)}</li>
                 </ul>
                 <Link to={{ pathname: "/checkout", state: { productClone } }}>

@@ -7,14 +7,14 @@ export default function deliveryCharge(country, europeanCountries, basket, total
     if (!country && !europeanCountries) return '2.00';
 
     if (includes(basket.map(i => i.product_type), 'print')) {
-        if (includes(country, 'United Kingdom')) charge.push(2.50);
+        if (country.includes('United Kingdom')) charge.push(2.50);
     }
 
-    if (includes(basket.map(i => i.product_type), 'print') && !includes(country, 'United Kingdom') && !includes(europeanCountry, country)) {
+    if (includes(basket.map(i => i.product_type), 'print') && !country.includes('United Kingdom') && !includes(europeanCountry, country)) {
         charge.push(6);
     }
 
-    if (total > 35 && includes(country, 'United Kingdom')) {
+    if (total > 35 && country.includes('United Kingdom')) {
         charge.push('freeDelivery')
     }
 
@@ -29,9 +29,12 @@ export default function deliveryCharge(country, europeanCountries, basket, total
     if (europeanCountries) {
         const productType = basket.map(i => i.product_type);
 
-        if (includes(productType, 'card')) {
-            if (includes(europeanCountry, country)) {
-                if (includes(country, 'United Kingdom')) {
+        if (includes(productType, 'card')) {          
+            const isUK = country.includes('United Kingdom');
+
+            if (includes(europeanCountry, country) || isUK) {
+                console.log('isUK', isUK);
+                if (isUK) {
                     charge.push(1.05);
                 } else {
                     charge.push(2)

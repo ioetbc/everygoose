@@ -3,18 +3,19 @@ import { includes } from 'lodash';
 export default function deliveryCharge(country, europeanCountries, basket, total) {
     let charge = [];
     const europeanCountry = europeanCountries.map(c => c.name);
+    const isUK = country.includes('United Kingdom');
 
     if (!country && !europeanCountries) return '2.00';
 
     if (includes(basket.map(i => i.product_type), 'print')) {
-        if (includes(country, 'United Kingdom')) charge.push(2.50);
+        if (isUK) charge.push(2.50);
     }
 
-    if (includes(basket.map(i => i.product_type), 'print') && !includes(country, 'United Kingdom') && !includes(europeanCountry, country)) {
+    if (includes(basket.map(i => i.product_type), 'print') && !isUK && !includes(europeanCountry, country)) {
         charge.push(6);
     }
 
-    if (total > 35 && includes(country, 'United Kingdom')) {
+    if (total > 35 && isUK) {
         charge.push('freeDelivery')
     }
 
@@ -30,8 +31,8 @@ export default function deliveryCharge(country, europeanCountries, basket, total
         const productType = basket.map(i => i.product_type);
 
         if (includes(productType, 'card')) {
-            if (includes(europeanCountry, country)) {
-                if (includes(country, 'United Kingdom')) {
+            if (includes(europeanCountry, country) || isUK) {
+                if (isUK) {
                     charge.push(1.05);
                 } else {
                     charge.push(2)
@@ -41,9 +42,9 @@ export default function deliveryCharge(country, europeanCountries, basket, total
             }
         }
         if (includes(productType, 'bundle')) {
-            if (!includes(europeanCountry, country) && !includes(country, 'United Kingdom')) charge.push(4.85);
-            if (includes(country, 'United Kingdom')) charge.push(1.50);
-            if (includes(europeanCountry, country) && !includes(country, 'United Kingdom')) charge.push(3.85);
+            if (!includes(europeanCountry, country) && !isUK) charge.push(4.85);
+            if (isUK) charge.push(1.50);
+            if (includes(europeanCountry, country) && !isUK) charge.push(3.85);
         }
     }
 

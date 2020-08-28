@@ -42,7 +42,7 @@ class PayForm extends Component {
             postcode: undefined,
             phone: undefined,     
             isLoading: false,
-            paymentMethod: undefined,
+            paymentMethod: 'stripe',
             product_code: ''
         }
 		this.handleStripePayment = this.handleStripePayment.bind(this);
@@ -154,7 +154,7 @@ class PayForm extends Component {
 					<Fragment>
 						<h3 style={{ marginTop: '12px' }}>Payment details</h3>
 
-						<div className="payment-method-container">
+						{/*<div className="payment-method-container">
 							<div
 								onClick={() => {
 									this.setState({ paymentMethod: 'stripe' })
@@ -176,7 +176,7 @@ class PayForm extends Component {
 							>
 								<p>paypal</p>
 							</div>
-						</div>
+                        </div>*/}
 
 						{this.state.paymentMethod === 'stripe' &&
 							<Fragment>
@@ -196,9 +196,9 @@ class PayForm extends Component {
 							</Fragment>
 						}
 
-						{this.state.paymentMethod === 'paypal' && 
+						{/*{this.state.paymentMethod === 'paypal' && 
 							<div id="paypal-button-container"></div>
-						}
+						}*/}
 					</Fragment>
 					:
 					<div className="question-lock-up" style={{ marginTop: '24px' }}>

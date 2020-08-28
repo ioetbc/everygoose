@@ -2,16 +2,20 @@ const { includes } = require('lodash');
 
 const deliveryCharge = (country, europeanCountries, basket, total) => {
     let charge = [];
+    const europeanCountry = europeanCountries.map(c => c.name);
+    const isUK = country.includes('United Kingdom');
+
+    if (!country && !europeanCountries) return '2.00';
 
     if (includes(basket.map(i => i.product_type), 'print')) {
-        if (includes(country, 'United Kingdom')) charge.push(0);
+        if (isUK) charge.push(2.50);
     }
 
-    if (includes(basket.map(i => i.product_type), 'print') && !includes(country, 'United Kingdom')) {
-        charge.push(15);
+    if (includes(basket.map(i => i.product_type), 'print') && !isUK && !includes(europeanCountry, country)) {
+        charge.push(6);
     }
 
-    if (total > 35 && includes(country, 'United Kingdom')) {
+    if (total > 35 && isUK) {
         charge.push('freeDelivery')
     }
 
@@ -25,26 +29,29 @@ const deliveryCharge = (country, europeanCountries, basket, total) => {
 
     if (europeanCountries) {
         const productType = basket.map(i => i.product_type);
-        const europenCountry = europeanCountries.map(c => c.name);
 
         if (includes(productType, 'card')) {
-            // row
-            if (!includes(europenCountry, country) && !includes(country, 'United Kingdom')) charge.push(2.50);
-            // uk
-            if (includes(country, 'United Kingdom')) charge.push(1);
-            // europe
-            if (includes(europenCountry, country) && !includes(country, 'United Kingdom') ) charge.push(2);
+            console.log('europeanCountry', europeanCountry)
+            console.log('country', country)
+            if (includes(europeanCountry, country) || isUK) {
+                if (isUK) {
+                    charge.push(1.05);
+                } else {
+                    charge.push(2)
+                }
+            } else {
+                charge.push(3.50);
+            }
         }
         if (includes(productType, 'bundle')) {
-            if (!includes(europenCountry, country) && !includes(country, 'United Kingdom')) charge.push(4.85);
-            if (includes(country, 'United Kingdom')) charge.push(1.50);
-            if (includes(europenCountry, country) && !includes(country, 'United Kingdom')) charge.push(3.85);
+            if (!includes(europeanCountry, country) && !isUK) charge.push(4.85);
+            if (isUK) charge.push(1.50);
+            if (includes(europeanCountry, country) && !isUK) charge.push(3.85);
         }
     }
 
-    const deliveryCharge = includes(charge, 'freeDelivery') ? 0 : Math.max(...charge);
 
-    return deliveryCharge;
+    return includes(charge, 'freeDelivery') ? 0 : Math.max(...charge);
 }
 
 module.exports = deliveryCharge;

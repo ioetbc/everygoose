@@ -47,7 +47,7 @@ class Checkout extends Component {
         const basket = getBasket();
         const total = getPrice(basket);
         const deliveryCharge = getDeliveryCharge('United Kingdom', [{name: 'United Kingdom'}], basket, total);
-        const subTotal = (parseFloat(total) + (parseInt(deliveryCharge, 10) || 0)).toFixed(2);
+        const subTotal = (parseFloat(total) + (deliveryCharge || 0)).toFixed(2);
 
         return (
             <Fragment>

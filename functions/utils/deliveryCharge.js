@@ -1,6 +1,6 @@
 const { includes } = require('lodash');
 
-const deliveryCharge = (country, europeanCountries, basket, total) => {
+function deliveryCharge(country, europeanCountries, basket, total) {
     let charge = [];
     const europeanCountry = europeanCountries.map(c => c.name);
     const isUK = country.includes('United Kingdom');
@@ -31,8 +31,6 @@ const deliveryCharge = (country, europeanCountries, basket, total) => {
         const productType = basket.map(i => i.product_type);
 
         if (includes(productType, 'card')) {
-            console.log('europeanCountry', europeanCountry)
-            console.log('country', country)
             if (includes(europeanCountry, country) || isUK) {
                 if (isUK) {
                     charge.push(1.05);
@@ -51,7 +49,10 @@ const deliveryCharge = (country, europeanCountries, basket, total) => {
     }
 
 
-    return includes(charge, 'freeDelivery') ? 0 : Math.max(...charge);
+    const deliveryCharge = includes(charge, 'freeDelivery') ? 0 : Math.max(...charge);
+
+
+    return deliveryCharge;
 }
 
 module.exports = deliveryCharge;

@@ -23,7 +23,7 @@ class PayForm extends Component {
             // addressThirdLine: '',
             // city: 'winchester',
             // county: 'fefef',
-            // country: ['Spain'],
+            // country: ['United Kingdom'],
             // postcode: 'so238ba',
             // phone: '07493774943',     
             // isLoading: false,
@@ -154,7 +154,7 @@ class PayForm extends Component {
 					<Fragment>
 						<h3 style={{ marginTop: '12px' }}>Payment details</h3>
 
-						{/*<div className="payment-method-container">
+						<div className="payment-method-container">
 							<div
 								onClick={() => {
 									this.setState({ paymentMethod: 'stripe' })
@@ -176,7 +176,7 @@ class PayForm extends Component {
 							>
 								<p>paypal</p>
 							</div>
-                        </div>*/}
+						</div>
 
 						{this.state.paymentMethod === 'stripe' &&
 							<Fragment>
@@ -196,9 +196,9 @@ class PayForm extends Component {
 							</Fragment>
 						}
 
-						{/*{this.state.paymentMethod === 'paypal' && 
+						{this.state.paymentMethod === 'paypal' && 
 							<div id="paypal-button-container"></div>
-						}*/}
+						}
 					</Fragment>
 					:
 					<div className="question-lock-up" style={{ marginTop: '24px' }}>

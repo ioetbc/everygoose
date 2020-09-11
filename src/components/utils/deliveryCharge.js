@@ -48,7 +48,6 @@ export default function deliveryCharge(country, europeanCountries, basket, total
         }
     }
 
-
     const deliveryCharge = includes(charge, 'freeDelivery') ? 0 : Math.max(...charge);
 
 

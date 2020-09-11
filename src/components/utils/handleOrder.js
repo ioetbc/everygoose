@@ -17,6 +17,7 @@ const handleOrder = async (payload, paymentMethod) => {
 
     const quantity = parseInt(basket.map(i => i.quantity)[0], 10);
 
+    // TODO put this in the email function 
     let theyOrIt;
     let cardOrCards;
     if (quantity < 2 && basket.length === 1) {
@@ -65,7 +66,6 @@ const handleOrder = async (payload, paymentMethod) => {
     return axios({
         method: 'post',
         url: process.env.REACT_APP_PAY_ENDPOINT,
-        // url: process.env.REACT_APP_PAY_ENDPOINT_DEV,
         config: {
             headers: {
                 'Content-Type': 'application/json'

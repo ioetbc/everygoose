@@ -113,7 +113,7 @@ class App extends Component {
 		this.setState({ pageNo: pageNo + 1 });
 		const pages = chunked[pageNo] || []
 
-		allProducts.forEach(item => {
+		pages.forEach(item => {
 			this.state.products.push({
 				title: item.product_title[0].text,
 				price: get(item, 'product_price', 0).toFixed(2),

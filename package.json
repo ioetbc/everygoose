@@ -12,7 +12,7 @@
     "express": "^4.17.1",
     "express-generator": "^4.16.1",
     "headroom.js": "^0.11.0",
-    "highlight.js": "~9.13.1",
+    "highlight.js": "~10.1.2",
     "http-proxy-middleware": "^0.19.1",
     "intersection-observer-polyfill": "^0.1.0",
     "jquery": "~3.3.1",

@@ -4,20 +4,6 @@ $color-input-background: white;
 $text-field-height: 45px;
 $text-field-width: 300px;
 
-.StripeElement {
-  box-sizing: border-box;
-  height: 45px;
-  padding: 14px 12px;
-  border-radius: 4px;
-  border: 1px $color-red solid;
-  background: white;
-  margin-bottom: 24px;
-}
-
-.StripeElement--invalid {
-  border-color: $color-red;
-}
-
 .text-field--container {
   margin-bottom: 24px;
 }
@@ -75,7 +61,7 @@ $text-field-width: 300px;
   .text-field--label {
     color: black;
     margin: 0 12px;
-    pointer-events: none; 
+    pointer-events: none;
     transform-origin: 0 0;
     transition: transform 166ms ease-in-out;
     margin-top: 3px;
@@ -115,17 +101,17 @@ $text-field-width: 300px;
 }
 
 .question-lock-up {
-	width: 100%;
-	border: $color-dull-as-fuck 1px solid;
-	height: 70px;
-	border-radius: 4px;
-	display: flex;
-	align-items: center;
+  width: 100%;
+  border: $color-dull-as-fuck 1px solid;
+  height: 70px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
 
-	h3 {
-		margin: 0;
-		padding-left: 24px;
-		color: $color-dull-as-fuck;
-		user-select: none;
-	}
+  h3 {
+    margin: 0;
+    padding-left: 24px;
+    color: $color-dull-as-fuck;
+    user-select: none;
+  }
 }

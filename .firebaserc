@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "everygoose"
+    "default": "everygoose-ui",
+    "staging": "everygoose-ui"
   }
 }

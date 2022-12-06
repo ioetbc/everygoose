@@ -19,7 +19,7 @@
     "normalize.css": "^8.0.1",
     "prismic-javascript": "^2.0.1",
     "prismic-reactjs": "^0.3.2",
-    "qs": "^6.4.0",
+    "qs": "^6.6.1",
     "react": "^16.2.0",
     "react-async-script-loader": "^0.3.0",
     "react-country-region-selector": "^1.4.5",
